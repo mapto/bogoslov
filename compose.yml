@@ -6,9 +6,7 @@ services:
     volumes: 
       - ./static:/usr/share/nginx/html:ro
       - ./corpora/html:/usr/share/nginx/static/corpora:ro
-      # - ./corpora/html:/usr/share/nginx/html/corpora:ro
       - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
-      # - ./logs:/val/log/nginx
     healthcheck:
       test: ["CMD-SHELL", "wget -nv -t1 --spider http://localhost || exit 1"]
     restart: always      
@@ -17,16 +15,11 @@ services:
     build:
       context: ./regex
       dockerfile: Dockerfile
-    # image: python:3-slim-buster
-    ports:
-      - 8781:7861
+    # ports:
+    #   - 8781:7861
     volumes:
-      # - ./regex:/app
       - ./regex/alphabet.tsv:/alphabet.tsv:ro
-      # - ./regex/corpus:/corpus:ro
       - ./corpora:/corpora:ro
-    # command: sh -c "pip install --no-cache-dir -r requirements.txt && ./app.py"
-    # working_dir: /app
     restart: always
     healthcheck:
       test: ["CMD-SHELL", "python -c \"from urllib.request import urlopen; int(urlopen('http://localhost:7861/regex/').status >= 400)\""]
@@ -35,14 +28,10 @@ services:
     build:
       context: ./ngram
       dockerfile: Dockerfile
-    # image: python:3-slim-buster
-    ports:
-      - 8782:7861
+    # ports:
+    #   - 8782:7861
     volumes:
-      # - ./ngram/corpus:/corpus:ro
       - ./corpora:/corpora:ro
-    # command: sh -c "./app.py"
-    # working_dir: /app
     restart: always
     healthcheck:
       test: ["CMD-SHELL", "python -c \"from urllib.request import urlopen; int(urlopen('http://localhost:7861/ngram/').status >= 400)\""]

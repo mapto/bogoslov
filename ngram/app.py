@@ -6,7 +6,6 @@ from glob import glob
 import gradio as gr
 
 from udpipeclient import udpipe_sent_lemmatize
-
 # from stanzacilent import stanza_sent_lemmatize
 
 from util import get_ngrams
@@ -15,7 +14,7 @@ static_path = "/corpora/"
 
 sent_stemmers = {
     "dummy": lambda x: [(t, t) for t in tokenizer(x) if t.strip()],
-    "stanza": stanza_sent_lemmatize,
+    # "stanza": stanza_sent_lemmatize,
     "udpipe": udpipe_sent_lemmatize,
 }
 
@@ -62,7 +61,7 @@ def render(data: list[tuple[str, list[str]]]) -> str:
     return "<br/>".join(result)
 
 
-def find(fulltext: str, stemmer: str, n: int = 4) -> str:
+def find(fulltext: str, n: int = 4) -> str:
     ngrams = {}
     for kid, vtext in data.items():
         lemmas = [l for l in vtext.split(" ") if l]
@@ -100,11 +99,11 @@ demo = gr.Interface(
         gr.Textbox(
             "блаженъ мѫжь иже не ити на съвѣть нечьстивъ", lines=5, label="Search"
         ),
-        gr.Radio(
-            choices=sent_stemmers.keys(),
-            value="stanza",
-            label="Lemmatizer",
-        ),
+        # gr.Radio(
+        #     choices=sent_stemmers.keys(),
+        #     value="stanza",
+        #     label="Lemmatizer",
+        # ),
         # gr.Textbox("*{stemmer}/BM*.tei.xml"),
         gr.Slider(minimum=3, maximum=7, value=4, step=1, label="N-gram"),
     ],
