@@ -70,6 +70,16 @@
         </xsl:if>
     </xsl:template>
     
+    <!-- Template for w elements (words) with lemma attributes -->
+    <xsl:template match="tei:w">
+        <span class="word">
+            <xsl:if test="@lemma">
+                <xsl:attribute name="title"><xsl:value-of select="@lemma"/></xsl:attribute>
+            </xsl:if>
+            <xsl:apply-templates/>
+        </span>
+    </xsl:template>
+    
     <!-- Template for text content -->
     <xsl:template match="text()">
         <xsl:value-of select="."/>
