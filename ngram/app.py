@@ -30,7 +30,7 @@ src = f"/corpora/{stemmer}/*/*.tei.xml"
 
 data = {}
 for fname in glob(src):
-    print(fname)
+    # print(fname)
     corpus = fname.split("/")[-2]
     ch = fname.split("/")[-1]
     root = etree.parse(fname)
@@ -43,7 +43,7 @@ for fname in glob(src):
 
 
 def ids2hrefs(ids: list[str]) -> str:
-    href_templ = """<li><a href="{href}">{label}</a></li>"""
+    href_templ = """<li><a href="{href}" target="fulltext">{label}</a></li>"""
     return "\n".join(
         href_templ.format(
             label=nid.replace("/", ":").replace(".tei.xml#", ":").replace("_", "."),
@@ -55,6 +55,8 @@ def ids2hrefs(ids: list[str]) -> str:
 
 def render(data: list[tuple[str, list[str]]]) -> str:
     """a list of <text ngram, list of addresses>"""
+    if not data:
+        return "Result is empty."
     result = []
     for ngram, addresses in data:
         result += [f"'{ngram}':<ul>{ids2hrefs(addresses)}</ul>"]
@@ -63,23 +65,23 @@ def render(data: list[tuple[str, list[str]]]) -> str:
 
 def find(fulltext: str, n: int = 4) -> str:
     ngrams = {}
+    # print(data)
     for kid, vtext in data.items():
         lemmas = [l for l in vtext.split(" ") if l]
         for i in range(len(lemmas) - n + 1):
             ng = tuple(lemmas[i : i + n])
+            # print(ng)
             if ng not in ngrams:
                 ngrams[ng] = []
             ngrams[ng] += [kid]
 
-    ltext = " ".join(w for w, l in sent_stemmers[stemmer](fulltext))
-    assert len(ltext.split(" ")) >= n, "Not enough tokens provided to search N-grams"
+    ltext = " ".join(l for w, l in sent_stemmers[stemmer](fulltext))
+    assert len(ltext.split(" ")) >= n, "Not enough tokens provided to search for N-grams"
 
     try:
         new_ngrams = get_ngrams(fulltext, ltext, n)
-    except AssertionError:
-        return (
-            f"Lemmatizer cannot lemmatize.<br/>Sentence: {fulltext}<br/>Lemmas: {ltext}"
-        )
+    except AssertionError as ae:
+        return ltext, f"Cannot make n-grams. {ae}"
     # print(new_ngrams)
     # print(ngrams)
 
@@ -90,14 +92,14 @@ def find(fulltext: str, n: int = 4) -> str:
             for estart, eend, etext in vtloc:
                 result += [(etext, ngrams[kng])]
 
-    return render(result)
+    return ltext, render(result)
 
 
 demo = gr.Interface(
     fn=find,
     inputs=[
         gr.Textbox(
-            "блаженъ мѫжь иже не ити на съвѣть нечьстивъ", lines=5, label="Search"
+            "Блаженъ мѫжъ иже не иде на съвѣть нечъстивъїхъ", lines=5, label="Search"
         ),
         # gr.Radio(
         #     choices=sent_stemmers.keys(),
@@ -105,11 +107,12 @@ demo = gr.Interface(
         #     label="Lemmatizer",
         # ),
         # gr.Textbox("*{stemmer}/BM*.tei.xml"),
-        gr.Slider(minimum=3, maximum=7, value=4, step=1, label="N-gram"),
+        gr.Slider(minimum=2, maximum=10, value=4, step=1, label="N-gram"),
     ],
     # outputs=[gr.Textbox(label="Results", head=html_head)],
     # outputs=[gr.Blocks(label="Results")],
     outputs=[
+        gr.Textbox(label="Lemmatized"),
         gr.HTML(label="Results"),
     ],
     # css=css,
@@ -117,7 +120,6 @@ demo = gr.Interface(
 )
 
 # demo.launch(share=True)
-# demo.launch(server_port=8000, server_name='0.0.0.0')
 # demo.launch(server_port=7861, server_name="0.0.0.0", show_api=False)
 # demo.launch()
 

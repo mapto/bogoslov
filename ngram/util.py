@@ -35,9 +35,10 @@ def get_word_ranges(fulltext: str, ltext: str) -> list[tuple[str, int, int, str]
     # print(lltokens)
     ttokens = reduce(operator.concat, lltokens)
     ltokens = [e for e in re.split(r"\W+", ltext) if e]
-    assert len(ttokens) == len(
-        ltokens
-    ), f"Length of two texts is not equal:\n[{len(ttokens)}]: {ttokens[:100]}\n[{len(ltokens)}]: {ltokens[:100]}"
+    # TODO: when gaps in lemmatization, the match result is inaccurate
+    # assert len(ttokens) == len(
+    #     ltokens
+    # ), f"Length of two texts is not equal:\n[{len(ttokens)}]: {ttokens[:100]}\n[{len(ltokens)}]: {ltokens[:100]}"
     result = []
     spos = 0
     epos = 0

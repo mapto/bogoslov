@@ -75,15 +75,6 @@ footer {
 }
 """
 
-result_templ = """
-<li>
-    <span class='locator'>{locator}:</span>
-    <span class='quote'>
-        {prefix}<span class='match'>{match}</span>{suffix}
-    </span>
-</li>"""
-
-href_templ = """<a href="{href}">{content}</a>"""
 
 
 srcs = glob(f"{primary_path}/*/*.html")
@@ -185,6 +176,14 @@ def select_sources(sources, books):
 
 
 def render(data: dict[str, list[str]]) -> str:
+    result_templ = """<li>
+    <span class='locator'>{locator}:</span>
+    <span class='quote'>
+        {prefix}<span class='match'>{match}</span>{suffix}
+    </span>
+</li>"""
+    href_templ = """<a href="{href}" target="fulltext">{content}</a>"""
+
     result = []
     for addr, insts in data.items():
         if not insts:
@@ -242,20 +241,6 @@ def find(
             )
             for r in res
         ]
-
-        # result[kid] = "".join(
-        #     [
-        #         (
-        #             result_templ.format(
-        #                 locator=f"{corpus_labels[kid]} [{r.start()}-{r.end()}]",
-        #                 prefix=f"{text[max(r.start()-context,0):r.start()]}",
-        #                 match=f"{text[r.start():r.end()]}",
-        #                 suffix=f"{text[r.end():min(r.end()+context,len(text)-1)]}",
-        #             )
-        #         )
-        #         for r in res
-        #     ]
-        # )
 
     return pat, render(result)
 

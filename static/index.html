@@ -4,26 +4,91 @@
     <title>BogoSlov</title>
     <meta charset="UTF-8"/>
     <link rel="stylesheet" href="ocs.css"/>
+    <style>
+      body, html {
+        position: relative;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+
+      main {
+        position: relative;
+        margin: 0;
+        top: 2em;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+
+      iframe, header, main {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        border: none;
+      }
+      header {
+        top:0;
+        left: 0;
+        height: 2em;
+        width: 100%;
+        background-color: lightgray;
+      }
+      nav, iframe {
+        top: 0;
+        left: 0;
+        flex-grow: 1;
+        height: 100%;
+      }
+      nav {
+        left: 0;
+        width: 15%;
+      }
+      #interface {
+        left: 15%;
+        width: 30%;
+      }
+      #fulltext {
+        left:45%;
+        width: 55%;
+      }
+
+      h1 {
+        font-weight: bolder;
+        font-variant-caps: small-caps;
+        font-size: medium;
+        text-align: center;
+      }
+    </style>
   </head>
   <body>
-    <h1>BogoSlov</h1>
-    <h2>Biblical OriGins in SlavOnic texts:<br/>
-    Systems for Language-modelled Observation and Verification</h2>
-
-    <p>Direct view of the Biblical <a href="/corpora">corpora</a> contained here.</p>
+    <header>
+        <h1>BogoSlov: Biblical OriGins in SlavOnic texts: Systems for Language-modelled Observation and Verification</h1>
+    </header>
+    <main>
+      <nav>
+        <p>Browse the hosted <a href="/corpora" target="fulltext">Biblical corpora</a></p>
+      
+        <p>Components:</p>
+        <ul>
+          <li><a href="/regex" target="interface">Regex</a></li>
+          <li><a href="/ngram" target="interface">Ngram</a></li>
+          <li>LCS</li>
+          <li>STrans</li>
+        </ul>
     
-    <p>Components:</p>
-    <ul>
-      <li><a href="/regex">Regex</a></li>
-      <li><a href="/ngram">Ngram</a></li>
-      <li><a href="#">LCS</a></li>
-      <li><a href="#">STrans</a></li>
-    </ul>
-    
-    <p>Further information: <a href="https://ceur-ws.org/Vol-3937/short8.pdf">Project Paper</a><br/>
-    Cite as [<a href="references.bib">BibTex</a>]:
-  <div class="csl-entry">Ruskov, M., Tom&#xE1;&#x161; Mikulka, Irina Podtergera, Maxim Gavrilkov, &amp; Walker Thompson. (2025). Quotes at the Fingertips: The BogoSlov Project&#x2019;s Combined Approach towards Identification of Biblical Material in Old Church Slavonic Texts. In M. Cornia, G. M. D. Nunzio, D. Firmani, S. Mizzaro, G. Serra, S. Tonelli, &amp; A. Tremamunno (Eds.), <i>Proceedings of the 21st Conference on Information and Research Science Connecting to Digital and Library Science</i> (p. 8). CEUR-WS. <a href="https://ceur-ws.org/Vol-3937/#short8">https://ceur-ws.org/Vol-3937/#short8</a></div>
-    </p>
-
+        <p>Further information:<br/>
+          <a href="https://ceur-ws.org/Vol-3937/short8.pdf">Project Paper</a><br/>
+          [<a href="references.bib">BibTex</a>] [<a href="https://github.com/mapto/bogoslov">GitHub</a>]
+        </p>  
+      </nav>
+      <iframe name="interface" id="interface" src="/ngram"></iframe>
+      <iframe name="fulltext" id="fulltext" src="/corpora/Bologna Psalter/BM1.html"></iframe>
+    </main>
  </body>
 </html>
