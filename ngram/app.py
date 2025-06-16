@@ -76,7 +76,8 @@ def find(fulltext: str, n: int = 4) -> str:
             ngrams[ng] += [kid]
 
     ltext = " ".join(l for w, l in sent_stemmers[stemmer](fulltext))
-    assert len(ltext.split(" ")) >= n, "Not enough tokens provided to search for N-grams"
+    if len(ltext.split(" ")) < n:
+        return "", "Not enough tokens provided to search for N-grams"
 
     try:
         new_ngrams = get_ngrams(fulltext, ltext, n)
