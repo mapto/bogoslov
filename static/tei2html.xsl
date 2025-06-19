@@ -9,9 +9,9 @@
     <xsl:template match="/">
         <html>
             <head>
-                <title>TEI Document</title>
+                <title><xsl:value-of select="//tei:text/tei:body/tei:head"/></title>
                 <meta charset="UTF-8"/>
-                <link rel="stylesheet" href="../ocs.css"/>
+                <link rel="stylesheet" href="/ocs.css"/>
             </head>
             <body>
                 <xsl:apply-templates select="//tei:body"/>
