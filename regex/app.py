@@ -6,7 +6,7 @@ import regex as re
 import gradio as gr
 from glob import glob
 
-primary_path = "/corpora/html/"
+primary_path = "/corpora"
 
 con_span = 100
 """
