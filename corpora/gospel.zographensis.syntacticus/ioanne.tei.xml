@@ -1,0 +1,368 @@
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader xml:lang="en">
+    <sourceDesc>
+      <bibl>Hanne Martine Eckhoff and Aleksandrs Berdicevskis, https://munin.uit.no/handle/10037/22366</bibl>
+    </sourceDesc>
+    <publicationStmt>
+      <publisher>Institute for Literature, Bulgarian Academy of Sciences</publisher>
+      <pubPlace>Sofia, Bulgaria</pubPlace>
+      <date>2015</date>
+      <availability status="restricted">
+        <licence target="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</licence>
+      </availability>
+    </publicationStmt>
+  </teiHeader>
+  <text xml:lang="chu">
+    <body>
+      <head>Codex Zographensis - Ioanne</head>
+      <div id="1" type="chapter" n="Ioanne 1">
+        <lg id="1_1" n="1">
+          <cl id="1_1_1"><w lemma="искони">Ꙇскони</w>. <w lemma="бꙑти">бѣаше</w> <w lemma="слово">слово</w>. </cl>
+        </lg>
+        <lg id="1_2" n="2">
+          <cl id="1_2_1"><w lemma="и">ꙇ</w> <w lemma="слово">слово</w> <w lemma="бꙑти">бѣаше</w> <w lemma="отъ">отъ</w> <w lemma="богъ">б҃а</w>. </cl>
+        </lg>
+        <lg id="1_3" n="3">
+          <cl id="1_3_1"><w lemma="и">ꙇ</w> <w lemma="богъ">б҃ъ</w> <w lemma="бꙑти">бѣаше</w> <w lemma="слово">слово</w>. </cl>
+        </lg>
+        <lg id="1_4" n="4">
+          <cl id="1_4_1"><w lemma="сь">се</w> <w lemma="бꙑти">бѣ</w> <w lemma="искони">ꙇскони</w> <w lemma="отъ">отъ</w> <w lemma="богъ">б҃а</w>. </cl>
+        </lg>
+        <lg id="1_5" n="5">
+          <cl id="1_5_1"><w lemma="вьсь">вьсѣ</w> <w lemma="тъ">тѣмь</w> <w lemma="бꙑти">бꙑшѧ</w>. </cl>
+        </lg>
+        <lg id="1_6" n="6">
+          <cl id="1_6_1"><w lemma="и">ꙇ</w> <w lemma="без">беж</w> <w lemma="и">н҄его</w> <w lemma="ничьтоже">ничьтоже</w> <w lemma="не">не</w> <w lemma="бꙑти">бꙑстъ</w>. <w lemma="иже">еже</w> <w lemma="бꙑти">бꙑстъ</w>. </cl>
+        </lg>
+        <lg id="1_7" n="7">
+          <cl id="1_7_1"><w lemma="въ">въ</w> <w lemma="тъ">томь</w> <w lemma="животъ">животъ</w> <w lemma="бꙑти">бѣ</w>. </cl>
+        </lg>
+        <lg id="1_8" n="8">
+          <cl id="1_8_1"><w lemma="и">ꙇ</w> <w lemma="животъ">животъ</w> <w lemma="бꙑти">бѣ</w> <w lemma="свѣтъ#1">свѣтъ</w> <w lemma="чловѣкъ">ч҃комъ</w>. </cl>
+        </lg>
+        <lg id="1_9" n="9">
+          <cl id="1_9_1"><w lemma="и">ꙇ</w> <w lemma="свѣтъ#1">свѣтъ</w> <w lemma="въ">въ</w> <w lemma="тьма#1">тъмѣ</w> <w lemma="свьтѣти">свьтитъ</w> <w lemma="себе">сѧ</w>. </cl>
+        </lg>
+        <lg id="1_10" n="10">
+          <cl id="1_10_1"><w lemma="и">ꙇ</w> <w lemma="тьма#1">тъма</w> <w lemma="и">его</w> <w lemma="не">не</w> <w lemma="обѧти">обьѩтъ</w>. </cl>
+        </lg>
+        <lg id="1_11" n="11">
+          <cl id="1_11_1"><w lemma="бꙑти">Бꙑстъ</w> <w lemma="чловѣкъ">ч҃къ</w>. <w lemma="посълати">посъланъ</w> <w lemma="отъ">отъ</w> <w lemma="богъ">б҃а</w>. </cl>
+        </lg>
+        <lg id="1_12" n="12">
+          <cl id="1_12_1"><w lemma="имѧ">ꙇмѧ</w> <w lemma="и">емоу</w> <w lemma="иоанъ">ꙇоанъ</w>. </cl>
+        </lg>
+        <lg id="1_13" n="13">
+          <cl id="1_13_1"><w lemma="сь">сь</w> <w lemma="прити">приде</w> <w lemma="въ">въ</w> <w lemma="съвѣдѣтельство">съвѣдѣтел҄ьство</w>. <w lemma="да">да</w> <w lemma="съвѣдѣтельствовати">съвѣдѣтел҄ьствоуетъ</w> <w lemma="о">о</w> <w lemma="свѣтъ#1">свѣтѣ</w>. <w lemma="да">да</w> <w lemma="вьсь">вьси</w> <w lemma="вѣра">вѣрѫ</w> <w lemma="ѩти">ꙇмѫтъ</w> <w lemma="и">ꙇмь</w>. </cl>
+        </lg>
+        <lg id="1_14" n="14">
+          <cl id="1_14_1"><w lemma="не">не</w> <w lemma="бꙑти">бѣ</w> <w lemma="тъ">тъ</w> <w lemma="свѣтъ#1">свѣтъ</w>. <w lemma="нъ">нъ</w> <w lemma="да">да</w> <w lemma="съвѣдѣтельствовати">съвѣдѣтел҄ьствоуетъ</w> <w lemma="о">о</w> <w lemma="свѣтъ#1">свѣтѣ</w>. </cl>
+        </lg>
+        <lg id="1_15" n="15">
+          <cl id="1_15_1"><w lemma="бꙑти">Бѣ</w> <w lemma="свѣтъ#1">свѣтъ</w> <w lemma="истиньнъ">ꙇстинънꙑ</w>. <w lemma="иже">ꙇже</w> <w lemma="просвѣщати">просвѣштаетъ</w> <w lemma="вьсꙗкъ">всѣкого</w> <w lemma="чловѣкъ">ч҃ка</w>. <w lemma="грѧсти">грѧдѫштаего</w> <w lemma="въ">въ</w> <w lemma="миръ#2">миръ</w>. </cl>
+        </lg>
+        <lg id="1_16" n="16">
+          <cl id="1_16_1"><w lemma="въ">въ</w> <w lemma="миръ#2">мирѣ</w> <w lemma="бꙑти">бѣ</w>. </cl>
+        </lg>
+        <lg id="1_17" n="17">
+          <cl id="1_17_1"><w lemma="и">ꙇ</w> <w lemma="миръ#2">миръ</w> <w lemma="тъ">тѣмь</w> <w lemma="бꙑти">бꙑс</w>. </cl>
+        </lg>
+        <lg id="1_18" n="18">
+          <cl id="1_18_1"><w lemma="и">ꙇ</w> <w lemma="миръ#2">миръ</w> <w lemma="и">его</w> <w lemma="не">не</w> <w lemma="познати">позна</w>. </cl>
+        </lg>
+        <lg id="1_19" n="19">
+          <cl id="1_19_1"><w lemma="въ">Въ</w> <w lemma="свои">своѩ</w> <w lemma="прити">приде</w>. </cl>
+        </lg>
+        <lg id="1_20" n="20">
+          <cl id="1_20_1"><w lemma="и">ꙇ</w> <w lemma="свои">свои</w> <w lemma="и">его</w> <w lemma="не">не</w> <w lemma="приѩти">п[риѧ]шѧ</w>. </cl>
+        </lg>
+        <lg id="1_21" n="21">
+          <cl id="1_21_1"><w lemma="ѥликъ">елико</w> <w lemma="же">же</w> <w lemma="и">ꙇхъ</w> <w lemma="приѩти">приѩтъ</w> <w lemma="и">і</w>. <w lemma="дати">дастъ</w> <w lemma="и">ꙇмъ</w> <w lemma="власть">власть</w> <w lemma="чѧдо">чѧдомъ</w> <w lemma="божии">б҃жиемъ</w> <w lemma="бꙑти">бꙑти</w>. <w lemma="вѣровати">вѣроуѭштимъ</w> <w lemma="въ">въ</w> <w lemma="имѧ">ꙇмѧ</w> <w lemma="и">его</w>. <w lemma="иже">ꙇже</w> <w lemma="не">не</w> <w lemma="отъ">отъ</w> <w lemma="кръвь">кръвиі</w>. <w lemma="ни">ни</w> <w lemma="отъ">отъ</w> <w lemma="похоть">похоти</w> <w lemma="плътьскъ">плътьскꙑ</w>. <w lemma="ни">ни</w> <w lemma="отъ">отъ</w> <w lemma="похоть">похоти</w> <w lemma="мѫжьскъ">мѫжьскꙑ</w>. <w lemma="нъ">нъ</w> <w lemma="отъ">отъ</w> <w lemma="богъ">б҃а</w> <w lemma="родити#1">родишѧ</w> <w lemma="себе">сѧ</w>. </cl>
+        </lg>
+        <lg id="1_22" n="22">
+          <cl id="1_22_1"><w lemma="и">Ꙇ</w> <w lemma="слово">слово</w> <w lemma="плъть">плъть</w> <w lemma="бꙑти">бꙑстъ</w>. </cl>
+        </lg>
+        <lg id="1_23" n="23">
+          <cl id="1_23_1"><w lemma="и">ꙇ</w> <w lemma="въселити">вьсели</w> <w lemma="себе">сѧ</w> <w lemma="въ">въ</w> <w lemma="мꙑ">нꙑ</w>. </cl>
+        </lg>
+        <lg id="1_24" n="24">
+          <cl id="1_24_1"><w lemma="и">ꙇ</w> <w lemma="видѣти">видѣхомъ</w> <w lemma="слава">славѫ</w> <w lemma="и">его</w>. <w lemma="слава">славѫ</w> <w lemma="ꙗко">ѣко</w> <w lemma="иночѧдъ">ꙇночѧдаего</w> <w lemma="отъ">отъ</w> <w lemma="богъ">о҃ца</w>. <w lemma="испльнь">ꙇсплънь</w> <w lemma="благодѣть">благодѣти</w> <w lemma="истина">ꙇстинꙑ</w>. </cl>
+        </lg>
+        <lg id="1_25" n="25">
+          <cl id="1_25_1"><w lemma="иоанъ">Ꙇоанъ</w> <w lemma="съвѣдѣтельствовати">съвѣдѣтельствоуетъ</w> <w lemma="о">о</w> <w lemma="и">н҄емь</w>. </cl>
+        </lg>
+        <lg id="1_26" n="26">
+          <cl id="1_26_1"><w lemma="и">ꙇ</w> <w lemma="възъвати">възъва</w> <w lemma="глаголати">г҃лѧ</w>. </cl>
+        </lg>
+        <lg id="1_27" n="27">
+          <cl id="1_27_1"><w lemma="сь">сь</w> <w lemma="бꙑти">бѣ</w> <w lemma="иже">егоже</w> <w lemma="рещи">рѣхъ</w>. </cl>
+        </lg>
+        <lg id="1_28" n="28">
+          <cl id="1_28_1"><w lemma="грѧсти">грѧдꙑ</w> <w lemma="по">по</w> <w lemma="азъ">мнѣ</w> <w lemma="прѣдъ">прѣдъ</w> <w lemma="азъ">мъноѭ</w> <w lemma="бꙑти">бꙑстъ</w>. <w lemma="ꙗко">ѣко</w> <w lemma="прьвъ">пръвѣі</w> <w lemma="азъ">мене</w> <w lemma="бꙑти">бѣ</w>. </cl>
+        </lg>
+        <lg id="1_29" n="29">
+          <cl id="1_29_1"><w lemma="и">ꙇ</w> <w lemma="отъ">отъ</w> <w lemma="испльнѥниѥ">ꙇсплън҄ениѣ</w> <w lemma="и">его</w> <w lemma="мꙑ">мꙑ</w> <w lemma="вьсь">вьси</w> <w lemma="приѩти">приѩхомъ</w>. <w lemma="благодѣть">Благодѣть</w> <w lemma="въз">въз</w> <w lemma="благодѣть">благодѣть</w>. </cl>
+        </lg>
+        <lg id="1_30" n="30">
+          <cl id="1_30_1"><w lemma="ꙗко">ѣко</w> <w lemma="законъ">законъ</w> <w lemma="моси">мосѣомь</w> <w lemma="дати">данъ</w> <w lemma="бꙑти">бꙑс</w>. <w lemma="благодѣть">благодѣть</w> <w lemma="и">ꙇ</w> <w lemma="истина">истина</w> <w lemma="исоусъ">ꙇ҃с</w> <w lemma="христ(ос)ъ">х҃мь</w> <w lemma="бꙑти">бꙑстъ</w>. </cl>
+        </lg>
+        <lg id="1_31" n="31">
+          <cl id="1_31_1"><w lemma="коньць">к҃оц</w>. </cl>
+        </lg>
+        <lg id="1_32" n="32">
+          <cl id="1_32_1"><w lemma="богъ">Б҃а</w> <w lemma="никътоже">никътоже</w> <w lemma="не">не</w> <w lemma="видѣти">видѣ</w>. <w lemma="николиже">николиже</w>. </cl>
+        </lg>
+        <lg id="1_33" n="33">
+          <cl id="1_33_1"><w lemma="иночѧдъ">ꙇночѧдꙑ</w> <w lemma="сꙑнъ#1">с҃нъ</w>. <w lemma="бꙑти">сꙙи</w> <w lemma="въ">въ</w> <w lemma="лоно">лонѣ</w> <w lemma="отьчь">о҃чи</w>. <w lemma="тъ">тъ</w> <w lemma="исповѣдѣти">ꙇсповѣдѣ</w>. </cl>
+        </lg>
+        <lg id="1_34" n="34">
+          <cl id="1_34_1"><w lemma="и">ꙇ</w> <w lemma="сь">се</w> <w lemma="бꙑти">естъ</w> <w lemma="съвѣдѣтельство">съвѣдѣтел҄ьство</w> <w lemma="иоановъ">ꙇоаново</w>. <w lemma="ѥгда">егда</w> <w lemma="посълати">посълашѧ</w> <w lemma="июдеи">ꙇюдѣи</w> <w lemma="отъ">отъ</w> <w lemma="иѥроусалимъ">ꙇ҃лма</w>. <w lemma="иѥреи">ꙇереѩ</w> <w lemma="и">ꙇ</w> <w lemma="левьгитъ">левьꙉитꙑ</w>. <w lemma="да">да</w> <w lemma="въпросити">въпросѧтъ</w> <w lemma="и">і</w>. </cl>
+        </lg>
+        <lg id="1_35" n="35">
+          <cl id="1_35_1"><w lemma="тꙑ">тꙑ</w> <w lemma="къто">къто</w> <w lemma="бꙑти">еси</w>. </cl>
+        </lg>
+        <lg id="1_36" n="36">
+          <cl id="1_36_1"><w lemma="и">ꙇ</w> <w lemma="исповѣдѣти">исповѣдѣ</w>. <w lemma="ꙗко">ѣко</w> </cl>
+        </lg>
+        <lg id="1_37" n="37">
+          <cl id="1_37_1"><w lemma="не бꙑти">нѣсмь</w> <w lemma="азъ">азъ</w> <w lemma="христ(ос)ъ">х҃ъ</w>. </cl>
+        </lg>
+        <lg id="1_38" n="38">
+          <cl id="1_38_1"><w lemma="и">ꙇ</w> <w lemma="въпросити">въпросишѧ</w> <w lemma="и">и</w>. </cl>
+        </lg>
+        <lg id="1_39" n="39">
+          <cl id="1_39_1"><w lemma="чьто">чьто</w> <w lemma="оубо">оубо</w> <w lemma="тꙑ">тꙑ</w> <w lemma="бꙑти">еси</w>. </cl>
+        </lg>
+        <lg id="1_40" n="40">
+          <cl id="1_40_1"><w lemma="илиꙗ">ꙇлиѣ</w> <w lemma="ли">ли</w> <w lemma="бꙑти">еси</w>. </cl>
+        </lg>
+        <lg id="1_41" n="41">
+          <cl id="1_41_1"><w lemma="и">ꙇ</w> <w lemma="глаголати">г҃ла</w> </cl>
+        </lg>
+        <lg id="1_42" n="42">
+          <cl id="1_42_1"><w lemma="не бꙑти">нѣсмь</w>. </cl>
+        </lg>
+        <lg id="1_43" n="43">
+          <cl id="1_43_1"><w lemma="пророкъ">пророкъ</w> <w lemma="бꙑти">еси</w> <w lemma="тꙑ">тꙑ</w>. </cl>
+        </lg>
+        <lg id="1_44" n="44">
+          <cl id="1_44_1"><w lemma="и">ꙇ</w> <w lemma="отъвѣщати">отъвѣшта</w> </cl>
+        </lg>
+        <lg id="1_45" n="45">
+          <cl id="1_45_1"><w lemma="ни">ни</w>. </cl>
+        </lg>
+        <lg id="1_46" n="46">
+          <cl id="1_46_1"><w lemma="рещи">рѣшѧ</w> <w lemma="же">же</w> <w lemma="и">емоу</w> </cl>
+        </lg>
+        <lg id="1_47" n="47">
+          <cl id="1_47_1"><w lemma="къто">къто</w> <w lemma="бꙑти">еси</w>. </cl>
+        </lg>
+        <lg id="1_48" n="48">
+          <cl id="1_48_1"><w lemma="да">да</w> <w lemma="отъвѣтъ">отъвѣтъ</w> <w lemma="дати">дамь</w> <w lemma="посълати">посълавъшеꙇмъ</w> <w lemma="мꙑ">нꙑ</w>. <w lemma="чьто">чьто</w> <w lemma="глаголати">г҃леши</w> <w lemma="о">о</w> <w lemma="тꙑ">тебѣ</w> <w lemma="самъ">самомь</w>. </cl>
+        </lg>
+        <lg id="1_49" n="49">
+          <cl id="1_49_1"><w lemma="рещи">Рече</w> </cl>
+        </lg>
+        <lg id="1_50" n="50">
+          <cl id="1_50_1"><w lemma="азъ">азъ</w> <w lemma="гласъ">гласъ</w> <w lemma="въпити">въпиѭштаго</w> <w lemma="въ">въ</w> <w lemma="поустꙑни">поустꙑн҄и</w>. </cl>
+        </lg>
+      </div>
+      <div id="18" type="chapter" n="Ioanne 18">
+        <lg id="18_1" n="1">
+          <cl id="18_1_1"><w lemma="бꙑти">бѣ</w> <w lemma="бо">бо</w> <w lemma="тьсть">тьсть</w> <w lemma="каиꙗфа">каꙇафѣ</w>. <w lemma="иже">ꙇже</w> <w lemma="бꙑти">бѣ</w> <w lemma="архиереи">архиереи</w> <w lemma="лѣто">лѣтоу</w> <w lemma="тъ">томоу</w>. </cl>
+        </lg>
+        <lg id="18_2" n="2">
+          <cl id="18_2_1"><w lemma="бꙑти">бѣ</w> <w lemma="же">же</w> <w lemma="каиꙗфа">каꙇафа</w>. <w lemma="дати">давꙑ</w> <w lemma="съвѣтъ">съвѣтꙑ</w> <w lemma="июдеи">ꙇюдѣомъ</w>. <w lemma="ꙗко">ѣко</w> <w lemma="добрѣ">добрѣе</w> <w lemma="бꙑти">естъ</w> <w lemma="ѥдинъ">единомоу</w> <w lemma="чловѣкъ">ч҃коу</w> <w lemma="оумрѣти">оумьрѣти</w> <w lemma="за">за</w> <w lemma="людиѥ">л҄юди</w>. </cl>
+        </lg>
+        <lg id="18_3" n="3">
+          <cl id="18_3_1"><w lemma="по">По</w> <w lemma="исоусъ">ꙇ҃сѣ</w> <w lemma="же">же</w> <w lemma="ити">ꙇдѣаше</w> <w lemma="симонъ">симонъ</w> <w lemma="петръ">петръ</w>. <w lemma="и">ꙇ</w> <w lemma="дроугъ">дроугꙑ</w> <w lemma="оученикъ">оученикъ</w>. </cl>
+        </lg>
+        <lg id="18_4" n="4">
+          <cl id="18_4_1"><w lemma="оученикъ">оученикъ</w> <w lemma="же">же</w> <w lemma="тъ">тъ</w> <w lemma="бꙑти">бѣ</w> <w lemma="знати">знаемъ</w>. <w lemma="архиереи">архиереови</w>. <w lemma="и">ꙇ</w> <w lemma="вънити">вьниде</w> <w lemma="съ">съ</w> <w lemma="исоусъ">ꙇ҃сомь</w>. <w lemma="въ">въ</w> <w lemma="дворъ">дворъ</w> <w lemma="архиереовъ">архиереовъ</w>. </cl>
+        </lg>
+        <lg id="18_5" n="5">
+          <cl id="18_5_1"><w lemma="петръ">Петръ</w> <w lemma="же">же</w> <w lemma="стоꙗти">стоѣше</w> <w lemma="при">при</w> <w lemma="двьрь">двьрехъ</w> <w lemma="вънѣ">вьнѣ</w>. </cl>
+        </lg>
+        <lg id="18_6" n="6">
+          <cl id="18_6_1"><w lemma="изити">Ꙇзиде</w> <w lemma="же">же</w> <w lemma="оученикъ">оученикъ</w> <w lemma="тъ">тъ</w>. <w lemma="иже">ꙇже</w> <w lemma="бꙑти">бѣ</w> <w lemma="знати">знаемъ</w> <w lemma="архиереи">архиереови</w>. <w lemma="и">ꙇ</w> <w lemma="рещи">рече</w> <w lemma="двьрьница">двьрьници</w>. </cl>
+        </lg>
+        <lg id="18_7" n="7">
+          <cl id="18_7_1"><w lemma="и">ꙇ</w> <w lemma="въвести">въведе</w> <w lemma="петръ">петра</w>. </cl>
+        </lg>
+        <lg id="18_8" n="8">
+          <cl id="18_8_1"><w lemma="глаголати">Г҃ла</w> <w lemma="же">же</w> <w lemma="раба">раба</w> <w lemma="двьрьница">двьрьница</w> <w lemma="петръ">петрови</w>. </cl>
+        </lg>
+        <lg id="18_9" n="9">
+          <cl id="18_9_1"><w lemma="еда">еда</w> <w lemma="и">ꙇ</w> <w lemma="тꙑ">тꙑ</w> <w lemma="отъ">отъ</w> <w lemma="оученикъ">оученикъ</w> <w lemma="бꙑти">еси</w> <w lemma="чловѣкъ">ч҃ка</w> <w lemma="тъ">того</w>. </cl>
+        </lg>
+        <lg id="18_10" n="10">
+          <cl id="18_10_1"><w lemma="глаголати">г҃ла</w> <w lemma="онъ">онъ</w> </cl>
+        </lg>
+        <lg id="18_11" n="11">
+          <cl id="18_11_1"><w lemma="не бꙑти">нѣсмь</w>. </cl>
+        </lg>
+        <lg id="18_12" n="12">
+          <cl id="18_12_1"><w lemma="стоꙗти">стоѣхѫ</w> <w lemma="же">же</w> <w lemma="рабъ">раби</w>. <w lemma="и">ꙇ</w> <w lemma="слоуга">слоугꙑ</w> <w lemma="огнь">огн҄ь</w> <w lemma="сътворити">сътворьше</w>. <w lemma="ꙗко">ѣко</w> <w lemma="зима">зима</w> <w lemma="бꙑти">бѣ</w>. <w lemma="и">ꙇ</w> <w lemma="грѣꙗти">грѣахѫ</w> </cl>
+        </lg>
+        <lg id="18_13" n="13">
+          <cl id="18_13_1"><w lemma="бꙑти">бѣ</w> <w lemma="же">же</w> <w lemma="съ">съ</w> <w lemma="и">н҄ими</w> <w lemma="петръ">петръ</w> <w lemma="стоꙗти">стоѩ</w> <w lemma="и">ꙇ</w> <w lemma="грѣꙗти">грѣѩ</w> <w lemma="себе">сѧ</w>] </cl>
+        </lg>
+        <lg id="18_14" n="14">
+          <cl id="18_14_1"><w lemma="архиереи">Архиереі</w> <w lemma="же">же</w> <w lemma="въпросити">въпроси</w> <w lemma="исоусъ">ꙇ҃са</w> <w lemma="о">о</w> <w lemma="оученикъ">оученицѣхъ</w> <w lemma="и">его</w>. <w lemma="и">ꙇ</w> <w lemma="о">о</w> <w lemma="оучениѥ">оучени</w> <w lemma="и">его</w>. </cl>
+        </lg>
+        <lg id="18_15" n="15">
+          <cl id="18_15_1"><w lemma="отъвѣщати">Ѡтъвѣшта</w> <w lemma="и">емоу</w> <w lemma="исоусъ">и҃с</w>. </cl>
+        </lg>
+        <lg id="18_16" n="16">
+          <cl id="18_16_1"><w lemma="азъ">азъ</w> <w lemma="не">не</w> <w lemma="обиновати">обиноуѩ</w> <w lemma="себе">сѧ</w> <w lemma="глаголати">г҃лахъ</w> <w lemma="вьсь">вьсемоу</w> <w lemma="миръ#2">мироу</w>. </cl>
+        </lg>
+        <lg id="18_17" n="17">
+          <cl id="18_17_1"><w lemma="азъ">азъ</w> <w lemma="вьсегда">вьсегда</w> <w lemma="оучити">оучихъ</w> <w lemma="на">на</w> <w lemma="съньмище">сънъмишти</w>. <w lemma="и">ꙇ</w> <w lemma="въ">въ</w> <w lemma="црькꙑ">цръкъв[е</w>] <w lemma="идеже">ꙇдеже</w> <w lemma="вьсь">вьси</w> <w lemma="июдеи">ꙇюдѣі</w> <w lemma="сънимати">сънемлѫтъ</w> <w lemma="себе">сѧ</w>. <w lemma="и">ꙇ</w> <w lemma="таи">таꙇ</w> <w lemma="не">не</w> <w lemma="глаголати">г҃лахъ</w> <w lemma="ничьтоже">ничесоже</w>. </cl>
+        </lg>
+        <lg id="18_18" n="18">
+          <cl id="18_18_1"><w lemma="чьто">Чьто</w> <w lemma="азъ">мѧ</w> <w lemma="въпрашати">въпрашаеши</w>. </cl>
+        </lg>
+        <lg id="18_19" n="19">
+          <cl id="18_19_1"><w lemma="въпросити">въпроси</w> <w lemma="слꙑшати">слꙑшавъшѧѩ</w>. <w lemma="чьто">чьто</w> <w lemma="глаголати">г҃лахъ</w> <w lemma="и">ꙇмъ</w>. </cl>
+        </lg>
+        <lg id="18_20" n="20">
+          <cl id="18_20_1"><w lemma="се">се</w> <w lemma="сь">си</w> <w lemma="вѣдѣти">вѣдѧтъ</w> <w lemma="иже">еже</w> <w lemma="рещи">рѣхъ</w> <w lemma="азъ">азъ</w>. </cl>
+        </lg>
+        <lg id="18_21" n="21">
+          <cl id="18_21_1"><w lemma="сь">Си</w> <w lemma="рещи">рекъшю</w> <w lemma="и">емоу</w>. <w lemma="ѥдинъ">единъ</w> <w lemma="отъ">отъ</w> <w lemma="прѣстоꙗти">прѣстоѩштихъ</w> <w lemma="слоуга">слоугъ</w>. <w lemma="оударити">оудари</w> <w lemma="въ">въ</w> <w lemma="ланита">ланитѫ</w> <w lemma="исоусъ">ꙇ҃са</w>. <w lemma="рещи">рекъ</w>. </cl>
+        </lg>
+        <lg id="18_22" n="22">
+          <cl id="18_22_1"><w lemma="тако">тако</w> <w lemma="ли">ли</w> <w lemma="отъвѣщавати">отъвѣштаваеши</w> <w lemma="архиереи">архиереови</w>. </cl>
+        </lg>
+        <lg id="18_23" n="23">
+          <cl id="18_23_1"><w lemma="отъвѣщати">Ѡтъвѣшта</w> <w lemma="и">емоу</w> <w lemma="исоусъ">и҃с</w>. </cl>
+        </lg>
+        <lg id="18_24" n="24">
+          <cl id="18_24_1"><w lemma="аще">аште</w> <w lemma="зълѣ">зълѣ</w> <w lemma="глаголати">г҃лахъ</w> <w lemma="съвѣдѣтельствовати">сьвѣдѣтел҄ьствоуꙇ</w> <w lemma="о">о</w> <w lemma="зълъ">зьлѣ</w>. <w lemma="аще">аште</w> <w lemma="ли">ли</w> <w lemma="добрѣ">добрѣ</w> <w lemma="чьто">чьто</w> <w lemma="азъ">мѧ</w> <w lemma="бити">биеши</w>. </cl>
+        </lg>
+        <lg id="18_25" n="25">
+          <cl id="18_25_1"><w lemma="посълати">Посъла</w> <w lemma="же">же</w> <w lemma="и">і</w> <w lemma="анна#1">анⸯна</w> <w lemma="съвѧзати">съвѧзана</w> <w lemma="къ">къ</w> <w lemma="каиꙗфа">каꙇафѣ</w> <w lemma="архиереи">архиереови</w>. </cl>
+        </lg>
+        <lg id="18_26" n="26">
+          <cl id="18_26_1"><w lemma="бꙑти">Бѣ</w> <w lemma="же">же</w> <w lemma="симонъ">симонъ</w> <w lemma="петръ">петръ</w> <w lemma="стоꙗти">стоѩ</w> <w lemma="и">ꙇ</w> <w lemma="грѣꙗти">грѣѩ</w> <w lemma="себе">сѧ</w>. </cl>
+        </lg>
+        <lg id="18_27" n="27">
+          <cl id="18_27_1"><w lemma="рещи">рѣшѧ</w> <w lemma="же">же</w> <w lemma="и">емоу</w>. </cl>
+        </lg>
+        <lg id="18_28" n="28">
+          <cl id="18_28_1"><w lemma="еда">еда</w> <w lemma="и">ꙇ</w> <w lemma="тꙑ">тꙑ</w> <w lemma="отъ">отъ</w> <w lemma="оученикъ">оученикъ</w> <w lemma="и">его</w> <w lemma="бꙑти">еси</w>. </cl>
+        </lg>
+        <lg id="18_29" n="29">
+          <cl id="18_29_1"><w lemma="онъ">онъ</w> <w lemma="же">же</w> <w lemma="отъврѣщи">отъвръже</w> <w lemma="себе">сѧ</w>. <w lemma="и">ꙇ</w> <w lemma="рещи">рече</w> </cl>
+        </lg>
+        <lg id="18_30" n="30">
+          <cl id="18_30_1"><w lemma="не бꙑти">нѣсмь</w>. </cl>
+        </lg>
+        <lg id="18_31" n="31">
+          <cl id="18_31_1"><w lemma="глаголати">г҃ла</w> <w lemma="ѥдинъ">единъ</w> <w lemma="отъ">отъ</w> <w lemma="рабъ">рабъ</w> <w lemma="архиереовъ">архиереовъ</w>. <w lemma="ѫжика">ѫжика</w> <w lemma="бꙑти">сꙑ</w>. <w lemma="иже">емоуже</w> <w lemma="оурѣзати#1">оурѣза</w> <w lemma="петръ">петръ</w> <w lemma="оухо">оухо</w>. </cl>
+        </lg>
+        <lg id="18_32" n="32">
+          <cl id="18_32_1"><w lemma="не">не</w> <w lemma="азъ">азъ</w> <w lemma="ли">ли</w> <w lemma="тꙑ">тѧ</w> <w lemma="видѣти">видѣхъ</w> <w lemma="въ">въ</w> <w lemma="врьтъ">врътѣ</w> <w lemma="съ">съ</w> <w lemma="и">н҄имь</w>. </cl>
+        </lg>
+        <lg id="18_33" n="33">
+          <cl id="18_33_1"><w lemma="пакꙑ">пакꙑ</w> <w lemma="же">же</w> <w lemma="петръ">петръ</w> <w lemma="отъврѣщи">отъвръже</w> <w lemma="себе">сѧ</w>. </cl>
+        </lg>
+        <lg id="18_34" n="34">
+          <cl id="18_34_1"><w lemma="и">ꙇ</w> <w lemma="абиѥ">абие</w> <w lemma="коуръ">коуръ</w> <w lemma="възгласити">възгласи</w>. з҃aч. </cl>
+        </lg>
+        <lg id="18_35" n="35">
+          <cl id="18_35_1"><w lemma="вести#1">Вѣсѧ</w> <w lemma="же">же</w> <w lemma="исоусъ">ꙇ҃са</w> <w lemma="отъ">отъ</w> <w lemma="каиꙗфа">каꙇафꙑ</w>. <w lemma="въ">въ</w> <w lemma="преторъ">преторъ</w>. </cl>
+        </lg>
+        <lg id="18_36" n="36">
+          <cl id="18_36_1"><w lemma="бꙑти">бѣ</w> <w lemma="же">же</w> <w lemma="заоутра">за оутра</w>. </cl>
+        </lg>
+        <lg id="18_37" n="37">
+          <cl id="18_37_1"><w lemma="и">ꙇ</w> <w lemma="тъ">ти</w> <w lemma="не">не</w> <w lemma="вънити">вьнидѫ</w> <w lemma="въ">въ</w> <w lemma="притворъ">притворъ</w>. <w lemma="коньць">к҃оц</w>. <w lemma="да">да</w> <w lemma="не">не</w> <w lemma="оскврьнити">оскврънѧтъ</w> <w lemma="себе">сѧ</w>. <w lemma="нъ">нъ</w> <w lemma="да">да</w> <w lemma="ꙗсти">ѣдѧтъ</w> <w lemma="пасха">пасхѫ</w>. </cl>
+        </lg>
+        <lg id="18_38" n="38">
+          <cl id="18_38_1"><w lemma="коньць">к҃оц</w>. </cl>
+        </lg>
+        <lg id="18_39" n="39">
+          <cl id="18_39_1"><w lemma="изити">Ꙇзиде</w> <w lemma="же">же</w> <w lemma="къ">къ</w> <w lemma="и">н҄имъ</w> <w lemma="и">ꙇ</w> <w lemma="пилатъ">пилатъ</w> <w lemma="вънъ">вънъ</w>. <w lemma="и">ꙇ</w> <w lemma="рещи">рече</w>. </cl>
+        </lg>
+      </div>
+      <div id="21" type="chapter" n="Ioanne 21">
+        <lg id="21_1" n="1">
+          <cl id="21_1_1"><w lemma="симонъ">Симоне</w> <w lemma="ионинъ">ꙇонинъ</w> <w lemma="любити">л҄юбиши</w> <w lemma="ли">ли</w> <w lemma="азъ">мѧ</w>. </cl>
+        </lg>
+        <lg id="21_2" n="2">
+          <cl id="21_2_1"><w lemma="оскръбѣти">оскръбѣ</w> <w lemma="петръ">петръ</w>. <w lemma="ꙗко">ѣко</w> <w lemma="рещи">рече</w> <w lemma="и">емоу</w> <w lemma="третиици">третици</w>. <w lemma="любити">л҄юбиши</w> <w lemma="ли">ли</w> <w lemma="азъ">мѧ</w>. <w lemma="и">ꙇ</w> <w lemma="глаголати">г҃ла</w> <w lemma="и">емоу</w>. </cl>
+        </lg>
+        <lg id="21_3" n="3">
+          <cl id="21_3_1"><w lemma="господь">г҃и</w>. <w lemma="вьсь">вьсе</w> <w lemma="тꙑ">тꙑ</w> <w lemma="вѣдѣти">вѣси</w>. </cl>
+        </lg>
+        <lg id="21_4" n="4">
+          <cl id="21_4_1"><w lemma="тꙑ">тꙑ</w> <w lemma="вѣдѣти">вѣси</w> <w lemma="ꙗко">ѣко</w> <w lemma="любити">л҄юбл҄ѭ</w> <w lemma="тꙑ">тѧ</w>. </cl>
+        </lg>
+        <lg id="21_5" n="5">
+          <cl id="21_5_1"><w lemma="глаголати">г҃ла</w> <w lemma="и">емоу</w> <w lemma="исоусъ">и҃с</w>. </cl>
+        </lg>
+        <lg id="21_6" n="6">
+          <cl id="21_6_1"><w lemma="пасти#2">паси</w> <w lemma="овьца">овьцѧ</w> <w lemma="мои">моѩ</w>. </cl>
+        </lg>
+        <lg id="21_7" n="7">
+          <cl id="21_7_1"><w lemma="аминъ">амин</w> <w lemma="аминъ">амин</w> <w lemma="глаголати">г҃лѭ</w> <w lemma="тꙑ">тебѣ</w>. </cl>
+        </lg>
+        <lg id="21_8" n="8">
+          <cl id="21_8_1"><w lemma="ѥгда">егда</w> <w lemma="бꙑти">бѣ</w> <w lemma="юнъ">юнъ</w>. <w lemma="поꙗсати">поѣсаше</w> <w lemma="себе">сѧ</w> <w lemma="самъ">самъ</w>. <w lemma="и">ꙇ</w> <w lemma="ходити">хождѣаше</w> <w lemma="ꙗможе">ѣможе</w> <w lemma="хотѣти">хотѣаше</w>. </cl>
+        </lg>
+        <lg id="21_9" n="9">
+          <cl id="21_9_1"><w lemma="ѥгда">егда</w> <w lemma="же">же</w> <w lemma="състарѣти">състарѣеши</w> <w lemma="себе">сѧ</w>. <w lemma="въздѣти">вьздеждеши</w> <w lemma="рѫка">рѫцѣ</w> <w lemma="твои">твоі</w>. <w lemma="и">ꙇ</w> <w lemma="инъ">инъ</w> <w lemma="тꙑ">тѧ</w> <w lemma="поꙗсати">поѣшетъ</w>. <w lemma="и">ꙇ</w> <w lemma="вести#1">ведетъ</w>. <w lemma="ꙗможе">ѣможе</w> <w lemma="не">не</w> <w lemma="хотѣти">хоштеши</w>. </cl>
+        </lg>
+        <lg id="21_10" n="10">
+          <cl id="21_10_1"><w lemma="сь">се</w> <w lemma="же">же</w> <w lemma="рещи">рече</w> <w lemma="клепати">клепл҄ѧ</w>. <w lemma="кꙑи">коеѭ</w> <w lemma="съмрьть">съмръ[т]иѭ</w> <w lemma="прославити">прославитъ</w> <w lemma="богъ">б҃а</w>. </cl>
+        </lg>
+        <lg id="21_11" n="11">
+          <cl id="21_11_1"><w lemma="и">ꙇ</w> <w lemma="сь">се</w> <w lemma="рещи">рекъ</w>. <w lemma="глаголати">г҃ла</w> <w lemma="и">емоу</w> </cl>
+        </lg>
+        <lg id="21_12" n="12">
+          <cl id="21_12_1"><w lemma="ити">ꙇди</w> <w lemma="по">по</w> <w lemma="азъ">мнѣ</w>. </cl>
+        </lg>
+        <lg id="21_13" n="13">
+          <cl id="21_13_1"><w lemma="и">ꙇ</w> <w lemma="обратити">обрашть</w> <w lemma="же">же</w> <w lemma="себе">сѧ</w> <w lemma="петръ">петръ</w>. <w lemma="видѣти">видѣ</w> <w lemma="оученикъ">оученика</w>. <w lemma="иже">егоже</w> <w lemma="любити">л҄юбл҄ѣаше</w> <w lemma="исоусъ">и҃с</w>. <w lemma="ити">ꙇдѫшта</w> <w lemma="въ">вь</w> <w lemma="слѣдъ">слѣдъ</w>. <w lemma="иже">ꙇже</w> <w lemma="и">ꙇ</w> <w lemma="възлещи">възлеже</w> <w lemma="на">на</w> <w lemma="прьси">пръси</w> <w lemma="и">его</w> <w lemma="и">ꙇ</w> <w lemma="рещи">рече</w>. </cl>
+        </lg>
+        <lg id="21_14" n="14">
+          <cl id="21_14_1"><w lemma="господь">г҃и</w> <w lemma="къто">кⸯто</w> <w lemma="бꙑти">естъ</w> <w lemma="прѣдаꙗти">прѣдаѩі</w> <w lemma="тꙑ">тѧ</w>. </cl>
+        </lg>
+        <lg id="21_15" n="15">
+          <cl id="21_15_1"><w lemma="сь">сего</w> <w lemma="видѣти">видѣвъ</w> <w lemma="петръ">петръ</w> <w lemma="глаголати">г҃ла</w> <w lemma="исоусъ">ꙇ҃сви</w>. </cl>
+        </lg>
+        <lg id="21_16" n="16">
+          <cl id="21_16_1"><w lemma="господь">г҃и</w>. <w lemma="а">а</w> <w lemma="сь">сь</w> <w lemma="чьто">чьто</w>. </cl>
+        </lg>
+        <lg id="21_17" n="17">
+          <cl id="21_17_1"><w lemma="глаголати">г҃ла</w> <w lemma="и">емоу</w> <w lemma="исоусъ">и҃с</w>. </cl>
+        </lg>
+        <lg id="21_18" n="18">
+          <cl id="21_18_1"><w lemma="аще">аште</w> <w lemma="хотѣти">хоштѫ</w> <w lemma="да">да</w> <w lemma="тъ">тъ</w> <w lemma="прѣбꙑти">прѣбѫдетъ</w>. <w lemma="доньде">доньдеже</w> <w lemma="прити">придѫ</w>. <w lemma="чьто">чьто</w> <w lemma="бꙑти">е</w> <w lemma="тꙑ">тебѣ</w>. </cl>
+        </lg>
+        <lg id="21_19" n="19">
+          <cl id="21_19_1"><w lemma="по">по</w> <w lemma="азъ">мнѣ</w> <w lemma="тꙑ">тꙑ</w> <w lemma="грѧсти">грѧд[и</w>] </cl>
+        </lg>
+        <lg id="21_20" n="20">
+          <cl id="21_20_1"><w lemma="изити">ꙇзиде</w> <w lemma="же">же</w> <w lemma="слово">слово</w> <w lemma="сь">се</w> <w lemma="въ">въ</w> <w lemma="братриꙗ">братри[ѭ</w>] <w lemma="ꙗко">ѣко</w> <w lemma="оученикъ">оученикъ</w> <w lemma="тъ">тъ</w> <w lemma="не">не</w> <w lemma="оумрѣти">оумьр҄етъ</w>. </cl>
+        </lg>
+        <lg id="21_21" n="21">
+          <cl id="21_21_1"><w lemma="не">не</w> <w lemma="рещи">речетъ</w> <w lemma="же">же</w> <w lemma="и">емоу</w> <w lemma="исоусъ">и҃с</w>. <w lemma="ꙗко">ѣко</w> <w lemma="не">[не]</w> <w lemma="оумрѣти">оумьретъ</w>. <w lemma="нъ">нъ</w> <w lemma="аще">аште</w> <w lemma="хотѣти">хоштѫ</w> <w lemma="да">да</w> <w lemma="тъ">тъ</w> <w lemma="прѣбꙑвати">прѣбꙑваетъ</w>. <w lemma="доньде">доньдеже</w> <w lemma="прити">придѫ</w>. <w lemma="чьто">чьто</w> <w lemma="бꙑти">е</w> <w lemma="тꙑ">тебѣ</w>. </cl>
+        </lg>
+        <lg id="21_22" n="22">
+          <cl id="21_22_1"><w lemma="сь">сь</w> <w lemma="бꙑти">естъ</w> <w lemma="оученикъ">оученикъ</w> <w lemma="съвѣдѣтельствовати">съвѣдѣтельствоуѩі</w> <w lemma="о">о</w> <w lemma="сь">сихъ</w>. <w lemma="иже">ꙇже</w> <w lemma="и">ꙇ</w> <w lemma="напьсати">напⸯса</w> <w lemma="сь">си</w>. </cl>
+        </lg>
+        <lg id="21_23" n="23">
+          <cl id="21_23_1"><w lemma="и">ꙇ</w> <w lemma="вѣдѣти">вѣмь</w> <w lemma="ꙗко">ѣко</w> <w lemma="истиньнъ">ꙇстинъно</w> <w lemma="бꙑти">естъ</w> <w lemma="съвѣдѣтельство">съвѣдѣтел҄ьство</w> <w lemma="и">его</w>. </cl>
+        </lg>
+        <lg id="21_24" n="24">
+          <cl id="21_24_1"><w lemma="бꙑти">сѫтъ</w> <w lemma="же">же</w> <w lemma="и">ꙇ</w> <w lemma="инъ">ина</w> <w lemma="мъногъ">многа</w>. <w lemma="иже">ѣже</w> <w lemma="сътворити">створи</w> <w lemma="исоусъ">и҃с</w>. <w lemma="иже">ѣже</w> <w lemma="аще">аште</w> <w lemma="по">по</w> <w lemma="ѥдинъ">единомоу</w> <w lemma="съписати#1">сⸯпана</w> <w lemma="бꙑвати">бꙑваѭтъ</w>. <w lemma="ни">ни</w> <w lemma="самъ">самомоу</w> <w lemma="азъ">мноѭ</w>. <w lemma="вьсь">вьсемоу</w> <w lemma="миръ#2">мироу</w> <w lemma="въмѣстити">въмѣстити</w>. <w lemma="пьсати">пишемꙑхъ</w> <w lemma="кънигꙑ">кън҄игъ</w>. </cl>
+        </lg>
+        <lg id="21_25" n="25">
+          <cl id="21_25_1"><w lemma="аминъ">аминь</w>. ⁘</cl>
+        </lg>
+      </div>
+    </body>
+  </text>
+</TEI>
