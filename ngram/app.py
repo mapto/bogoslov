@@ -35,9 +35,10 @@ for fname in glob(src):
     result = root.xpath(f"//tei:{unit}", namespaces=ns)
     for e in result:
         eid = e.get("id")
-        data[f"{corpus}/{ch}#{eid}"] = " ".join(
-            e.xpath(f"""//tei:{unit}[@id='{eid}']//tei:w/@lemma""", namespaces=ns)
-        )
+        contents = e.xpath(f"""//tei:{unit}[@id='{eid}']//tei:w/@lemma""", namespaces=ns)
+        if not contents or (len(contents) == 1 and not contents[0].strip()):
+            continue
+        data[f"{corpus}/{ch}#{eid}"] = " ".join(contents)
 
 
 def ids2hrefs(ids: list[str]) -> str:
