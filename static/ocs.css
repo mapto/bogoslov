@@ -1,18 +1,18 @@
 @font-face{
-    font-family:BukyVede;
-    src:url(http://scripta-bulgarica.eu/sites/all/themes/scripta/fonts/BukyVede-Regular.ttf) format('truetype'),
-        url(http://scripta-bulgarica.eu/sites/all/themes/scripta/fonts/BukyVede-Bold.ttf) format('truetype'),
-        url(http://scripta-bulgarica.eu/sites/all/themes/scripta/fonts/BukyVede-Italic.ttf) format('truetype')
+    font-family: BukyVede;
+    src: url(http://scripta-bulgarica.eu/sites/all/themes/scripta/fonts/BukyVede-Regular.ttf) format('truetype'),
+         url(http://scripta-bulgarica.eu/sites/all/themes/scripta/fonts/BukyVede-Bold.ttf) format('truetype'),
+         url(http://scripta-bulgarica.eu/sites/all/themes/scripta/fonts/BukyVede-Italic.ttf) format('truetype');
 }
 
 @font-face {
-    font-family: 'CyrillicaOchrid10U';
-    src: url('http://www.starobulglit.eu/OC10U.ttf') format('truetype');
+    font-family: CyrillicaOchrid10U;
+    src: url(http://www.starobulglit.eu/OC10U.ttf) format('truetype');
 }
 
 
 body {
- sans-serif; margin: 20px;
+ margin: 20px;
 }
 
 .chapter {

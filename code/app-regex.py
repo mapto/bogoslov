@@ -6,9 +6,6 @@ import regex as re
 import gradio as gr
 from glob import glob
 
-primary_path = "/corpora"
-
-con_span = 100
 """
 @font-face {
     font-family: 'CyrillicaOchrid10U';
@@ -76,8 +73,10 @@ footer {
 """
 
 
+con_span = 100
 
-srcs = glob(f"{primary_path}/*/*.html")
+
+srcs = glob(f"/corpora/*/*.html")
 
 texts = {}
 parser = etree.HTMLParser()
@@ -96,29 +95,19 @@ for fname in srcs:
         # print(text)
 
 sources = [
-    "PROIEL (Sinai Psalter, Codex Marianus)",
-    "WikiSource (Codex Marianus, Codex Zographensis)",
-    "MacRobert (Bologna Psalter)",
+    "Sintacticus (Sinai Psalter, Codex Marianus, Codex Zographensis)",
+    # "WikiSource (Codex Marianus, Codex Zographensis)",
+    "Oxford (Bologna Psalter)",
 ]
-books = ["Psalter", "Matthew", "Mark", "Luke", "John"]
-
-# files = {"PROIEL": "proiel_20180408", "WikiSource": "wikisource_20250407"}
+books = ["Psalter", "Matthaeo", "Marco", "Luca", "Ioanne"]
 
 corpus_labels = {
-    "macrobert_20250303_psal-bol": "Bologna Psalter from Mary MacRobert",
-    "torot_20180919_psal-sin": "Sinai Psalter from TOROT",
-    "proiel_20180408_marianus_matthew": "Codex Marianus - Matthew from PROIEL",
-    "proiel_20180408_marianus_mark": "Codex Marianus - Mark from PROIEL",
-    "proiel_20180408_marianus_luke": "Codex Marianus - Luke from PROIEL",
-    "proiel_20180408_marianus_john": "Codex Marianus - John from PROIEL",
-    "wikisource_20250407_marianus_matthew": "Codex Marianus - Matthew from WikiSource",
-    "wikisource_20250407_marianus_mark": "Codex Marianus - Mark from WikiSource",
-    "wikisource_20250407_marianus_luke": "Codex Marianus - Luke from WikiSource",
-    "wikisource_20250407_marianus_john": "Codex Marianus - John from WikiSource",
-    "wikisource_20250407_zogr_matthew": "Codex Zographensis - Matthew from WikiSource",
-    "wikisource_20250407_zogr_mark": "Codex Zographensis - Mark from WikiSource",
-    "wikisource_20250407_zogr_luke": "Codex Zographensis - Luke from WikiSource",
-    "wikisource_20250407_zogr_john": "Codex Zographensis - John from WikiSource",
+    "psalter.bologna.oxford": "Bologna Psalter from Catherine Mary MacRobert",
+    "psalter.sinai.syntacticus": "Sinai Psalter from Syntacticus",
+    "gospel.marianus.syntacticus": "Codex Marianus from Syntacticus",
+    "gospel.zographensis.syntacticus": "Codex Zographensis from Syntacticus",
+    "gospel.marianus.wikisource": "Codex Marianus from WikiSource",
+    "gospel.zographensis.wikisource": "Codex Zographensis from WikiSource",
 }
 
 corpus_files = {v: k for k, v in corpus_labels.items()}
@@ -155,22 +144,21 @@ def generalise(s: str) -> str:
 
 
 def select_sources(sources, books):
-    # TODO: Any other sources than Bologna Psalter
     result = []
     src = [s.split(" ")[0] for s in sources]
     for b in books:
         if b == "Psalter":
-            if "MacRobert" in src:
-                result += ["Bologna Psalter"]
-            if "PROIEL" in src:
-                result += ["torot_20180919_psal-sin"]
+            if "Oxford" in src:
+                result += ["psalter.bologna.oxford"]
+            if "Syntacticus" in src:
+                result += ["psalter.sinai.syntacticus"]
         else:
-            if "PROIEL" in src:
-                result += [f"proiel_20180408_marianus_{b.lower()}"]
+            if "Syntacticus" in src:
+                result += ["gospel.marianus.syntacticus", "gospel.zographensis.syntacticus"]
             if "WikiSource" in src:
                 result += [
-                    f"wikisource_20250407_marianus_{b.lower()}",
-                    f"wikisource_20250407_zogr_{b.lower()}",
+                    "gospel.marianus.wikisource",
+                    "gospel.zographensis.wikisource",
                 ]
     return result
 
@@ -194,7 +182,7 @@ def render(data: dict[str, list[str]]) -> str:
         ]
         contents = "\n".join(htmls)
         href = f"/corpora/{addr}"
-        hr_addr = addr.replace("/", ":").replace(".html#", ":")
+        hr_addr = addr.replace("/", ".").replace(".html#", ":")
         result += [
             f"{href_templ.format(href=href, content=hr_addr)}:<ul>{contents}</ul>"
         ]
@@ -203,14 +191,14 @@ def render(data: dict[str, list[str]]) -> str:
 
 def find(
     s: str,
-    # sources: list[str],
-    # books: list[str],
+    sources: list[str],
+    books: list[str],
     context: int = 10,
     ignore_case: bool = True,
     whole_words: bool = False,
 ) -> str:
-    sources = ["MacRobert"]
-    books = ["Psalter"]
+    # sources = ["MacRobert"]
+    # books = ["Psalter"]
     srcs = select_sources(sources, books)
 
     pattern = generalise(s)
@@ -254,16 +242,16 @@ demo = gr.Interface(
     fn=find,
     inputs=[
         gr.Textbox("бог", label="Search"),
-        # gr.CheckboxGroup(
-        #     choices=sources,
-        #     value=sources,
-        #     label="Sources",
-        # ),
-        # gr.CheckboxGroup(
-        #     choices=books,
-        #     value=books,
-        #     label="Books",
-        # ),
+        gr.CheckboxGroup(
+            choices=sources,
+            value=sources,
+            label="Sources",
+        ),
+        gr.CheckboxGroup(
+            choices=books,
+            value=books,
+            label="Books",
+        ),
         gr.Radio([20, 50, 100, 200], value=200, label="Letters in context"),
         gr.Checkbox(label="Match case"),
         gr.Checkbox(label="Whole words"),

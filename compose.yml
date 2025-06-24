@@ -13,25 +13,41 @@ services:
 
   regex:
     build:
-      context: ./regex
-      dockerfile: Dockerfile
+      context: ./code
+      dockerfile: Dockerfile-regex
     # ports:
     #   - 8781:7861
     volumes:
-      - ./regex/alphabet.tsv:/alphabet.tsv:ro
+      - ./code/alphabet.tsv:/alphabet.tsv:ro
       - ./corpora:/corpora:ro
+      # - ./code:/home/app
     restart: always
     healthcheck:
       test: ["CMD-SHELL", "python -c \"from urllib.request import urlopen; int(urlopen('http://localhost:7861/regex/').status >= 400)\""]
 
   ngram:
     build:
-      context: ./ngram
-      dockerfile: Dockerfile
+      context: ./code
+      dockerfile: Dockerfile-ngram
     # ports:
     #   - 8782:7861
     volumes:
       - ./corpora:/corpora:ro
+      # - ./code:/home/app
     restart: always
     healthcheck:
       test: ["CMD-SHELL", "python -c \"from urllib.request import urlopen; int(urlopen('http://localhost:7861/ngram/').status >= 400)\""]
+
+  db:
+    image: pgvector/pgvector:pg17
+    environment:
+      - POSTGRES_DB=bogoslov
+      - POSTGRES_USER=bogoslov
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    ports:
+      - 5732:5432
+    volumes: 
+      - ./db/data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d bogoslov -U bogoslov"]
+    restart: always      

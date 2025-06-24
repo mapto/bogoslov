@@ -1,15 +1,15 @@
 FROM python:3-slim-buster
 RUN adduser app
 WORKDIR /home/app
-COPY requirements.txt .
+COPY requirements-regex.txt .
 
 COPY *.py .
 
 # RUN chmod +x app.py
 USER app
-RUN pip install --no-cache-dir --no-warn-script-location -r requirements.txt
+RUN pip install --no-cache-dir --no-warn-script-location -r requirements-regex.txt
 
 COPY alphabet.tsv .
-CMD ./app.py
+CMD ./app-regex.py
 
 # CMD tail -f /dev/null
