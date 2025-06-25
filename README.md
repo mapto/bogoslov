@@ -8,7 +8,7 @@ The contained corpora are courtesy to:
 
 * Bologna Psalter: digitalisation by [Mary Catherine MacRobert](https://www.some.ox.ac.uk/our-people/catherine-mary-macrobert/), transliteration from Latin to Cyrillic by Martin Ruskov, TEI annotation by Martin Ruskov, Lemmatization with [UDPipe](https://lindat.mff.cuni.cz/services/udpipe/).
 
-* Sinai Psalter, Codex Marianus, Codex Zographensis: [XSLT transformed](static/proiel2tei.xsl) from the [Syntacticus project](https://github.com/syntacticus/syntacticus-treebank-data).
+* Sinai Psalter, Codex Marianus, Codex Zographensis: [XSLT transformed](static/proiel2tei.xsl) from the [Syntacticus project](https://github.com/syntacticus/syntacticus-treebank-data). This source is aligned with the [Universal Dependencies](https://universaldependencies.org/) initiative and thus contains annotations, including human-validated lemmatization.
 
 # Bibliography
 

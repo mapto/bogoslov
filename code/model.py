@@ -5,9 +5,13 @@
 from sqlalchemy import Column, Computed, ForeignKey  # type: ignore
 from sqlalchemy import Integer, String, DateTime  # type: ignore
 from sqlalchemy.sql import func  # type: ignore
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, mapped_column
+from pgvector.sqlalchemy import Vector
 
 from db import Base, Session, engine
+
+# vdims = 384
+vdims = 768
 
 
 class Verse(Base):
@@ -30,12 +34,24 @@ class Ngram(Base):
     __tablename__ = "ngrams"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    path = Column(String)
-    filename = Column(String)
-    address = Column(String)
     lemmas = Column(String)
     text = Column(String)
     n = Column(Integer)
+
+    verse_id = Column(Integer, ForeignKey("verses.id"))
+
+    def __str__(self):
+        return str({c.name: getattr(self, c.name) for c in self.__table__.columns})
+
+
+class Embedding(Base):
+    __tablename__ = "embeddings"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    model = Column(String)
+    vector = mapped_column(Vector(vdims))
+
+    verse_id = Column(Integer, ForeignKey("verses.id"))
 
     def __str__(self):
         return str({c.name: getattr(self, c.name) for c in self.__table__.columns})

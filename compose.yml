@@ -1,3 +1,6 @@
+# This compose reuses an image for multiple containers. Because of this it should be built in advance with:
+# docker build -t bogoslov .
+
 services:
   proxy:
     image: nginx:1.25-alpine-slim
@@ -12,28 +15,47 @@ services:
     restart: always      
 
   regex:
-    build:
-      context: ./code
-      dockerfile: Dockerfile-regex
+    # build:
+    #   context: ./code
+    #   dockerfile: Dockerfile
+    image: bogoslov
     # ports:
     #   - 8781:7861
     volumes:
-      - ./code/alphabet.tsv:/alphabet.tsv:ro
+      - ./code/alphabet.tsv:/home/app/alphabet.tsv:ro
       - ./corpora:/corpora:ro
       # - ./code:/home/app
+    command: ./app-regex.py
     restart: always
     healthcheck:
       test: ["CMD-SHELL", "python -c \"from urllib.request import urlopen; int(urlopen('http://localhost:7861/regex/').status >= 400)\""]
 
   ngram:
-    build:
-      context: ./code
-      dockerfile: Dockerfile-ngram
+    # build:
+    #   context: ./code
+    #   dockerfile: Dockerfile
+    image: bogoslov
     # ports:
     #   - 8782:7861
     volumes:
       - ./corpora:/corpora:ro
       # - ./code:/home/app
+    command: ./app-ngram.py
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"from urllib.request import urlopen; int(urlopen('http://localhost:7861/ngram/').status >= 400)\""]
+
+  strans:
+    # build:
+    #   context: ./code
+    #   dockerfile: Dockerfile
+    image: bogoslov
+    # ports:
+    #   - 8783:7861
+    volumes:
+      - ./corpora:/corpora:ro
+      # - ./code:/home/app
+    command: ./app-strans.py
     restart: always
     healthcheck:
       test: ["CMD-SHELL", "python -c \"from urllib.request import urlopen; int(urlopen('http://localhost:7861/ngram/').status >= 400)\""]
@@ -48,6 +70,7 @@ services:
       - 5732:5432
     volumes: 
       - ./db/data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/0-init.sql:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -d bogoslov -U bogoslov"]
     restart: always      

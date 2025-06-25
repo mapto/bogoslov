@@ -4,12 +4,21 @@ from lxml import etree
 from glob import glob
 from tqdm import tqdm
 
-from db import Session, Base, engine
-from model import Verse, Ngram
+from sentence_transformers import SentenceTransformer
+from sqlalchemy import create_engine  # type: ignore
+from sqlalchemy.orm import sessionmaker  # type: ignore
+
+DATABASE_URL = "postgresql://bogoslov:xxxxxx@localhost:5732/bogoslov"
+engine = create_engine(DATABASE_URL, echo=False, pool_size=10, max_overflow=20)
+Session = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+from db import Base
+from model import Verse, Ngram, Embedding
 
 Base.metadata.create_all(engine)
 
 s = Session()
+# s.execute(text('CREATE EXTENSION IF NOT EXISTS vector'))
 
 ns = {"tei": "http://www.tei-c.org/ns/1.0"}
 unit = "lg"
@@ -45,29 +54,54 @@ src = "../corpora/*/*.tei.xml"
 #     s.add_all(data)
 #     s.commit()
 
-for v in s.query(Verse).all():
-    print(f"{v.path}.{v.filename}.{v.address}")
-    ngrams = []
-    for n in tqdm(range(2, 11)):
-        tokens = [l for l in v.text.split(" ") if l]
-        lemmas = [l for l in v.lemmas.split(",") if l]
-        for i in range(len(lemmas) - n + 1):
-            ng = tuple(lemmas[i : i + n])
-            if len(tokens) >= i + n:
-                text = " ".join(tokens[i : i + n])
-            elif len(tokens) > i:
-                text = " ".join(tokens[i:])
-            else:
-                text = ""
-            ngrams += [
-                Ngram(
-                    n=n,
-                    path=v.path,
-                    filename=v.filename,
-                    address=v.address,
-                    lemmas=",".join(lemmas[i : i + n]),
-                    text=text,
-                )
-            ]
-    s.add_all(ngrams)
+# for v in tqdm(s.query(Verse).all()):
+#     # print(f"{v.path}.{v.filename}.{v.address}")
+#     ngrams = []
+#     for n in range(2, 11):
+#         tokens = [l for l in v.text.split(" ") if l]
+#         lemmas = [l for l in v.lemmas.split(",") if l]
+#         for i in range(len(lemmas) - n + 1):
+#             ng = tuple(lemmas[i : i + n])
+#             # TODO: handle better lemmatization mismatches
+#             if len(tokens) >= i + n:
+#                 text = " ".join(tokens[i : i + n])
+#             elif len(tokens) > i:
+#                 text = " ".join(tokens[i:])
+#             else:
+#                 text = ""
+#             ngrams += [
+#                 Ngram(
+#                     n=n,
+#                     lemmas=",".join(lemmas[i : i + n]),
+#                     text=text,
+#                     verse_id=v.id,
+#                 )
+#             ]
+#     s.add_all(ngrams)
+#     s.commit()
+
+models = [
+    # "uaritm/multilingual_en_uk_pl_ru",  # 768
+    # "cointegrated/rubert-tiny2", # 312
+    "pouxie/LaBSE-en-ru-bviolet",
+    "Den4ikAI/sbert_large_mt_ru_retriever",
+    "siberian-lang-lab/evenki-russian-parallel-corpora",
+    "Diiiann/ru_oss",
+    "DiTy/bi-encoder-russian-msmarco",
+]
+
+for m in tqdm(models):
+    # m = "uaritm/multilingual_en_uk_pl_ru"
+    model = SentenceTransformer(m)
+    vectors = []
+    for v in s.query(Verse).all():
+        primary = model.encode(v.text)
+        vectors += [
+            Embedding(
+                model=m,
+                vector=primary,
+                verse_id=v.id,
+            )
+        ]
+    s.add_all(vectors)
     s.commit()

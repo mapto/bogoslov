@@ -154,7 +154,10 @@ def select_sources(sources, books):
                 result += ["psalter.sinai.syntacticus"]
         else:
             if "Syntacticus" in src:
-                result += ["gospel.marianus.syntacticus", "gospel.zographensis.syntacticus"]
+                result += [
+                    "gospel.marianus.syntacticus",
+                    "gospel.zographensis.syntacticus",
+                ]
             if "WikiSource" in src:
                 result += [
                     "gospel.marianus.wikisource",

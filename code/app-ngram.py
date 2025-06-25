@@ -30,7 +30,7 @@ stemmer = "udpipe"
 ns = {"tei": "http://www.tei-c.org/ns/1.0"}
 unit = "lg"
 
-src = f"/corpora/*/*.tei.xml"
+# src = f"/corpora/*/*.tei.xml"
 
 # data = {}
 # for fname in glob(src):
