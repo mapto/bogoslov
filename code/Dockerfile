@@ -1,14 +1,12 @@
 FROM python:3-slim-buster
 RUN adduser app
 WORKDIR /home/app
+USER app
+
 COPY requirements.txt .
+
+RUN pip install --no-cache-dir --no-warn-script-location -r requirements.txt
 
 COPY *.py .
 
-# RUN chmod +x app.py
-USER app
-RUN pip install --no-cache-dir --no-warn-script-location -r requirements.txt
-
-# CMD ./app-ngram.py
-
-CMD tail -f /dev/null
+CMD ["tail", "-f", "/dev/null"]

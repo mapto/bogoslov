@@ -5,6 +5,13 @@ from db import Session, Base, engine
 from model import Verse, Ngram, Embedding
 
 
+def get_texts() -> list[tuple[str, str, str, str]]:
+    s = Session()
+
+    result = s.query(Verse).all()
+    return [(r.path, r.filename, r.address, r.text) for r in result]
+
+
 def find_ngram(
     n: int, lngram: str, estart: int, eend: int, etext: str
 ) -> list[tuple[str, str, str]]:

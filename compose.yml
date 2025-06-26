@@ -15,50 +15,50 @@ services:
     restart: always      
 
   regex:
-    # build:
-    #   context: ./code
-    #   dockerfile: Dockerfile
     image: bogoslov
     # ports:
     #   - 8781:7861
     volumes:
       - ./code/alphabet.tsv:/home/app/alphabet.tsv:ro
       - ./corpora:/corpora:ro
-      # - ./code:/home/app
     command: ./app-regex.py
     restart: always
     healthcheck:
       test: ["CMD-SHELL", "python -c \"from urllib.request import urlopen; int(urlopen('http://localhost:7861/regex/').status >= 400)\""]
 
   ngram:
-    # build:
-    #   context: ./code
-    #   dockerfile: Dockerfile
     image: bogoslov
     # ports:
     #   - 8782:7861
     volumes:
       - ./corpora:/corpora:ro
-      # - ./code:/home/app
     command: ./app-ngram.py
     restart: always
     healthcheck:
       test: ["CMD-SHELL", "python -c \"from urllib.request import urlopen; int(urlopen('http://localhost:7861/ngram/').status >= 400)\""]
 
-  strans:
-    # build:
-    #   context: ./code
-    #   dockerfile: Dockerfile
+  lcs:
     image: bogoslov
     # ports:
     #   - 8783:7861
     volumes:
       - ./corpora:/corpora:ro
-      # - ./code:/home/app
+    command: ./app-lcs.py
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"from urllib.request import urlopen; int(urlopen('http://localhost:7861/lcs/').status >= 400)\""]
+
+
+  strans:
+    image: bogoslov
+    # ports:
+    #   - 8784:7861
+    volumes:
+      - ./corpora:/corpora:ro
     command: ./app-strans.py
     restart: always
     healthcheck:
-      test: ["CMD-SHELL", "python -c \"from urllib.request import urlopen; int(urlopen('http://localhost:7861/ngram/').status >= 400)\""]
+      test: ["CMD-SHELL", "python -c \"from urllib.request import urlopen; int(urlopen('http://localhost:7861/strans/').status >= 400)\""]
 
   db:
     image: pgvector/pgvector:pg17

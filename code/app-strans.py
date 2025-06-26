@@ -9,20 +9,13 @@ from sentence_transformers import SentenceTransformer
 
 from persist import find_embeddings, get_models
 
-models = [
-    "uaritm/multilingual_en_uk_pl_ru",  # 768
-    "cointegrated/rubert-tiny2", # 312
-    "pouxie/LaBSE-en-ru-bviolet",
-    "Den4ikAI/sbert_large_mt_ru_retriever",
-    "siberian-lang-lab/evenki-russian-parallel-corpora",
-    "Diiiann/ru_oss",
-    "DiTy/bi-encoder-russian-msmarco",
-]
+from settings import static_path
 
 models = get_models()
 
 ns = {"tei": "http://www.tei-c.org/ns/1.0"}
 unit = "lg"
+
 
 def render(data: dict[str, list[str]]) -> str:
     result_templ = """<li><span class='quote'>{text}</span></li>"""
@@ -34,7 +27,7 @@ def render(data: dict[str, list[str]]) -> str:
             continue
         htmls = [result_templ.format(text=t) for t in texts]
         contents = "\n".join(htmls)
-        href = f"/corpora/{addr}".replace("tei.xml", "html")
+        href = f"{static_path}{addr}".replace("tei.xml", "html")
         hr_addr = addr.replace("/", ".").replace(".html#", ":")
         result += [
             f"{href_templ.format(href=href, content=hr_addr)}:<ul>{contents}</ul>"
@@ -57,7 +50,7 @@ demo = gr.Interface(
     fn=find,
     inputs=[
         gr.Textbox(
-            "Блаженъ мѫжъ иже не иде на съвѣть нечъстивъїхъ", lines=5, label="Search"
+            "Не осѫждаите да не осѫждени бѫдете", lines=5, label="Search"
         ),
         gr.Dropdown(models, value="uaritm/multilingual_en_uk_pl_ru", label="Model"),
     ],

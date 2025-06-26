@@ -6,6 +6,8 @@ import regex as re
 import gradio as gr
 from glob import glob
 
+from settings import static_path
+
 """
 @font-face {
     font-family: 'CyrillicaOchrid10U';
@@ -76,7 +78,7 @@ footer {
 con_span = 100
 
 
-srcs = glob(f"/corpora/*/*.html")
+srcs = glob(f"{static_path}*/*.html")
 
 texts = {}
 parser = etree.HTMLParser()
@@ -270,8 +272,5 @@ demo = gr.Interface(
     css=css,
     # head=html_head,
 )
-
-# demo.launch(share=True)
-# demo.launch(server_port=8000, server_name='0.0.0.0')
 
 demo.launch(server_port=7861, server_name="0.0.0.0", show_api=False, root_path="/regex")
