@@ -25,6 +25,7 @@ def find(fulltext: str, m: str) -> str:
 
 demo = gr.Interface(
     fn=find,
+    description="""<h1>Sentence Transformers</h1><small>See <a href="https://www.sbert.net">sbert.net</a></small>""",
     inputs=[
         gr.Textbox("Не осѫждаите да не осѫждени бѫдете", lines=5, label="Search"),
         gr.Dropdown(models, value="uaritm/multilingual_en_uk_pl_ru", label="Model"),

@@ -33,6 +33,7 @@ def find(fulltext: str) -> list[tuple[str, str, float]]:
 
 demo = gr.Interface(
     fn=find,
+    description="""<h1>Longest Common Subsequence</h1><small>See <a href="http://www.eiti.uottawa.ca/~diana/publications/tkdd.pdf">Islam & Inkpen 2008</a></small>""",
     inputs=[
         gr.Textbox("Приде же въ градъ самарьскъ", lines=5, label="Search"),
     ],

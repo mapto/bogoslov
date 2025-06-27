@@ -67,6 +67,7 @@ def find(fulltext: str, n: int = 4) -> str:
 
 demo = gr.Interface(
     fn=find,
+    description="""<h1>Lemmatized N-grams</h1><small>See <a href="https://stephanus.tlg.uci.edu/helppdf/ngrams.pdf">N-grams in TLG</a></small>""",
     inputs=[
         gr.Textbox(
             "въса землꙗ да поклонит ти се и поеть тебе", lines=5, label="Search"

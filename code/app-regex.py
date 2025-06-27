@@ -178,6 +178,7 @@ def find(
 
 demo = gr.Interface(
     fn=find,
+    description="""<h1>Regular Expressions</h1><small>See <a href="https://debuggex.com">Debuggex</a> for interpretation.</small>""",
     inputs=[
         gr.Textbox("бог", label="Search"),
         gr.CheckboxGroup(
