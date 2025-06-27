@@ -3,7 +3,7 @@ from settings import static_path
 pfa_templ = "{path}/{fname}#{addr}"
 
 href_templ = """<a href="{href}" target="fulltext">{label}</a>"""
-entry_templ = "<li>{link} [{accuarcy:.4f}]:<br/>{text}</li>"
+entry_templ = """<li>{link} [{accuarcy:.4f}]:<br/><span class="lg">{text}</span></li>"""
 
 
 def render(data: list[tuple[str, str, float]]) -> str:

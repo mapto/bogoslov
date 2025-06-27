@@ -10,6 +10,8 @@ The contained corpora are courtesy to:
 
 * Sinai Psalter, Codex Marianus, Codex Zographensis: [XSLT transformed](static/proiel2tei.xsl) from the [Syntacticus project](https://github.com/syntacticus/syntacticus-treebank-data). This source is aligned with the [Universal Dependencies](https://universaldependencies.org/) initiative and thus contains annotations, including human-validated lemmatization.
 
+The BukyVede font is courtesy to [Kempgen and others](https://kodeks.de/AKSL/Schrift/BukyVedeBackground.htm).
+
 # Bibliography
 
 Ruskov, Mikulka, Podtergera, Gavrilkov & Thompson (2025). Quotes at the Fingertips: The BogoSlov Project’s Combined Approach towards Identification of Biblical Material in Old Church Slavonic Texts. In Proceedings of the 21st Conference on Information and Research Science Connecting to Digital and Library Science. CEUR-WS. https://ceur-ws.org/Vol-3937/short8.pdf ([bibtex](static/references.bib))

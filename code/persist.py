@@ -54,7 +54,9 @@ def get_models() -> list[str]:
     return list(models.keys())
 
 
-def find_embeddings(model_name: str, text: str, distance_threshold: float = .8) -> list[tuple[str, str, float]]:
+def find_embeddings(
+    model_name: str, text: str, dist_threshold: float = 0.2
+) -> list[tuple[str, str, float]]:
     s = Session()
     model = models[model_name]
     quote = model.encode(text)
@@ -66,7 +68,7 @@ def find_embeddings(model_name: str, text: str, distance_threshold: float = .8) 
         s.query(Embedding, Verse, Embedding.vector.cosine_distance(quote))
         .filter(Embedding.model == model_name)
         .filter(Embedding.verse_id == Verse.id)
-        .filter(Embedding.vector.cosine_distance(quote) <= distance_threshold)
+        .filter(Embedding.vector.cosine_distance(quote) <= dist_threshold)
         .all()
     )
     return [

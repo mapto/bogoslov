@@ -19,6 +19,7 @@ services:
     # ports:
     #   - 8781:7861
     volumes:
+      - ./static/ocs.css:/static/ocs.css:ro
       - ./corpora:/corpora:ro
       - ./code/alphabet.tsv:/home/app/alphabet.tsv:ro
     command: ./app-regex.py
@@ -30,6 +31,8 @@ services:
     image: bogoslov
     # ports:
     #   - 8782:7861
+    volumes:
+      - ./static/ocs.css:/static/ocs.css:ro
     command: ./app-ngram.py
     restart: always
     healthcheck:
@@ -39,6 +42,8 @@ services:
     image: bogoslov
     # ports:
     #   - 8783:7861
+    volumes:
+      - ./static/ocs.css:/static/ocs.css:ro
     command: ./app-lcs.py
     restart: always
     healthcheck:
@@ -52,6 +57,7 @@ services:
     environment:
       - HF_HOME=/models/
     volumes:
+      - ./static/ocs.css:/static/ocs.css:ro
       - ./models:/models/
     command: ./app-strans.py
     restart: always

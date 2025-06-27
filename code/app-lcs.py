@@ -40,6 +40,7 @@ demo = gr.Interface(
         # gr.Textbox(label="Lemmatized"),
         gr.HTML(label="Results"),
     ],
+    css_paths="/static/ocs.css",
 )
 
 demo.launch(server_port=7861, server_name="0.0.0.0", show_api=False, root_path="/lcs")

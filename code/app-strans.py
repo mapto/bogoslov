@@ -7,6 +7,7 @@ from tqdm import tqdm
 import gradio as gr
 from sentence_transformers import SentenceTransformer
 
+from settings import threshold
 from persist import find_embeddings, get_models
 from results import render, pfa_templ
 
@@ -31,6 +32,7 @@ demo = gr.Interface(
     outputs=[
         gr.HTML(label="Results"),
     ],
+    css_paths="/static/ocs.css",
 )
 
 demo.launch(

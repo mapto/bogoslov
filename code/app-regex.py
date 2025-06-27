@@ -8,73 +8,6 @@ from glob import glob
 
 from settings import static_path
 
-"""
-@font-face {
-    font-family: 'CyrillicaOchrid10U';
-    src: url('http://www.starobulglit.eu/OC10U.ttf') format('truetype');
-}
-@font-face{
-    font-family:'KlimentStdWeb';
-    src:url('http://bdinski.obdurodon.org/css/fonts/kliment_std-webfont.eot');
-    src:url('http://bdinski.obdurodon.org/css/fonts/kliment_std-webfont.eot?#iefix') format('embedded-opentype'), 
-        url('http://bdinski.obdurodon.org/css/fonts/kliment_std-webfont.woff') format('woff'), 
-        url('http://bdinski.obdurodon.org/css/fonts/kliment_std-webfont.ttf') format('truetype'), 
-        url('http://bdinski.obdurodon.org/css/fonts/kliment_std-webfont.svg#KlimentStdRegular') format('svg');
-    font-weight:normal;
-    font-style:normal;
-}
-@font-face{
-    font-family:'BukyvedeWeb';
-    src:url('http://bdinski.obdurodon.org/css/fonts/bukyvede-regular-webfont.eot');
-    src:url('http://bdinski.obdurodon.org/css/fonts/bukyvede-regular-webfont.eot?#iefix') format('embedded-opentype'), 
-        url('http://bdinski.obdurodon.org/css/fonts/bukyvede-regular-webfont.woff') format('woff'), 
-        url('http://bdinski.obdurodon.org/css/fonts/bukyvede-regular-webfont.ttf') format('truetype'), 
-        url('http://bdinski.obdurodon.org/css/fonts/bukyvede-regular-webfont.svg#BukyvedeRegular') format('svg');
-    font-weight:normal;
-    font-style:normal;
-
-}
-"""
-
-# <html><head>
-html_head = """<style>
-@font-face{
-	font-family:BukyVede;
-	src:url(http://scripta-bulgarica.eu/sites/all/themes/scripta/fonts/BukyVede-Regular.ttf) format('truetype'),
-		url(http://scripta-bulgarica.eu/sites/all/themes/scripta/fonts/BukyVede-Bold.ttf) format('truetype'),
-		url(http://scripta-bulgarica.eu/sites/all/themes/scripta/fonts/BukyVede-Italic.ttf) format('truetype')
-}
-
-.quote {
-    font-family: BukyVede !important;
-}
-.match {
-    background:yellow;
-}
-</style>"""
-
-css = """
-@font-face{
-    font-family:BukyVede;
-    src:url(http://scripta-bulgarica.eu/sites/all/themes/scripta/fonts/BukyVede-Regular.ttf) format('truetype'),
-        url(http://scripta-bulgarica.eu/sites/all/themes/scripta/fonts/BukyVede-Bold.ttf) format('truetype'),
-        url(http://scripta-bulgarica.eu/sites/all/themes/scripta/fonts/BukyVede-Italic.ttf) format('truetype')
-}
-
-.quote {
-    font-family: BukyVede !important;
-}
-
-.match {
-    background:yellow;
-}
-
-footer {
-    visibility: hidden;
-}
-"""
-
-
 con_span = 100
 
 
@@ -269,8 +202,7 @@ demo = gr.Interface(
         ),
         gr.HTML(label="Results"),
     ],
-    css=css,
-    # head=html_head,
+    css_paths="/static/ocs.css",
 )
 
 demo.launch(server_port=7861, server_name="0.0.0.0", show_api=False, root_path="/regex")

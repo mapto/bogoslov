@@ -28,6 +28,7 @@ stemmer = "udpipe"
 ns = {"tei": "http://www.tei-c.org/ns/1.0"}
 unit = "lg"
 
+
 def find(fulltext: str, n: int = 4) -> str:
     lemmatized = sent_stemmers[stemmer](fulltext)
     ltext = " ".join(l for w, l in lemmatized)
@@ -56,9 +57,9 @@ def find(fulltext: str, n: int = 4) -> str:
         (
             get_verse_text(p, f, a),
             pfa_templ.format(path=p, fname=f, addr=a),
-            ngrams_counter[(p, f, a)] / (len(lemmatized) - n+1),
+            ngrams_counter[(p, f, a)] / (len(lemmatized) - n + 1),
         )
-        for p, f, a in ngrams_counter.keys() if ngrams_counter[(p, f, a)] / (len(lemmatized) - n+1) >= threshold
+        for p, f, a in ngrams_counter.keys()  # if ngrams_counter[(p, f, a)] / (len(lemmatized) - n+1) >= threshold
     ]
 
     return ltext, render(result)
@@ -68,7 +69,7 @@ demo = gr.Interface(
     fn=find,
     inputs=[
         gr.Textbox(
-            "Блаженъ мѫжъ иже не иде на съвѣть нечъстивъїхъ", lines=5, label="Search"
+            "въса землꙗ да поклонит ти се и поеть тебе", lines=5, label="Search"
         ),
         # gr.Radio(
         #     choices=sent_stemmers.keys(),
@@ -81,12 +82,7 @@ demo = gr.Interface(
         gr.Textbox(label="Lemmatized"),
         gr.HTML(label="Results"),
     ],
-    # css=css,
-    # head=html_head,
+    css_paths="/static/ocs.css",
 )
-
-# demo.launch(share=True)
-# demo.launch(server_port=7861, server_name="0.0.0.0", show_api=False)
-# demo.launch()
 
 demo.launch(server_port=7861, server_name="0.0.0.0", show_api=False, root_path="/ngram")
