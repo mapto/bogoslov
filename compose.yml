@@ -31,6 +31,8 @@ services:
     image: bogoslov
     # ports:
     #   - 8782:7861
+    environment:
+      - LD_PRELOAD=/home/app/.local/lib/python3.11/site-packages/scikit_learn.libs/libgomp-d22c30c5.so.1.0.0
     volumes:
       - ./static/ocs.css:/static/ocs.css:ro
     command: ./app-ngram.py
@@ -42,6 +44,8 @@ services:
     image: bogoslov
     # ports:
     #   - 8783:7861
+    environment:
+      - LD_PRELOAD=/home/app/.local/lib/python3.11/site-packages/scikit_learn.libs/libgomp-d22c30c5.so.1.0.0
     volumes:
       - ./static/ocs.css:/static/ocs.css:ro
     command: ./app-lcs.py
@@ -56,6 +60,7 @@ services:
     #   - 8784:7861
     environment:
       - HF_HOME=/models/
+      - LD_PRELOAD=/home/app/.local/lib/python3.11/site-packages/scikit_learn.libs/libgomp-d22c30c5.so.1.0.0
     volumes:
       - ./static/ocs.css:/static/ocs.css:ro
       - ./models:/models/
@@ -73,8 +78,8 @@ services:
     ports:
       - 5732:5432
     volumes: 
-      - ./db/data:/var/lib/postgresql/data
-      - ./init.sql:/docker-entrypoint-initdb.d/0-init.sql:ro
+      - ./db/data/:/var/lib/postgresql/data/
+      # - ./db/init/:/docker-entrypoint-initdb.d/:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -d bogoslov -U bogoslov"]
     restart: always      
