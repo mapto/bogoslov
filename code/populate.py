@@ -13,13 +13,13 @@ engine = create_engine(DATABASE_URL, echo=False, pool_size=10, max_overflow=20)
 Session = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
-ns = {"tei": "http://www.tei-c.org/ns/1.0"}
-unit = "lg"
+from settings import ns, unit
 
 src = "../corpora/*/*.tei.xml"
 
 Base.metadata.create_all(engine)
 s = Session()
+
 
 def persist_verse(s: Session, fname: str):
     print(fname)
@@ -30,7 +30,9 @@ def persist_verse(s: Session, fname: str):
     data = []
     for e in tqdm(result):
         eid = e.get("id")
-        tcontents = e.xpath(f"""//tei:{unit}[@id='{eid}']//tei:w/text()""", namespaces=ns)
+        tcontents = e.xpath(
+            f"""//tei:{unit}[@id='{eid}']//tei:w/text()""", namespaces=ns
+        )
         lcontents = e.xpath(
             f"""//tei:{unit}[@id='{eid}']//tei:w/@lemma""", namespaces=ns
         )
@@ -47,6 +49,7 @@ def persist_verse(s: Session, fname: str):
         ]
     s.add_all(data)
     s.commit()
+
 
 def persist_ngram(s, verse: str, n: int):
     ngrams = []
@@ -71,6 +74,7 @@ def persist_ngram(s, verse: str, n: int):
         ]
     s.add_all(ngrams)
     s.commit()
+
 
 def persist_embedding(m: str):
     model = SentenceTransformer(m)
@@ -112,4 +116,3 @@ if __name__ == "__main__":
 
     for m in tqdm(models):
         persist_embedding(m)
-

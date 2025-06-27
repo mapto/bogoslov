@@ -2,6 +2,7 @@
 
 from lxml import etree
 from glob import glob
+from collections import Counter
 
 import gradio as gr
 
@@ -10,13 +11,10 @@ from udpipeclient import udpipe_sent_lemmatize
 # from stanzacilent import stanza_sent_lemmatize
 
 from db import Session
-
-# from model import Verse
-
+from settings import static_path, threshold
 from util import get_ngrams
-from persist import find_ngram
-
-from settings import static_path
+from persist import find_ngram, get_verse_text
+from results import render, pfa_templ, href_templ
 
 sent_stemmers = {
     "dummy": lambda x: [(t, t) for t in tokenizer(x) if t.strip()],
@@ -30,32 +28,10 @@ stemmer = "udpipe"
 ns = {"tei": "http://www.tei-c.org/ns/1.0"}
 unit = "lg"
 
-
-def ids2hrefs(ids: list[str]) -> str:
-    href_templ = """<li><a href="{href}" target="fulltext">{label}</a></li>"""
-    return "\n".join(
-        href_templ.format(
-            label=nid.replace(".tei.xml#", ":").replace(".", ":").replace("_", "."),
-            href=f"{static_path}{nid.replace('.tei.xml', '.html')}",
-        )
-        for nid in ids
-    )
-
-
-def render(data: list[tuple[str, list[str]]]) -> str:
-    """a list of <text ngram, list of addresses>"""
-    if not data:
-        return "Result is empty."
-    result = []
-    # print(data)
-    for ngram, addresses in data:
-        result += [f"'{ngram}':<ul>{ids2hrefs(addresses)}</ul>"]
-    return "<br/>".join(result)
-
-
 def find(fulltext: str, n: int = 4) -> str:
-    ltext = " ".join(l for w, l in sent_stemmers[stemmer](fulltext))
-    if len(ltext.split(" ")) < n:
+    lemmatized = sent_stemmers[stemmer](fulltext)
+    ltext = " ".join(l for w, l in lemmatized)
+    if len(lemmatized) < n:
         return "", "Not enough tokens provided to search for N-grams"
 
     try:
@@ -65,17 +41,25 @@ def find(fulltext: str, n: int = 4) -> str:
     # print(new_ngrams)
     # print(ngrams)
 
-    result = []
+    found = []
     # print(new_ngrams)
+    ngrams_total = len(new_ngrams)
+    ngrams_counter = Counter()
     for kng, vtloc in new_ngrams.items():
         for estart, eend, etext in vtloc:
             nxt = find_ngram(n, ",".join(kng), estart, eend, etext)
-            result += [
-                (
-                    etext,
-                    [f"{path}/{filename}#{address}" for path, filename, address in nxt],
-                )
-            ]
+            ngrams_counter += Counter(nxt)
+            # for path, fname, addr in nxt:
+            #     ngrams_counter[(path, fname, addr)] += 1
+
+    result = [
+        (
+            get_verse_text(p, f, a),
+            pfa_templ.format(path=p, fname=f, addr=a),
+            ngrams_counter[(p, f, a)] / (len(lemmatized) - n+1),
+        )
+        for p, f, a in ngrams_counter.keys() if ngrams_counter[(p, f, a)] / (len(lemmatized) - n+1) >= threshold
+    ]
 
     return ltext, render(result)
 
@@ -91,7 +75,7 @@ demo = gr.Interface(
         #     value="stanza",
         #     label="Lemmatizer",
         # ),
-        gr.Slider(minimum=2, maximum=10, value=3, step=1, label="N-gram"),
+        gr.Slider(minimum=2, maximum=10, value=2, step=1, label="N-gram"),
     ],
     outputs=[
         gr.Textbox(label="Lemmatized"),

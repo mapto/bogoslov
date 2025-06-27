@@ -19,8 +19,8 @@ services:
     # ports:
     #   - 8781:7861
     volumes:
-      - ./code/alphabet.tsv:/home/app/alphabet.tsv:ro
       - ./corpora:/corpora:ro
+      - ./code/alphabet.tsv:/home/app/alphabet.tsv:ro
     command: ./app-regex.py
     restart: always
     healthcheck:
@@ -30,8 +30,6 @@ services:
     image: bogoslov
     # ports:
     #   - 8782:7861
-    volumes:
-      - ./corpora:/corpora:ro
     command: ./app-ngram.py
     restart: always
     healthcheck:
@@ -41,8 +39,6 @@ services:
     image: bogoslov
     # ports:
     #   - 8783:7861
-    volumes:
-      - ./corpora:/corpora:ro
     command: ./app-lcs.py
     restart: always
     healthcheck:
@@ -53,8 +49,10 @@ services:
     image: bogoslov
     # ports:
     #   - 8784:7861
+    environment:
+      - HF_HOME=/models/
     volumes:
-      - ./corpora:/corpora:ro
+      - ./models:/models/
     command: ./app-strans.py
     restart: always
     healthcheck:

@@ -186,7 +186,7 @@ def render(data: dict[str, list[str]]) -> str:
             for l, p, m, s in insts
         ]
         contents = "\n".join(htmls)
-        href = f"/corpora/{addr}"
+        href = f"{static_path}{addr}"
         hr_addr = addr.replace("/", ".").replace(".html#", ":")
         result += [
             f"{href_templ.format(href=href, content=hr_addr)}:<ul>{contents}</ul>"

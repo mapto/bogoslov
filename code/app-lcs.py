@@ -4,27 +4,9 @@ from difflib import SequenceMatcher
 
 import gradio as gr
 
+from settings import threshold
 from persist import get_texts
-
-from settings import static_path, threshold
-
-
-def render(data: list[tuple[str, str, float]]) -> str:
-    """a list of <text, address, accuracy>"""
-    href_templ = """<a href="{href}" target="fulltext">{label}</a>"""
-
-    data.sort(key=lambda x: x[2], reverse=True)
-    if not data:
-        return "Result is empty."
-    result = []
-    # print(data)
-    for text, address, accuarcy in data:
-        link = href_templ.format(
-            label=address.replace(".tei.xml#", ":").replace(".", ":").replace("_", "."),
-            href=f"{static_path}{address.replace('.tei.xml', '.html')}",
-        )
-        result += [f"<li>{link} [{accuarcy:.4f}]: {text}</li>"]
-    return "<br/>".join(result)
+from results import render
 
 
 def find(fulltext: str) -> list[tuple[str, str, float]]:
@@ -35,15 +17,16 @@ def find(fulltext: str) -> list[tuple[str, str, float]]:
     for path, filename, address, t in primary:
         s = SequenceMatcher(None, fulltext, t)
 
-        lcs = "".join(
-            [
-                fulltext[block.a : (block.a + block.size)]
-                for block in s.get_matching_blocks()
-            ]
-        )
-        accuracy = len(lcs) / textlen
+        blocks = [b for b in s.get_matching_blocks() if b.size]
+        if blocks:
+            stripped = t[blocks[0].b : (blocks[-1].b + blocks[-1].size)]
+        else:
+            stripped = t
+
+        lcs = "".join([fulltext[b.a : (b.a + b.size)] for b in blocks])
+        accuracy = (2 * len(lcs)) / (textlen + len(stripped))
         if accuracy >= threshold:
-            results += [(t, f"{path}/{filename}#{address}", accuracy)]
+            results += [(stripped, f"{path}/{filename}#{address}", accuracy)]
 
     return render(results)
 
