@@ -5,6 +5,8 @@
     <meta charset="UTF-8"/>
     <link rel="stylesheet" href="ocs.css"/>
     <style>
+      @import url('https://fonts.googleapis.com/css2?family=Philosopher:wght@400;700&display=swap');
+
       body, html {
         position: relative;
         margin: 0;
@@ -13,6 +15,7 @@
         height: 100%;
         display: flex;
         flex-direction: column;
+        font-family: "Philosopher", sans-serif;
       }
 
       main {
@@ -48,6 +51,28 @@
       nav {
         left: 0;
         width: 10%;
+        font-family: "Philosopher", sans-serif;
+      }
+      nav ul {
+        padding-left: 2em;
+      }
+      nav li {
+        list-style-type: '🠶 ';
+        padding-left: 0;
+        margin-left: 0;
+        /* list-style-type: '🞂  '; */
+        /* font-size: xx-large; */
+      }
+      .mainmenu {
+        font-weight: 700;
+        font-style: normal;
+        font-size: larger;
+      }
+      .refs {
+        font-family: "Philosopher", sans-serif;
+        font-weight: 400;
+        font-style: normal;
+        font-size: small;
       }
       #interface {
         left: 10%;
@@ -72,10 +97,10 @@
     </header>
     <main>
       <nav>
-        <p>Browse the hosted <a href="/corpora" target="fulltext">Biblical corpora</a>.</p>
+        <p>Browse the hosted <a href="/corpora" target="fulltext" class="mainmenu">Biblical corpora</a></p>
       
         <p>Components:</p>
-        <ul>
+        <ul class="mainmenu">
           <li><a href="/regex" target="interface">Regex</a></li>
           <li><a href="/ngram" target="interface">Ngram</a></li>
           <li><a href="/lcs" target="interface">LCS</a></li>
@@ -83,7 +108,8 @@
         </ul>
     
         <p>Further information:</p>
-        <ul>
+        <ul class="refs">
+          <li><a href="https://4euplus.eu/4EU-1150.html">Funding attribution</a></li>
           <li><a href="https://ceur-ws.org/Vol-3937/short8.pdf">Project Paper</a>
             [<a href="references.bib">BibTex</a>]</li>
           <li><a href="https://github.com/mapto/bogoslov#bogoslov">Corpora attributions</a>

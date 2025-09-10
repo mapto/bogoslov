@@ -6,13 +6,13 @@ services:
     image: nginx:1.25-alpine-slim
     ports:
       - 8780:80
-    volumes: 
+    volumes:
       - ./static:/usr/share/nginx/html:ro
       - ./corpora:/usr/share/nginx/static/corpora:ro
       - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
     healthcheck:
       test: ["CMD-SHELL", "wget -nv -t1 --spider http://localhost || exit 1"]
-    restart: always      
+    restart: always
 
   regex:
     image: bogoslov
@@ -39,13 +39,18 @@ services:
     restart: always
     healthcheck:
       test: ["CMD-SHELL", "python -c \"from urllib.request import urlopen; int(urlopen('http://localhost:7861/ngram/').status >= 400)\""]
+    deploy:
+      resources:
+        limits:
+          cpus: 1
+          memory: 1024M
 
   lcs:
     image: bogoslov
     # ports:
     #   - 8783:7861
-    environment:
-      - LD_PRELOAD=/home/app/.local/lib/python3.11/site-packages/scikit_learn.libs/libgomp-d22c30c5.so.1.0.0
+    # environment:
+    #   - LD_PRELOAD=/home/app/.local/lib/python3.11/site-packages/scikit_learn.libs/libgomp-d22c30c5.so.1.0.0
     volumes:
       - ./static/ocs.css:/static/ocs.css:ro
     command: ./app-lcs.py
@@ -60,7 +65,7 @@ services:
     #   - 8784:7861
     environment:
       - HF_HOME=/models/
-      - LD_PRELOAD=/home/app/.local/lib/python3.11/site-packages/scikit_learn.libs/libgomp-d22c30c5.so.1.0.0
+      # - LD_PRELOAD=/home/app/.local/lib/python3.11/site-packages/scikit_learn.libs/libgomp-d22c30c5.so.1.0.0
     volumes:
       - ./static/ocs.css:/static/ocs.css:ro
       - ./models:/models/
@@ -68,6 +73,11 @@ services:
     restart: always
     healthcheck:
       test: ["CMD-SHELL", "python -c \"from urllib.request import urlopen; int(urlopen('http://localhost:7861/strans/').status >= 400)\""]
+    deploy:
+      resources:
+        limits:
+          cpus: 1
+          memory: 1024M
 
   db:
     image: pgvector/pgvector:pg17
@@ -77,9 +87,20 @@ services:
       - POSTGRES_HOST_AUTH_METHOD=trust
     ports:
       - 5732:5432
-    volumes: 
+    volumes:
       - ./db/data/:/var/lib/postgresql/data/
-      # - ./db/init/:/docker-entrypoint-initdb.d/:ro
+      - ./db/init/:/docker-entrypoint-initdb.d/:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -d bogoslov -U bogoslov"]
-    restart: always      
+    restart: always
+
+  # populate:
+  #   image: bogoslov
+  #   environment:
+  #     - HF_HOME=/models/
+  #   volumes:
+  #     - ./corpora:/corpora:ro
+  #     - ./models:/models/
+  #   command: ./populate.py
+  #   depends_on:
+  #     - db

@@ -3,7 +3,7 @@
     src: url(/BukyVede-Regular.ttf) format('truetype');
 }
 
-.quote, .lg {
+.quote, .chapter .lg {
     font-family: BukyVede !important;
 }
 

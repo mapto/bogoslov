@@ -58,6 +58,17 @@
     </xsl:if>
   </xsl:template>
   
+  <!-- Template for token elements -->
+  <xsl:template match="token[@citation-part]">
+    <cl xmlns="http://www.tei-c.org/ns/1.0" id="{@lemma}">
+      <xsl:value-of select="@citation-part"/>
+    </cl>
+    <xsl:if test="@presentation-after">
+      <xsl:value-of select="@presentation-after"/>
+    </xsl:if>
+  </xsl:template>
+  
+
   <!-- Template to ignore empty tokens -->
   <xsl:template match="token[not(@form)]"/>
   
