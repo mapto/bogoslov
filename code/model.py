@@ -29,7 +29,7 @@ class Verse(Base):
 
 
 class Ngram(Base):
-    """This is used only by the n-gram app"""
+    """Used only by the n-gram app"""
 
     __tablename__ = "ngrams"
 
@@ -45,6 +45,8 @@ class Ngram(Base):
 
 
 class Embedding(Base):
+    """Used only by the strans app"""
+
     __tablename__ = "embeddings"
 
     id = Column(Integer, primary_key=True, autoincrement=True)

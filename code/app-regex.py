@@ -7,6 +7,8 @@ import gradio as gr
 from glob import glob
 
 from settings import static_path
+from persist import find_regex, get_verse_text
+from results import render, pfa_templ, href_templ
 
 con_span = 100
 
@@ -74,124 +76,49 @@ def generalise(s: str) -> str:
             res = res.replace(f"({i})", f"({v})?(◌҃)?")
         else:
             res = res.replace(f"({i})", f"({v})(◌҃)?")
-    res = res.replace(" ", "\s+")
+    res = res.replace(" ", r"\s+")
     return res
-
-
-def select_sources(sources, books):
-    result = []
-    src = [s.split(" ")[0] for s in sources]
-    for b in books:
-        if b == "Psalter":
-            if "Oxford" in src:
-                result += ["psalter.bologna.oxford"]
-            if "Syntacticus" in src:
-                result += ["psalter.sinai.syntacticus"]
-        else:
-            if "Syntacticus" in src:
-                result += [
-                    "gospel.marianus.syntacticus",
-                    "gospel.zographensis.syntacticus",
-                ]
-            if "WikiSource" in src:
-                result += [
-                    "gospel.marianus.wikisource",
-                    "gospel.zographensis.wikisource",
-                ]
-    return result
-
-
-def render(data: dict[str, list[str]]) -> str:
-    result_templ = """<li>
-    <span class='locator'>{locator}:</span>
-    <span class='quote'>
-        {prefix}<span class='match'>{match}</span>{suffix}
-    </span>
-</li>"""
-    href_templ = """<a href="{href}" target="fulltext">{content}</a>"""
-
-    result = []
-    for addr, insts in data.items():
-        if not insts:
-            continue
-        htmls = [
-            result_templ.format(locator=l, prefix=p, match=m, suffix=s)
-            for l, p, m, s in insts
-        ]
-        contents = "\n".join(htmls)
-        href = f"{static_path}{addr}"
-        hr_addr = addr.replace("/", ".").replace(".html#", ":")
-        result += [
-            f"{href_templ.format(href=href, content=hr_addr)}:<ul>{contents}</ul>"
-        ]
-    return "<br/>".join(result)
 
 
 def find(
     s: str,
-    sources: list[str],
-    books: list[str],
-    context: int = 10,
+    # sources: list[str],
+    # books: list[str],
+    # context: int = 10,
     ignore_case: bool = True,
     whole_words: bool = False,
 ) -> str:
     # sources = ["MacRobert"]
     # books = ["Psalter"]
-    srcs = select_sources(sources, books)
 
     pattern = generalise(s)
     noword = (
-        "(\s|"
+        r"(\s|"
         + "|".join((f"\\{p}" if p in "?+.[]-=" else p) for p in punct if p)
         + ")+"
     )
     pat = (noword + pattern + noword) if whole_words else pattern
+    op = '~*' if ignore_case else '~'  # see https://www.postgresql.org/docs/17/functions-matching.html#FUNCTIONS-POSIX-REGEXP
 
-    flags = re.DOTALL
-    flags |= re.IGNORECASE if ignore_case else 0
+    matches = find_regex(pat, op)
 
-    result = {}
-    for kid, text in texts.items():
-        if not any(kid.startswith(s) for s in srcs):
-            continue
-        # print(kid)
-        # print(text)
-        res = re.finditer(pat, text, flags=flags)
-        # print(bool(res), res)
-        result[kid] = [
-            (
-                f"[{r.start()}-{r.end()}]",
-                f"{text[max(r.start()-context,0):r.start()]}",
-                f"{text[r.start():r.end()]}",
-                f"{text[r.end():min(r.end()+context,len(text)-1)]}",
-            )
-            for r in res
-        ]
+    result = [
+        (
+            get_verse_text(p, f, a),
+            pfa_templ.format(path=p, fname=f, addr=a),
+            1,
+        )
+        for p, f, a in matches
+    ]
 
     return pat, render(result)
 
 
-# def html_wrap(text: str) -> str:
-#     return html_prefix + text + html_suffix
-
-# find("бог", 20, whole_words=True)
-
 demo = gr.Interface(
     fn=find,
-    description="""<h1>Regular Expressions</h1><small>See <a href="https://debuggex.com">Debuggex</a> for interpretation.</small>""",
+    description="""<h1>Regular Expressions</h1><small>See <a href="https://www.postgresql.org/docs/17/functions-matching.html#FUNCTIONS-POSIX-REGEXP">Regular Expressions in PostgreSQL</small>""",
     inputs=[
         gr.Textbox("бог", label="Search"),
-        gr.CheckboxGroup(
-            choices=sources,
-            value=sources,
-            label="Sources",
-        ),
-        gr.CheckboxGroup(
-            choices=books,
-            value=books,
-            label="Books",
-        ),
-        gr.Radio([20, 50, 100, 200], value=200, label="Letters in context"),
         gr.Checkbox(label="Match case"),
         gr.Checkbox(label="Whole words"),
     ],

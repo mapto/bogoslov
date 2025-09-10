@@ -8,10 +8,10 @@ import gradio as gr
 from sentence_transformers import SentenceTransformer
 
 from settings import threshold
-from persist import find_embeddings, get_models
+from persist import find_embeddings, get_strans_models
 from results import render, pfa_templ
 
-models = get_models()
+models = get_strans_models()
 
 
 def find(fulltext: str, m: str) -> str:
