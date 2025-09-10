@@ -77,7 +77,7 @@ demo = gr.Interface(
         #     value="stanza",
         #     label="Lemmatizer",
         # ),
-        gr.Slider(minimum=2, maximum=10, value=2, step=1, label="N-gram"),
+        gr.Slider(minimum=2, maximum=10, value=3, step=1, label="N-gram"),
     ],
     outputs=[
         gr.Textbox(label="Lemmatized"),

@@ -8,7 +8,7 @@ from glob import glob
 
 from settings import static_path
 from persist import find_regex, get_verse_text
-from results import render, pfa_templ, href_templ
+from results import render, render_table, pfa_templ, href_templ
 
 con_span = 100
 
@@ -88,8 +88,6 @@ def find(
     ignore_case: bool = True,
     whole_words: bool = False,
 ) -> str:
-    # sources = ["MacRobert"]
-    # books = ["Psalter"]
 
     pattern = generalise(s)
     noword = (
@@ -98,7 +96,7 @@ def find(
         + ")+"
     )
     pat = (noword + pattern + noword) if whole_words else pattern
-    op = '~*' if ignore_case else '~'  # see https://www.postgresql.org/docs/17/functions-matching.html#FUNCTIONS-POSIX-REGEXP
+    op = '~' if ignore_case else '~*'  # see https://www.postgresql.org/docs/17/functions-matching.html#FUNCTIONS-POSIX-REGEXP
 
     matches = find_regex(pat, op)
 
@@ -111,12 +109,17 @@ def find(
         for p, f, a in matches
     ]
 
-    return pat, render(result)
+    # output = render(result)
+    output = render_table({"query": s, "ignore case": ignore_case, "whole words": whole_words}, result)
+    return pat, output[1]
+    return pat, output[0], output[1]
+    # return pat, output, None
+    # return pat, output[0], None
 
 
 demo = gr.Interface(
     fn=find,
-    description="""<h1>Regular Expressions</h1><small>See <a href="https://www.postgresql.org/docs/17/functions-matching.html#FUNCTIONS-POSIX-REGEXP">Regular Expressions in PostgreSQL</small>""",
+    description="""<h1>Regular Expressions</h1><small>See <a href="https://www.postgresql.org/docs/17/functions-matching.html#FUNCTIONS-POSIX-REGEXP">Regular Expressions</a> in PostgreSQL</small>""",
     inputs=[
         gr.Textbox("бог", label="Search"),
         gr.Checkbox(label="Match case"),
@@ -128,6 +131,7 @@ demo = gr.Interface(
         gr.Textbox(
             "", label="Regex to paste in https://debuggex.com to interpret results"
         ),
+        # gr.DownloadButton(label="Download"),
         gr.HTML(label="Results"),
     ],
     css_paths="/static/ocs.css",
