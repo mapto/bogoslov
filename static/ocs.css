@@ -32,3 +32,26 @@ body {
 footer {
     visibility: hidden;
 }
+
+table.results, table.results tr, table.results tr td {
+    border: none;
+    margin: 0;
+    padding: 0;
+    vertical-align:top;
+}
+
+table.results tr {
+    border-top: 1px solid lightgray;
+}
+
+table.results tr td.quote {
+    text-align: left;
+}
+
+table.results tr td.info {
+    text-align: center;
+}
+
+div.html-container {
+    padding: 0;
+}

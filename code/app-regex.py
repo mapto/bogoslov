@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import tempfile
 from lxml import etree
 import regex as re
 
@@ -85,8 +86,9 @@ def find(
     # sources: list[str],
     # books: list[str],
     # context: int = 10,
-    ignore_case: bool = True,
-    whole_words: bool = False,
+    match_case: bool,
+    whole_words: bool,
+    result_dir: str,
 ) -> str:
 
     pattern = generalise(s)
@@ -96,7 +98,9 @@ def find(
         + ")+"
     )
     pat = (noword + pattern + noword) if whole_words else pattern
-    op = '~' if ignore_case else '~*'  # see https://www.postgresql.org/docs/17/functions-matching.html#FUNCTIONS-POSIX-REGEXP
+
+    # see https://www.postgresql.org/docs/17/functions-matching.html#FUNCTIONS-POSIX-REGEXP
+    op = "~" if match_case else "~*"
 
     matches = find_regex(pat, op)
 
@@ -110,31 +114,41 @@ def find(
     ]
 
     # output = render(result)
-    output = render_table({"query": s, "ignore case": ignore_case, "whole words": whole_words}, result)
+    output = render_table(
+        {"query": s, "match case": match_case, "whole words": whole_words},
+        result,
+        result_dir,
+    )
+
+    print(output[0])
     return pat, output[1]
-    return pat, output[0], output[1]
+    # return pat, output[0], output[1]
     # return pat, output, None
     # return pat, output[0], None
 
 
-demo = gr.Interface(
-    fn=find,
-    description="""<h1>Regular Expressions</h1><small>See <a href="https://www.postgresql.org/docs/17/functions-matching.html#FUNCTIONS-POSIX-REGEXP">Regular Expressions</a> in PostgreSQL</small>""",
-    inputs=[
-        gr.Textbox("бог", label="Search"),
-        gr.Checkbox(label="Match case"),
-        gr.Checkbox(label="Whole words"),
-    ],
-    # outputs=[gr.Textbox(label="Results", head=html_head)],
-    # outputs=[gr.Blocks(label="Results")],
-    outputs=[
-        gr.Textbox(
-            "", label="Regex to paste in https://debuggex.com to interpret results"
-        ),
-        # gr.DownloadButton(label="Download"),
-        gr.HTML(label="Results"),
-    ],
-    css_paths="/static/ocs.css",
-)
+with tempfile.TemporaryDirectory(dir="/dev/shm") as tmpdir:
+    demo = gr.Interface(
+        fn=find,
+        description="""<h1>Regular Expressions</h1><small>See <a href="https://www.postgresql.org/docs/17/functions-matching.html#FUNCTIONS-POSIX-REGEXP">Regular Expressions</a> in PostgreSQL</small>""",
+        inputs=[
+            gr.Textbox("бог", label="Search"),
+            gr.Checkbox(label="Match case"),
+            gr.Checkbox(label="Whole words"),
+            gr.Label(tmpdir, visible=False),
+        ],
+        # outputs=[gr.Textbox(label="Results", head=html_head)],
+        # outputs=[gr.Blocks(label="Results")],
+        outputs=[
+            gr.Textbox(
+                "", label="Regex to paste in https://debuggex.com to interpret results"
+            ),
+            # gr.DownloadButton(label="Download"),
+            gr.HTML(label="Results"),
+        ],
+        css_paths="/static/ocs.css",
+    )
 
-demo.launch(server_port=7861, server_name="0.0.0.0", show_api=False, root_path="/regex")
+    demo.launch(
+        server_port=7861, server_name="0.0.0.0", show_api=False, root_path="/regex"
+    )

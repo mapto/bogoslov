@@ -1,21 +1,69 @@
-import io
+import tempfile
+
 import pandas as pd
 
 from settings import static_path, base_url
 
 pfa_templ = "{path}/{fname}#{addr}"
 
+table_templ = """<table class="results">{body}</table>"""
+trow_templ = """<tr><td class="quote">{text}</td><td class="info"><span title="accuracy" style="font-size: large; opacity: {acc}">{acc}</span><br><a href="{href}" title="{urn}">{ref}<br><span style="font-weight: bold; color: {color}">[{src}]</span></a></td></tr>"""
+
 href_templ = """<a href="{href}" target="fulltext">{label}</a>"""
 entry_templ = """<li>{link} [{accuarcy:.4f}]:<br/><span class="lg">{text}</span></li>"""
 
+ms2color = {
+    "S": "#90AA00",
+    "B": "#00AA90",
+    "M": "#0090AA",
+    "Z": "#9000AA",
+}
+
+
 def path2urn(s: str) -> str:
+    """
+    >>> path2urn("gospel.zographensis.syntacticus/marco.tei.xml#4_19")
+    "gospel.zographensis.syntacticus.marco:4.19"
+    >>> path2urn("psalter.bologna.oxford/BM8.tei.xml#112_7")
+    "psalter.bologna.oxford.BM8:112.7"
+    >>> path2urn("psalter.sinai.syntacticus/psal-sin.tei.xml#10_30")
+    "psalter.sinai.syntacticus.psal-sin:10.30"
+    """
     return s.replace(".tei.xml#", ":").replace("_", ".").replace("/", ".")
+
 
 def path2link(s: str) -> str:
     return f"{static_path}{s.replace('.tei.xml', '.html')}"
 
+
 def path2url(s: str) -> str:
     return f"{base_url}{static_path}{s.replace('.tei.xml', '.html')}"
+
+def path2loc(s: str) -> str:
+    """
+    >>> path2urn("gospel.zographensis.syntacticus/marco.tei.xml#4_19")
+    "marco<br>4.19"
+    >>> path2urn("psalter.bologna.oxford/BM8.tei.xml#112_7")
+    "BM8<br>112.7"
+    >>> path2urn("psalter.sinai.syntacticus/psal-sin.tei.xml#10_30")
+    "psal-sin<br>10.30"
+    """
+    return s.split("/")[-1].replace(".tei.xml#", "<br>").replace("_", ".")
+
+
+def path2ms(s: str) -> str:
+    """
+    >>> path2ms("gospel.zographensis.syntacticus/marco.tei.xml#4_19")
+    "Z"
+    >>> path2ms("gospel.marianus.syntacticus.marco.tei.xml#4_19")
+    "M"
+    >>> path2ms("psalter.bologna.oxford/BM8.tei.xml#112_7")
+    "B"
+    >>> path2ms("psalter.sinai.syntacticus/psal-sin.tei.xml#10_30")
+    "S"
+    """
+    return s.split(".")[1][0].upper()
+
 
 def render(data: list[tuple[str, str, float]]) -> str:
     """a list of <text, address, accuracy>"""
@@ -33,12 +81,32 @@ def render(data: list[tuple[str, str, float]]) -> str:
         result += [entry_templ.format(link=link, accuarcy=accuarcy, text=text)]
     return "\n".join(result)
 
-def render_table(params: dict[str, str],  data: list[tuple[str, str, float]]) -> tuple[str, io.BytesIO]:
-    """a list of <text, address, accuracy>"""
+
+def render_table(
+    params: dict[str, str],
+    data: list[tuple[str, str, float]],
+    dir: str,
+) -> tuple[str, str]:
+    """a list of <text, address, accuracy>. Returns path to export and HTML body."""
 
     data.sort(key=lambda x: x[2], reverse=True)
     if not data:
         return "Result is empty.", None
+
+    html_rows = []
+    for text, addr, acc in data:
+        html_rows += [
+            trow_templ.format(
+                text=text,
+                acc="1.0" if acc == 1 else f"{acc:0.3f}",
+                href=path2link(addr),
+                ref=path2loc(addr),
+                color=ms2color[path2ms(addr)],
+                src=path2ms(addr),
+                urn=path2urn(addr),
+            )
+        ]
+    html_result = table_templ.format(body="\n".join(html_rows))
 
     result = [
         {
@@ -50,12 +118,12 @@ def render_table(params: dict[str, str],  data: list[tuple[str, str, float]]) ->
         for d in data
     ]
     df = pd.DataFrame(result)
-    html = df.to_html(index=False)
 
     for k, v in params.items():
         df[k] = v
 
-    in_memory_fp = io.BytesIO()
-    df.to_excel(in_memory_fp, index=False)
+    with tempfile.NamedTemporaryFile(dir=dir, delete=False) as newfile:
+        df.to_excel(newfile, index=False)
+        fname_result = newfile
 
-    return in_memory_fp, html
+    return fname_result, html_result

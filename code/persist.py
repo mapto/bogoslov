@@ -7,6 +7,7 @@ from model import Verse, Ngram, Embedding
 
 strans_models = None
 
+
 def get_verse_text(path, filename, address) -> str:
     s = Session()
     result = (
@@ -25,7 +26,8 @@ def get_texts() -> list[tuple[str, str, str, str]]:
     result = s.query(Verse).all()
     return [(r.path, r.filename, r.address, r.text) for r in result]
 
-def find_regex(pattern: str, operator: str) -> list[tuple[str,str,str]]:
+
+def find_regex(pattern: str, operator: str) -> list[tuple[str, str, str]]:
     s = Session()
     result = (
         s.query(Verse)
