@@ -1,4 +1,4 @@
-import tempfile
+from pathlib import Path
 
 import pandas as pd
 
@@ -85,7 +85,6 @@ def render(data: list[tuple[str, str, float]]) -> str:
 def render_table(
     params: dict[str, str],
     data: list[tuple[str, str, float]],
-    dir: str,
 ) -> tuple[str, str]:
     """a list of <text, address, accuracy>. Returns path to export and HTML body."""
 
@@ -122,8 +121,20 @@ def render_table(
     for k, v in params.items():
         df[k] = v
 
-    with tempfile.NamedTemporaryFile(dir=dir, delete=False) as newfile:
-        df.to_excel(newfile, index=False)
-        fname_result = newfile
+    fname_result = f"/results/{hash(tuple(params.values()))}.xlsx"
+    if not Path(fname_result).exists():
+        with pd.ExcelWriter(fname_result, engine='xlsxwriter') as writer:
+            df.to_excel(writer, index=False, sheet_name="Result")
+            wb = writer.book
+            text_format = wb.add_format({
+                'text_wrap': True,
+                'font_name':'BukyVede',
+                })
+            ws = wb.get_worksheet_by_name("Result")
+            ws.set_column(0,0, 60, text_format)
+            ws.set_column(4,4, 40, text_format)
+            ws.set_column(1,2, 20)
+            # ws.set_column(1,2, 10)
 
-    return fname_result, html_result
+    return f'<a href="{fname_result}">Download</a>', html_result
+    # return fname_result, html_result

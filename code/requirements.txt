@@ -1,6 +1,5 @@
 gradio==5.20.1
 lxml==5.3.1
-openpyxl==3.1.5
 pgvector==0.4.1
 psycopg2-binary==2.9.10
 regex==2024.11.6
@@ -9,3 +8,4 @@ sentence-transformers==4.1.0
 sqlalchemy==2.0.41
 torch==2.8.0 --index-url https://download.pytorch.org/whl/cpu
 tqdm==4.67.1
+xlsxwriter==3.2.6

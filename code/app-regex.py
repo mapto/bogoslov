@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import tempfile
 from lxml import etree
 import regex as re
 
@@ -88,7 +87,6 @@ def find(
     # context: int = 10,
     match_case: bool,
     whole_words: bool,
-    result_dir: str,
 ) -> str:
 
     pattern = generalise(s)
@@ -115,40 +113,34 @@ def find(
 
     # output = render(result)
     output = render_table(
-        {"query": s, "match case": match_case, "whole words": whole_words},
+        {"query": s, "match case": match_case, "whole words": whole_words, "method": "regex"},
         result,
-        result_dir,
     )
 
-    print(output[0])
-    return pat, output[1]
-    # return pat, output[0], output[1]
-    # return pat, output, None
-    # return pat, output[0], None
+    return pat, output[0], output[1]
 
 
-with tempfile.TemporaryDirectory(dir="/dev/shm") as tmpdir:
-    demo = gr.Interface(
-        fn=find,
-        description="""<h1>Regular Expressions</h1><small>See <a href="https://www.postgresql.org/docs/17/functions-matching.html#FUNCTIONS-POSIX-REGEXP">Regular Expressions</a> in PostgreSQL</small>""",
-        inputs=[
-            gr.Textbox("бог", label="Search"),
-            gr.Checkbox(label="Match case"),
-            gr.Checkbox(label="Whole words"),
-            gr.Label(tmpdir, visible=False),
-        ],
-        # outputs=[gr.Textbox(label="Results", head=html_head)],
-        # outputs=[gr.Blocks(label="Results")],
-        outputs=[
-            gr.Textbox(
-                "", label="Regex to paste in https://debuggex.com to interpret results"
-            ),
-            # gr.DownloadButton(label="Download"),
-            gr.HTML(label="Results"),
-        ],
-        css_paths="/static/ocs.css",
-    )
+demo = gr.Interface(
+    fn=find,
+    description="""<h1>Regular Expressions</h1><small>See <a href="https://www.postgresql.org/docs/17/functions-matching.html#FUNCTIONS-POSIX-REGEXP">Regular Expressions</a> in PostgreSQL</small>""",
+    inputs=[
+        gr.Textbox("бог", label="Search"),
+        gr.Checkbox(label="Match case"),
+        gr.Checkbox(label="Whole words"),
+    ],
+    # outputs=[gr.Textbox(label="Results", head=html_head)],
+    # outputs=[gr.Blocks(label="Results")],
+    outputs=[
+        gr.Textbox(
+            "", label="Regex to paste in https://debuggex.com to interpret results"
+        ),
+        # gr.DownloadButton(label="Download"),
+        gr.HTML(label="Download"),
+        gr.HTML(label="Results"),
+    ],
+    css_paths="/static/ocs.css",
+)
 
-    demo.launch(
-        server_port=7861, server_name="0.0.0.0", show_api=False, root_path="/regex"
-    )
+demo.launch(
+    server_port=7861, server_name="0.0.0.0", show_api=False, root_path="/regex"
+)

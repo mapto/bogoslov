@@ -9,6 +9,7 @@ services:
     volumes:
       - ./static:/usr/share/nginx/html:ro
       - ./corpora:/usr/share/nginx/static/corpora:ro
+      - ./results:/usr/share/nginx/static/results:ro
       - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
     healthcheck:
       test: ["CMD-SHELL", "wget -nv -t1 --spider http://localhost || exit 1"]
@@ -20,7 +21,7 @@ services:
     #   - 8781:7861
     volumes:
       - ./static/ocs.css:/static/ocs.css:ro
-      - ./corpora:/corpora:ro
+      - ./results:/results
       - ./code/alphabet.tsv:/home/app/alphabet.tsv:ro
     command: ./app-regex.py
     restart: always
@@ -35,6 +36,7 @@ services:
       - LD_PRELOAD=/home/app/.local/lib/python3.11/site-packages/scikit_learn.libs/libgomp-d22c30c5.so.1.0.0
     volumes:
       - ./static/ocs.css:/static/ocs.css:ro
+      - ./results:/results
     command: ./app-ngram.py
     restart: always
     healthcheck:
@@ -53,6 +55,7 @@ services:
     #   - LD_PRELOAD=/home/app/.local/lib/python3.11/site-packages/scikit_learn.libs/libgomp-d22c30c5.so.1.0.0
     volumes:
       - ./static/ocs.css:/static/ocs.css:ro
+      - ./results:/results
     command: ./app-lcs.py
     restart: always
     healthcheck:
@@ -68,6 +71,7 @@ services:
       # - LD_PRELOAD=/home/app/.local/lib/python3.11/site-packages/scikit_learn.libs/libgomp-d22c30c5.so.1.0.0
     volumes:
       - ./static/ocs.css:/static/ocs.css:ro
+      - ./results:/results
       - ./models:/models/
     command: ./app-strans.py
     restart: always
