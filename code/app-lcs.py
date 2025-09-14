@@ -6,13 +6,13 @@ import gradio as gr
 
 from settings import threshold
 from persist import get_texts
-from results import render
+from results import render_table
 
 
 def find(fulltext: str) -> list[tuple[str, str, float]]:
     primary = get_texts()
 
-    results = []
+    result = []
     textlen = len(fulltext)
     for path, filename, address, t in primary:
         s = SequenceMatcher(None, fulltext, t)
@@ -26,9 +26,14 @@ def find(fulltext: str) -> list[tuple[str, str, float]]:
         lcs = "".join([fulltext[b.a : (b.a + b.size)] for b in blocks])
         accuracy = (2 * len(lcs)) / (textlen + len(stripped))
         if accuracy >= threshold:
-            results += [(stripped, f"{path}/{filename}#{address}", accuracy)]
+            result += [(stripped, f"{path}/{filename}#{address}", accuracy)]
 
-    return render(results)
+    output = render_table(
+        {"query": fulltext, "method": "lcs"},
+        result,
+    )
+
+    return output[0], output[1]
 
 
 demo = gr.Interface(
@@ -38,7 +43,7 @@ demo = gr.Interface(
         gr.Textbox("Приде же въ градъ самарьскъ", lines=5, label="Search"),
     ],
     outputs=[
-        # gr.Textbox(label="Lemmatized"),
+        gr.HTML(label="Download"),
         gr.HTML(label="Results"),
     ],
     css_paths="/static/ocs.css",

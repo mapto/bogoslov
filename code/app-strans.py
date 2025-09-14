@@ -9,7 +9,7 @@ from sentence_transformers import SentenceTransformer
 
 from settings import threshold
 from persist import find_embeddings, get_strans_models
-from results import render, pfa_templ
+from results import render_table, pfa_templ
 
 models = get_strans_models()
 
@@ -20,8 +20,17 @@ def find(fulltext: str, m: str) -> str:
         (r[0], pfa_templ.format(path=r[1], fname=r[2], addr=r[3]), r[4])
         for r in response
     ]
-    return render(result)
 
+    output = render_table(
+        {"query": fulltext, "method": "strans", "model": m},
+        result,
+    )
+
+    return output[0], output[1]
+
+
+# def file2link(s: str) -> str:
+#     return f'<a href="{fname_result}">Download</a>'
 
 demo = gr.Interface(
     fn=find,
@@ -31,6 +40,7 @@ demo = gr.Interface(
         gr.Dropdown(models, value="uaritm/multilingual_en_uk_pl_ru", label="Model"),
     ],
     outputs=[
+        gr.HTML(label="Download"),
         gr.HTML(label="Results"),
     ],
     css_paths="/static/ocs.css",

@@ -33,6 +33,10 @@ footer {
     visibility: hidden;
 }
 
+table.results {
+    width: 100%;
+}
+
 table.results, table.results tr, table.results tr td {
     border: none;
     margin: 0;

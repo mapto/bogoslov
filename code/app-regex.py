@@ -8,7 +8,7 @@ from glob import glob
 
 from settings import static_path
 from persist import find_regex, get_verse_text
-from results import render, render_table, pfa_templ, href_templ
+from results import render_table, pfa_templ, href_templ
 
 con_span = 100
 
@@ -81,7 +81,7 @@ def generalise(s: str) -> str:
 
 
 def find(
-    s: str,
+    fulltext: str,
     # sources: list[str],
     # books: list[str],
     # context: int = 10,
@@ -89,7 +89,7 @@ def find(
     whole_words: bool,
 ) -> str:
 
-    pattern = generalise(s)
+    pattern = generalise(fulltext)
     noword = (
         r"(\s|"
         + "|".join((f"\\{p}" if p in "?+.[]-=" else p) for p in punct if p)
@@ -111,9 +111,14 @@ def find(
         for p, f, a in matches
     ]
 
-    # output = render(result)
     output = render_table(
-        {"query": s, "match case": match_case, "whole words": whole_words, "method": "regex"},
+        {
+            "query": fulltext,
+            "method": "regex",
+            "match case": match_case,
+            "whole words": whole_words,
+            "pattern": pat,
+        },
         result,
     )
 
@@ -134,13 +139,10 @@ demo = gr.Interface(
         gr.Textbox(
             "", label="Regex to paste in https://debuggex.com to interpret results"
         ),
-        # gr.DownloadButton(label="Download"),
         gr.HTML(label="Download"),
         gr.HTML(label="Results"),
     ],
     css_paths="/static/ocs.css",
 )
 
-demo.launch(
-    server_port=7861, server_name="0.0.0.0", show_api=False, root_path="/regex"
-)
+demo.launch(server_port=7861, server_name="0.0.0.0", show_api=False, root_path="/regex")

@@ -14,7 +14,7 @@ from db import Session
 from settings import static_path, threshold
 from util import get_ngrams
 from persist import find_ngram, get_verse_text
-from results import render, pfa_templ, href_templ
+from results import render_table, pfa_templ, href_templ
 
 sent_stemmers = {
     "dummy": lambda x: [(t, t) for t in tokenizer(x) if t.strip()],
@@ -62,7 +62,12 @@ def find(fulltext: str, n: int = 4) -> str:
         for p, f, a in ngrams_counter.keys()  # if ngrams_counter[(p, f, a)] / (len(lemmatized) - n+1) >= threshold
     ]
 
-    return ltext, render(result)
+    output = render_table(
+        {"query": fulltext, "method": "n-gram", "n": n, "lemmatized": ltext},
+        result,
+    )
+
+    return ltext, output[0], output[1]
 
 
 demo = gr.Interface(
@@ -81,6 +86,7 @@ demo = gr.Interface(
     ],
     outputs=[
         gr.Textbox(label="Lemmatized"),
+        gr.HTML(label="Download"),
         gr.HTML(label="Results"),
     ],
     css_paths="/static/ocs.css",
