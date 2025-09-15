@@ -32,8 +32,8 @@ services:
     image: bogoslov
     # ports:
     #   - 8782:7861
-    environment:
-      - LD_PRELOAD=/home/app/.local/lib/python3.11/site-packages/scikit_learn.libs/libgomp-d22c30c5.so.1.0.0
+#    environment:
+#      - LD_PRELOAD=/home/app/.local/lib/python3.11/site-packages/scikit_learn.libs/libgomp-d22c30c5.so.1.0.0
     volumes:
       - ./static/ocs.css:/static/ocs.css:ro
       - ./results:/results
@@ -41,11 +41,11 @@ services:
     restart: always
     healthcheck:
       test: ["CMD-SHELL", "python -c \"from urllib.request import urlopen; int(urlopen('http://localhost:7861/ngram/').status >= 400)\""]
-    deploy:
-      resources:
-        limits:
-          cpus: 1
-          memory: 1024M
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: 1
+    #       memory: 1024M
 
   lcs:
     image: bogoslov
@@ -81,7 +81,7 @@ services:
       resources:
         limits:
           cpus: 1
-          memory: 1024M
+          memory: 2048M
 
   db:
     image: pgvector/pgvector:pg17

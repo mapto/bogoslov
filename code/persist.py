@@ -51,24 +51,23 @@ def find_ngram(
 
 
 def get_strans_models() -> list[str]:
-    global strans_models
-
     s = Session()
 
-    if not strans_models:
+    if "available_models" not in globals():
+        global available_models
         available_models = [
             r.model for r in s.query(Embedding.model).group_by(Embedding.model).all()
         ]
-        strans_models = {m: SentenceTransformer(m) for m in available_models}
+        # strans_models = {m: SentenceTransformer(m) for m in available_models}
 
-    return list(strans_models.keys())
+    return available_models
 
 
 def find_embeddings(
     model_name: str, text: str, dist_threshold: float = 0.2
 ) -> list[tuple[str, str, float]]:
     s = Session()
-    model = strans_models[model_name]
+    model = SentenceTransformer(model_name)
     quote = model.encode(text)
 
     result = (

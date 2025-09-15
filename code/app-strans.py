@@ -1,30 +1,32 @@
 #!/usr/bin/env python3
 
+from pathlib import Path
 from lxml import etree
-from glob import glob
-from tqdm import tqdm
 
+from tqdm import tqdm
 import gradio as gr
 from sentence_transformers import SentenceTransformer
 
 from settings import threshold
 from persist import find_embeddings, get_strans_models
-from results import render_table, pfa_templ
+from results import render_table, render_from_export, build_fname, pfa_templ
 
 models = get_strans_models()
 
 
 def find(fulltext: str, m: str) -> str:
+    params = {"query": fulltext, "method": "strans", "model": m}
+    fname_result = build_fname(params)
+    if Path(fname_result).exists():
+        return render_from_export(fname_result)
+
     response = find_embeddings(m, fulltext, 1 - threshold)
     result = [
         (r[0], pfa_templ.format(path=r[1], fname=r[2], addr=r[3]), r[4])
         for r in response
     ]
 
-    output = render_table(
-        {"query": fulltext, "method": "strans", "model": m},
-        result,
-    )
+    output = render_table(params, result)
 
     return output[0], output[1]
 

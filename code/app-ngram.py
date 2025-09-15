@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
+from pathlib import Path
 from lxml import etree
-from glob import glob
 from collections import Counter
 
 import gradio as gr
@@ -14,7 +14,7 @@ from db import Session
 from settings import static_path, threshold
 from util import get_ngrams
 from persist import find_ngram, get_verse_text
-from results import render_table, pfa_templ, href_templ
+from results import render_table, render_from_export, build_fname, pfa_templ
 
 sent_stemmers = {
     "dummy": lambda x: [(t, t) for t in tokenizer(x) if t.strip()],
@@ -34,6 +34,11 @@ def find(fulltext: str, n: int = 4) -> str:
     ltext = " ".join(l for w, l in lemmatized)
     if len(lemmatized) < n:
         return "", "Not enough tokens provided to search for N-grams"
+
+    params = {"query": fulltext, "method": "ngram", "n": n, "lemmatized": ltext}
+    fname_result = build_fname(params)
+    if Path(fname_result).exists():
+        return render_from_export(fname_result)
 
     try:
         new_ngrams = get_ngrams(fulltext, ltext, n)
@@ -62,10 +67,7 @@ def find(fulltext: str, n: int = 4) -> str:
         for p, f, a in ngrams_counter.keys()  # if ngrams_counter[(p, f, a)] / (len(lemmatized) - n+1) >= threshold
     ]
 
-    output = render_table(
-        {"query": fulltext, "method": "n-gram", "n": n, "lemmatized": ltext},
-        result,
-    )
+    output = render_table(params, result)
 
     return ltext, output[0], output[1]
 

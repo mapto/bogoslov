@@ -1,15 +1,21 @@
 #!/usr/bin/env python3
 
+from pathlib import Path
 from difflib import SequenceMatcher
 
 import gradio as gr
 
 from settings import threshold
 from persist import get_texts
-from results import render_table
+from results import render_table, render_from_export, build_fname, pfa_templ
 
 
 def find(fulltext: str) -> list[tuple[str, str, float]]:
+    params = {"query": fulltext, "method": "lcs"}
+    fname_result = build_fname(params)
+    if Path(fname_result).exists():
+        return render_from_export(fname_result)
+
     primary = get_texts()
 
     result = []
@@ -26,12 +32,15 @@ def find(fulltext: str) -> list[tuple[str, str, float]]:
         lcs = "".join([fulltext[b.a : (b.a + b.size)] for b in blocks])
         accuracy = (2 * len(lcs)) / (textlen + len(stripped))
         if accuracy >= threshold:
-            result += [(stripped, f"{path}/{filename}#{address}", accuracy)]
+            result += [
+                (
+                    stripped,
+                    pfa_templ.format(path=path, fname=filename, addr=address),
+                    accuracy,
+                )
+            ]
 
-    output = render_table(
-        {"query": fulltext, "method": "lcs"},
-        result,
-    )
+    output = render_table(params, result)
 
     return output[0], output[1]
 
