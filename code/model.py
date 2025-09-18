@@ -29,7 +29,7 @@ class Verse(Base):
 
 
 class Ngram(Base):
-    """Used only by the n-gram app"""
+    """Used only by the n-gram app, pos is used for uniqueness validation only"""
 
     __tablename__ = "ngrams"
 
@@ -37,6 +37,7 @@ class Ngram(Base):
     lemmas = Column(String)
     text = Column(String)
     n = Column(Integer)
+    pos = Column(Integer)
 
     verse_id = Column(Integer, ForeignKey("verses.id"))
 

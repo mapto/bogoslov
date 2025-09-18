@@ -42,6 +42,10 @@ def generalise(s: str) -> str:
 
 
 def find(fulltext: str, match_case: bool, whole_words: bool) -> str:
+    """
+    The function that performs the search.
+    Takes the query string as parameter and relevant regex flags.
+    """
     pattern = generalise(fulltext)
     noword = (
         r"(\s|"
@@ -82,7 +86,7 @@ def find(fulltext: str, match_case: bool, whole_words: bool) -> str:
 
 demo = gr.Interface(
     fn=find,
-    description="""<h1>Regular Expressions</h1><small>See <a href="https://www.postgresql.org/docs/17/functions-matching.html#FUNCTIONS-POSIX-REGEXP">Regular Expressions</a> in PostgreSQL</small>""",
+    description="""<h1>Regular Expressions</h1><small>See <a href="https://www.postgresql.org/docs/17/functions-matching.html#FUNCTIONS-POSIX-REGEXP">Regular Expressions</a> in PostgreSQL and <a href="https://github.com/mapto/bogoslov/blob/main/code/app-regex.py#L44">implementation</a>.</small>""",
     inputs=[
         gr.Textbox("богомъ", label="Search"),
         gr.Checkbox(label="Match case"),

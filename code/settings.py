@@ -12,5 +12,7 @@ threshold = 0.5
 
 spacy_models = []
 
+max_ngram = 5
+
 # debug = True
 debug = False

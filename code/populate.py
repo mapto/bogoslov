@@ -1,24 +1,41 @@
 #!/usr/bin/env python3
 
+"""BogoSlov Populate
+
+Schema needs to be preloaded.
+
+Usage:
+  populate.py [-v | --verses] [-n | --ngrams] [-e | --embeddings] [-f | --force]
+  populate.py [-v | --verses] [-n | --ngrams] [--embedding=<name>] [-f | --force]
+  populate.py (-h | --help)
+  populate.py --version
+
+Options:
+  -h --help            Show this screen.
+  --version            Show version.
+  -v --verses          Generate index for Verses.
+  -n --ngrams          Generate index for Ngrams (requires index for Verses).
+  -e --embeddings      Generate index for Embeddings (requires index for Verses).
+  --embedding=<name>   Generate index for Embeddings only for model <name> (requires index for Verses).
+  -f --force           Force Embedding regeneration even if it exists already.
+
+"""
+
 from lxml import etree
 from glob import glob
+
 from tqdm import tqdm
-
+from docopt import docopt
 from sentence_transformers import SentenceTransformer
-from sqlalchemy import create_engine  # type: ignore
-from sqlalchemy.orm import sessionmaker  # type: ignore
+from sqlalchemy import create_engine, delete  # type: ignore
+from sqlalchemy.orm import sessionmaker, declarative_base  # type: ignore
 
-DATABASE_URL = "postgresql://bogoslov:xxxxxx@localhost:5732/bogoslov"
-engine = create_engine(DATABASE_URL, echo=False, pool_size=10, max_overflow=20)
-Session = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-Base = declarative_base()
+from model import Verse, Ngram, Embedding
 
-from settings import ns, unit
+from settings import ns, unit, max_ngram
+from db import engine, Session, Base
 
-src = "../corpora/*/*.tei.xml"
-
-Base.metadata.create_all(engine)
-s = Session()
+src = "/corpora/*/*.tei.xml"
 
 
 def persist_verse(s: Session, fname: str):
@@ -70,16 +87,26 @@ def persist_ngram(s, verse: str, n: int):
                 lemmas=",".join(lemmas[i : i + n]),
                 text=text,
                 verse_id=v.id,
+                pos=i,
             )
         ]
     s.add_all(ngrams)
     s.commit()
 
 
-def persist_embedding(m: str):
+def persist_embedding(m: str, force=False):
     model = SentenceTransformer(m)
     vectors = []
-    for v in s.query(Verse).all():
+    q = s.query(Verse)
+    cnt = q.count()
+    preexistent = s.query(Embedding).filter(Embedding.model == m).count()
+    if cnt == preexistent and not force:
+        print(f"Model {m} already loaded.")
+        return
+    if preexistent > 0:
+        print(f"Cleaning up partially preloaded model {m}.")
+        s.execute(delete(Embedding).where(Embedding.model == m))
+    for v in tqdm(q.all(), total=cnt):
         primary = model.encode(v.text)
         vectors += [
             Embedding(
@@ -100,19 +127,44 @@ models = [
     "siberian-lang-lab/evenki-russian-parallel-corpora",  # 768
     "Diiiann/ru_oss",  # 768
     "DiTy/bi-encoder-russian-msmarco",  # 768
+    # "BounharAbdelaziz/ModernBERT-Arabic-Embeddings", # 768, restricted access
 ]
 
 if __name__ == "__main__":
-    for fname in glob(src):
-        persist_verse(s, fname)
+    args = docopt(__doc__, version="BogoSlov Populate 1.0")
+    # print(args)
 
-    for v in tqdm(s.query(Verse).all()):
-        for n in range(2, 11):
-            persist_ngram(s, v, n)
+    Base.metadata.create_all(engine)
+    s = Session()
 
-    # download models
-    for m in models:
-        SentenceTransformer(m)
+    if args["--verses"]:
+        print("# Indexing Verses...")
+        for fname in glob(src):
+            persist_verse(s, fname)
 
-    for m in tqdm(models):
-        persist_embedding(m)
+    if args["--ngrams"]:
+        files = list(
+            s.query(Verse.path, Verse.filename)
+            .group_by(Verse.path, Verse.filename)
+            .all()
+        )
+        # print(files)
+        for path, filename in files:
+            print(f"# Indexing N-grams: {path}/{filename}...")
+            q = s.query(Verse).filter(Verse.path == path, Verse.filename == filename)
+            for v in tqdm(q.all(), q.count()):
+                for n in range(2, max_ngram + 1):
+                    persist_ngram(s, v, n)
+
+    if args["--embeddings"]:
+        for m in models:
+            print(f"# Indexing model: {m}...")
+            persist_embedding(m, force=args["--force"])
+
+    elif args["--embedding"]:
+        m = args["--embedding"]
+        if m not in models:
+            print(f"Available models: {models}")
+        else:
+            print(f"# Indexing model: {m}...")
+            persist_embedding(m, force=args["--force"])

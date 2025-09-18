@@ -11,6 +11,10 @@ from results import render_table, render_from_export, build_fname, pfa_templ
 
 
 def find(fulltext: str) -> list[tuple[str, str, float]]:
+    """
+    The function that performs the search.
+    Takes the query string as parameter.
+    """
     params = {"query": fulltext, "method": "lcs"}
     fname_result = build_fname(params)
     if Path(fname_result).exists():
@@ -47,7 +51,7 @@ def find(fulltext: str) -> list[tuple[str, str, float]]:
 
 demo = gr.Interface(
     fn=find,
-    description="""<h1>Longest Common Subsequence</h1><small>See <a href="http://www.eiti.uottawa.ca/~diana/publications/tkdd.pdf">Islam & Inkpen 2008</a></small>""",
+    description="""<h1>Longest Common Subsequence</h1><small>See <a href="http://www.eiti.uottawa.ca/~diana/publications/tkdd.pdf">Islam & Inkpen 2008</a> and <a href="https://github.com/mapto/bogoslov/blob/main/code/app-lcs.py#L13">implementation</a>.</small>""",
     inputs=[
         gr.Textbox("Приде же въ градъ самарьскъ", lines=5, label="Search"),
     ],

@@ -11,7 +11,7 @@ from udpipeclient import udpipe_sent_lemmatize
 # from stanzacilent import stanza_sent_lemmatize
 
 from db import Session
-from settings import static_path, threshold
+from settings import static_path, threshold, max_ngram
 from util import get_ngrams
 from persist import find_ngram, get_verse_text
 from results import render_table, render_from_export, build_fname, pfa_templ
@@ -30,6 +30,10 @@ unit = "lg"
 
 
 def find(fulltext: str, n: int = 4) -> str:
+    """
+    The function that performs the search.
+    Takes the query string as parameter and the lenght of the (word token) n-gram.
+    """
     lemmatized = sent_stemmers[stemmer](fulltext)
     ltext = " ".join(l for w, l in lemmatized)
     if len(lemmatized) < n:
@@ -74,7 +78,7 @@ def find(fulltext: str, n: int = 4) -> str:
 
 demo = gr.Interface(
     fn=find,
-    description="""<h1>Lemmatized N-grams</h1><small>See <a href="https://stephanus.tlg.uci.edu/helppdf/ngrams.pdf">N-grams in TLG</a></small>""",
+    description="""<h1>Lemmatized N-grams</h1><small>See <a href="https://stephanus.tlg.uci.edu/helppdf/ngrams.pdf">N-grams in TLG</a> and <a href="https://github.com/mapto/bogoslov/blob/main/code/app-ngram.py#L32">implementation</a>.</small>""",
     inputs=[
         gr.Textbox(
             "въса землꙗ да поклонит ти се и поеть тебе", lines=5, label="Search"
@@ -84,7 +88,7 @@ demo = gr.Interface(
         #     value="stanza",
         #     label="Lemmatizer",
         # ),
-        gr.Slider(minimum=2, maximum=10, value=3, step=1, label="N-gram"),
+        gr.Slider(minimum=2, maximum=max_ngram, value=3, step=1, label="N-gram"),
     ],
     outputs=[
         gr.Textbox(label="Lemmatized"),

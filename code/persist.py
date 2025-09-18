@@ -1,3 +1,4 @@
+from torch import float16
 from sqlalchemy import select
 from sentence_transformers import SentenceTransformer
 
@@ -67,8 +68,13 @@ def find_embeddings(
     model_name: str, text: str, dist_threshold: float = 0.2
 ) -> list[tuple[str, str, float]]:
     s = Session()
-    model = SentenceTransformer(model_name)
-    quote = model.encode(text)
+    # Done so in order to release memory ASAP
+    quote = SentenceTransformer(
+        model_name, device="cpu", model_kwargs={"dtype": float16}
+    ).encode(text)
+    import gc
+
+    gc.collect()
 
     result = (
         s.query(Embedding, Verse, Embedding.vector.cosine_distance(quote))
@@ -77,6 +83,7 @@ def find_embeddings(
         .filter(Embedding.vector.cosine_distance(quote) <= dist_threshold)
         .all()
     )
+
     return [
         (r[1].text, r[1].path, r[1].filename, r[1].address, 1 - r[2]) for r in result
     ]

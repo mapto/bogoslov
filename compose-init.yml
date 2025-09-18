@@ -1,0 +1,30 @@
+# This compose reuses an image for multiple containers. Because of this it should be built in advance with:
+# docker build -t bogoslov .
+
+services:
+  db:
+    image: pgvector/pgvector:pg17
+    environment:
+      - POSTGRES_DB=bogoslov
+      - POSTGRES_USER=bogoslov
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    # ports:
+    #   - 5732:5432
+    volumes:
+      - ./db/data/:/var/lib/postgresql/data/
+      - ./db/init/:/docker-entrypoint-initdb.d/:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d bogoslov -U bogoslov"]
+    restart: always
+
+  populate:
+    image: bogoslov
+    environment:
+      - HF_HOME=/models/
+    volumes:
+      - ./corpora:/corpora:ro
+      - ./models:/models/
+    command: ./populate.py -v -n -e
+    restart: no
+    depends_on:
+      - db

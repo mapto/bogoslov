@@ -15,6 +15,10 @@ models = get_strans_models()
 
 
 def find(fulltext: str, m: str) -> str:
+    """
+    The function that performs the search.
+    Takes the query string as parameter and the model identifier on HuggingFace.
+    """
     params = {"query": fulltext, "method": "strans", "model": m}
     fname_result = build_fname(params)
     if Path(fname_result).exists():
@@ -36,7 +40,7 @@ def find(fulltext: str, m: str) -> str:
 
 demo = gr.Interface(
     fn=find,
-    description="""<h1>Sentence Transformers</h1><small>See <a href="https://www.sbert.net">sbert.net</a></small>""",
+    description="""<h1>Sentence Transformers</h1><small>See <a href="https://www.sbert.net">sbert.net</a> and <a href="https://github.com/mapto/bogoslov/blob/main/code/app-strans.py#L17">implementation</a>.</small>""",
     inputs=[
         gr.Textbox("Не осѫждаите да не осѫждени бѫдете", lines=5, label="Search"),
         gr.Dropdown(models, value="uaritm/multilingual_en_uk_pl_ru", label="Model"),

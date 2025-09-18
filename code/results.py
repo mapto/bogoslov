@@ -13,7 +13,7 @@ fname_templ = "/results/{method}-{params}.xlsx"
 # fname_templ = "/results/{query}-{method}-{params}.xlsx"
 
 table_templ = """<table class="results">{body}</table>"""
-trow_templ = """<tr><td class="quote">{text}</td><td class="info"><span title="accuracy" style="font-size: large; opacity: {acc}">{acc}</span><br><a href="{href}" title="{urn}">{ref}<br><span style="font-weight: bold; color: {color}">[{src}]</span></a></td></tr>"""
+trow_templ = """<tr><td class="quote">{text}</td><td class="info"><span title="accuracy" style="font-size: large; opacity: {acc}">{acc}</span><br><a href="{href}" title="{urn}" target="fulltext">{ref}<br><span style="font-weight: bold; color: {color}">[{src}]</span></a></td></tr>"""
 
 href_templ = """<a href="{href}" target="fulltext">{label}</a>"""
 entry_templ = """<li>{link} [{accuarcy:.4f}]:<br/><span class="lg">{text}</span></li>"""
@@ -149,7 +149,7 @@ def render_table(
         html_rows += [
             trow_templ.format(
                 text=text,
-                acc="1.0" if acc == 1 else f"{acc:.2f}".lstrip("0"),
+                acc="1.0" if acc == 1 else (f"{acc:.2f}"[1:]),
                 href=path2link(addr),
                 ref=path2loc(addr),
                 color=ms2color[path2ms(addr)],
