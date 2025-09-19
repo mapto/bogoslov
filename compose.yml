@@ -3,7 +3,7 @@
 
 services:
   proxy:
-    image: nginx:1.25-alpine-slim
+    image: nginx:1-alpine-slim
     ports:
       - 8780:80
     volumes:
@@ -22,7 +22,7 @@ services:
     volumes:
       - ./static/ocs.css:/static/ocs.css:ro
       - ./results:/results
-      - ./code/alphabet.tsv:/home/app/alphabet.tsv:ro
+      - ./static/alphabet.tsv:/home/app/alphabet.tsv:ro
     command: ./app-regex.py
     restart: always
     healthcheck:
@@ -37,6 +37,7 @@ services:
     volumes:
       - ./static/ocs.css:/static/ocs.css:ro
       - ./results:/results
+      - ./static/alphabet.tsv:/home/app/alphabet.tsv:ro  # serves for escape characters
     command: ./app-ngram.py
     restart: always
     healthcheck:
@@ -77,11 +78,12 @@ services:
     restart: always
     healthcheck:
       test: ["CMD-SHELL", "python -c \"from urllib.request import urlopen; int(urlopen('http://localhost:7861/strans/').status >= 400)\""]
-    deploy:
-      resources:
-        limits:
-          cpus: 1
-          memory: 2048M
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: 1
+    #       memory: 4196M
+    #   memswap_limit: 4196m
 
   db:
     image: pgvector/pgvector:pg17

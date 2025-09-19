@@ -6,21 +6,26 @@ from difflib import SequenceMatcher
 import gradio as gr
 
 from settings import threshold
-from persist import get_texts
-from results import render_table, render_from_export, build_fname, pfa_templ
+from persist import get_texts, get_sources
+from results import render_table, render_from_export, build_fname
+from results import pfa_templ, sources2code
 
 
-def find(fulltext: str) -> list[tuple[str, str, float]]:
+def find(sources: list[str], fulltext: str) -> list[tuple[str, str, float]]:
     """
     The function that performs the search.
     Takes the query string as parameter.
     """
-    params = {"query": fulltext, "method": "lcs"}
+    params = {
+        "query": fulltext,
+        "method": "lcs",
+        "sources": sources2code(sources),
+    }
     fname_result = build_fname(params)
     if Path(fname_result).exists():
         return render_from_export(fname_result)
 
-    primary = get_texts()
+    primary = get_texts(sources)
 
     result = []
     textlen = len(fulltext)
@@ -46,20 +51,26 @@ def find(fulltext: str) -> list[tuple[str, str, float]]:
 
     output = render_table(params, result)
 
-    return output[0], output[1]
+    return output
 
 
-demo = gr.Interface(
-    fn=find,
-    description="""<h1>Longest Common Subsequence</h1><small>See <a href="http://www.eiti.uottawa.ca/~diana/publications/tkdd.pdf">Islam & Inkpen 2008</a> and <a href="https://github.com/mapto/bogoslov/blob/main/code/app-lcs.py#L13">implementation</a>.</small>""",
-    inputs=[
-        gr.Textbox("Приде же въ градъ самарьскъ", lines=5, label="Search"),
-    ],
-    outputs=[
-        gr.HTML(label="Download"),
-        gr.HTML(label="Results"),
-    ],
-    css_paths="/static/ocs.css",
-)
+if __name__ == "__main__":
+    sources = get_sources()
 
-demo.launch(server_port=7861, server_name="0.0.0.0", show_api=False, root_path="/lcs")
+    app = gr.Interface(
+        fn=find,
+        description="""<h1>Longest Common Subsequence</h1><small>See <a href="http://www.eiti.uottawa.ca/~diana/publications/tkdd.pdf">Islam & Inkpen 2008</a> and <a href="https://github.com/mapto/bogoslov/blob/main/code/app-lcs.py#L13">implementation</a>.</small>""",
+        inputs=[
+            gr.CheckboxGroup(sources, value=sources, label="Sources"),
+            gr.Textbox("Приде же въ градъ самарьскъ", lines=5, label="Search"),
+        ],
+        outputs=[
+            gr.HTML(label="Download"),
+            gr.HTML(label="Results"),
+        ],
+        css_paths="/static/ocs.css",
+    )
+
+    app.launch(
+        server_port=7861, server_name="0.0.0.0", show_api=False, root_path="/lcs"
+    )

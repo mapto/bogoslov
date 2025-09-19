@@ -9,7 +9,7 @@ from settings import static_path, base_url
 
 pfa_templ = "{path}/{fname}#{addr}"
 # fname_templ = "/results/{params}.xlsx"
-fname_templ = "/results/{method}-{params}.xlsx"
+fname_templ = "/results/{method}-{sources}-{params}.xlsx"
 # fname_templ = "/results/{query}-{method}-{params}.xlsx"
 
 table_templ = """<table class="results">{body}</table>"""
@@ -74,27 +74,53 @@ def path2loc(s: str) -> str:
     return s.split("/")[-1].replace(".tei.xml#", "<br>").replace("_", ".")
 
 
+def source2ms(s: str) -> str:
+    """
+    >>> path2ms("gospel.zographensis.syntacticus")
+    'Z'
+    >>> path2ms("gospel.marianus.syntacticus")
+    'M'
+    >>> path2ms("psalter.bologna.oxford")
+    'B'
+    >>> path2ms("psalter.sinai.syntacticus")
+    'S'
+    """
+    return s.split(".")[1][0].upper()
+
+
+def sources2code(sources: list[str]) -> str:
+    """
+    >>> sources2code(["gospel.zographensis.syntacticus", "gospel.marianus.syntacticus"])
+    'MZ'
+    >>> sources2code(["psalter.bologna.oxford", "psalter.sinai.syntacticus"])
+    'BS'
+    """
+    codes = [source2ms(s) for s in sources]
+    codes.sort()
+    return "".join(codes)
+
+
 def path2ms(s: str) -> str:
     """
     >>> path2ms("gospel.zographensis.syntacticus/marco.tei.xml#4_19")
     'Z'
-    >>> path2ms("gospel.marianus.syntacticus.marco.tei.xml#4_19")
+    >>> path2ms("gospel.marianus.syntacticus/marco.tei.xml#4_19")
     'M'
     >>> path2ms("psalter.bologna.oxford/BM8.tei.xml#112_7")
     'B'
     >>> path2ms("psalter.sinai.syntacticus/psal-sin.tei.xml#10_30")
     'S'
     """
-    return s.split(".")[1][0].upper()
+    return source2ms(s.split("/")[0])
 
 
 def build_fname(params: dict[str, str]) -> str:
     """
-    >>> params = {"query": "hello", "method": "regex"}
+    >>> params = {"query": "hello", "method": "regex", "sources":"BMSZ"}
     >>> build_fname(params)
-    '/results/hello-regex-532c0ac07acee465f2585a261fefd47c.xlsx'
+    '/results/regex-BMSZ-452b6711460846e87367c2fcee2ea493.xlsx'
     >>> build_fname(params)
-    '/results/hello-regex-532c0ac07acee465f2585a261fefd47c.xlsx'
+    '/results/regex-BMSZ-452b6711460846e87367c2fcee2ea493.xlsx'
     """
 
     m = hashlib.md5()
@@ -104,6 +130,7 @@ def build_fname(params: dict[str, str]) -> str:
     return fname_templ.format(
         # query=quote_plus(params["query"][:20]),
         method=params["method"],
+        sources=params["sources"],
         params=m.hexdigest(),
     )
 
@@ -138,7 +165,12 @@ def render_table(
     data: list[tuple[str, str, float]],
 ) -> tuple[str, str]:
     """A list of <text, address, accuracy>. Returns path to export and HTML body.
-    A precondition is that build_fname(params) does not exist."""
+    A precondition is that build_fname(params) does not exist.
+
+    >> params = {"query": "hello", "method": "regex", "sources":"BMSZ"}
+    >> data = [("text", "psalter.bologna.oxford", 1)]
+    >> render_table(params, data)
+    """
 
     data.sort(key=lambda x: x[2], reverse=True)
     if not data:
@@ -149,7 +181,7 @@ def render_table(
         html_rows += [
             trow_templ.format(
                 text=text,
-                acc="1.0" if acc == 1 else (f"{acc:.2f}"[1:]),
+                acc="1.0" if acc > 0.99 else (f"{acc:.2f}"[1:]),
                 href=path2link(addr),
                 ref=path2loc(addr),
                 color=ms2color[path2ms(addr)],
@@ -184,10 +216,19 @@ def render_table(
         align = Alignment(wrap_text=True)
         ws = wb.worksheets[0]
 
+        first = True
         for cell in ws["A"]:
+            if first:
+                first = False
+                continue
             cell.font = font
             cell.alignment = align
+
+        first = True
         for cell in ws["B"]:
+            if first:
+                first = False
+                continue
             cell.font = font
             cell.alignment = align
 

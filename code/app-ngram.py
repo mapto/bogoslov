@@ -13,8 +13,9 @@ from udpipeclient import udpipe_sent_lemmatize
 from db import Session
 from settings import static_path, threshold, max_ngram
 from util import get_ngrams
-from persist import find_ngram, get_verse_text
-from results import render_table, render_from_export, build_fname, pfa_templ
+from persist import find_ngram, get_verse_text, get_sources
+from results import render_table, render_from_export, build_fname
+from results import pfa_templ, sources2code
 
 sent_stemmers = {
     "dummy": lambda x: [(t, t) for t in tokenizer(x) if t.strip()],
@@ -29,7 +30,7 @@ ns = {"tei": "http://www.tei-c.org/ns/1.0"}
 unit = "lg"
 
 
-def find(fulltext: str, n: int = 4) -> str:
+def find(sources: list[str], fulltext: str, n: int = 4) -> str:
     """
     The function that performs the search.
     Takes the query string as parameter and the lenght of the (word token) n-gram.
@@ -37,17 +38,27 @@ def find(fulltext: str, n: int = 4) -> str:
     lemmatized = sent_stemmers[stemmer](fulltext)
     ltext = " ".join(l for w, l in lemmatized)
     if len(lemmatized) < n:
-        return "", "Not enough tokens provided to search for N-grams"
+        return (
+            ltext,
+            "Not enough tokens provided to search for N-grams",
+            f"Tokens identified: {len(lemmatized)}. If this is wrong, consider simplifying your query.",
+        )
 
-    params = {"query": fulltext, "method": "ngram", "n": n, "lemmatized": ltext}
+    params = {
+        "query": fulltext,
+        "method": "ngram",
+        "n": n,
+        "lemmatized": ltext,
+        "sources": sources2code(sources),
+    }
     fname_result = build_fname(params)
     if Path(fname_result).exists():
-        return render_from_export(fname_result)
+        return ltext, *render_from_export(fname_result)
 
     try:
         new_ngrams = get_ngrams(fulltext, ltext, n)
     except AssertionError as ae:
-        return ltext, f"Cannot make n-grams. {ae}"
+        return ltext, f"Cannot make n-grams. {ae}", str(ae)
     # print(new_ngrams)
     # print(ngrams)
 
@@ -57,7 +68,7 @@ def find(fulltext: str, n: int = 4) -> str:
     ngrams_counter = Counter()
     for kng, vtloc in new_ngrams.items():
         for estart, eend, etext in vtloc:
-            nxt = find_ngram(n, ",".join(kng), estart, eend, etext)
+            nxt = find_ngram(n, ",".join(kng), estart, eend, etext, sources)
             ngrams_counter += Counter(nxt)
             # for path, fname, addr in nxt:
             #     ngrams_counter[(path, fname, addr)] += 1
@@ -73,29 +84,35 @@ def find(fulltext: str, n: int = 4) -> str:
 
     output = render_table(params, result)
 
-    return ltext, output[0], output[1]
+    return ltext, *output
 
 
-demo = gr.Interface(
-    fn=find,
-    description="""<h1>Lemmatized N-grams</h1><small>See <a href="https://stephanus.tlg.uci.edu/helppdf/ngrams.pdf">N-grams in TLG</a> and <a href="https://github.com/mapto/bogoslov/blob/main/code/app-ngram.py#L32">implementation</a>.</small>""",
-    inputs=[
-        gr.Textbox(
-            "въса землꙗ да поклонит ти се и поеть тебе", lines=5, label="Search"
-        ),
-        # gr.Radio(
-        #     choices=sent_stemmers.keys(),
-        #     value="stanza",
-        #     label="Lemmatizer",
-        # ),
-        gr.Slider(minimum=2, maximum=max_ngram, value=3, step=1, label="N-gram"),
-    ],
-    outputs=[
-        gr.Textbox(label="Lemmatized"),
-        gr.HTML(label="Download"),
-        gr.HTML(label="Results"),
-    ],
-    css_paths="/static/ocs.css",
-)
+if __name__ == "__main__":
+    sources = get_sources()
 
-demo.launch(server_port=7861, server_name="0.0.0.0", show_api=False, root_path="/ngram")
+    app = gr.Interface(
+        fn=find,
+        description="""<h1>Lemmatized N-grams</h1><small>See <a href="https://stephanus.tlg.uci.edu/helppdf/ngrams.pdf">N-grams in TLG</a> and <a href="https://github.com/mapto/bogoslov/blob/main/code/app-ngram.py#L32">implementation</a>.</small>""",
+        inputs=[
+            gr.CheckboxGroup(sources, value=sources, label="Sources"),
+            gr.Textbox(
+                "въса землꙗ да поклонит ти се и поеть тебе", lines=5, label="Search"
+            ),
+            # gr.Radio(
+            #     choices=sent_stemmers.keys(),
+            #     value="stanza",
+            #     label="Lemmatizer",
+            # ),
+            gr.Slider(minimum=2, maximum=max_ngram, value=3, step=1, label="N-gram"),
+        ],
+        outputs=[
+            gr.Textbox(label="Lemmatized"),
+            gr.HTML(label="Download"),
+            gr.HTML(label="Results"),
+        ],
+        css_paths="/static/ocs.css",
+    )
+
+    app.launch(
+        server_port=7861, server_name="0.0.0.0", show_api=False, root_path="/ngram"
+    )
