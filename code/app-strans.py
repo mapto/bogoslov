@@ -1,11 +1,8 @@
 #!/usr/bin/env python3
 
 from pathlib import Path
-from lxml import etree
 
-from tqdm import tqdm
 import gradio as gr
-from sentence_transformers import SentenceTransformer
 
 from settings import threshold
 from persist import find_embeddings, get_strans_models, get_sources

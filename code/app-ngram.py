@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 from pathlib import Path
-from lxml import etree
 from collections import Counter
 
 import gradio as gr
@@ -10,8 +9,7 @@ from udpipeclient import udpipe_sent_lemmatize
 
 # from stanzacilent import stanza_sent_lemmatize
 
-from db import Session
-from settings import static_path, threshold, max_ngram
+from settings import max_ngram
 from util import get_ngrams
 from persist import find_ngram, get_verse_text, get_sources
 from results import render_table, render_from_export, build_fname
@@ -36,7 +34,7 @@ def find(sources: list[str], fulltext: str, n: int = 4) -> str:
     Takes the query string as parameter and the lenght of the (word token) n-gram.
     """
     lemmatized = sent_stemmers[stemmer](fulltext)
-    ltext = " ".join(l for w, l in lemmatized)
+    ltext = " ".join(lem for w, lem in lemmatized)
     if len(lemmatized) < n:
         return (
             ltext,
@@ -62,9 +60,7 @@ def find(sources: list[str], fulltext: str, n: int = 4) -> str:
     # print(new_ngrams)
     # print(ngrams)
 
-    found = []
     # print(new_ngrams)
-    ngrams_total = len(new_ngrams)
     ngrams_counter = Counter()
     for kng, vtloc in new_ngrams.items():
         for estart, eend, etext in vtloc:

@@ -85,6 +85,18 @@ services:
     #       memory: 4196M
     #   memswap_limit: 4196m
 
+  bm25:
+    image: bogoslov
+    # ports:
+    #   - 8785:7861
+    volumes:
+      - ./static/ocs.css:/static/ocs.css:ro
+      - ./results:/results
+    command: ./app-bm25.py
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"from urllib.request import urlopen; int(urlopen('http://localhost:7861/bm25/').status >= 400)\""]
+
   db:
     image: pgvector/pgvector:pg17
     environment:
