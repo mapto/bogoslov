@@ -83,7 +83,7 @@ def find(sources: list[str], fulltext: str, n: int = 4) -> str:
     return ltext, *output
 
 
-if __name__ == "__main__":
+def interface() -> gr.Interface:
     sources = get_sources()
 
     app = gr.Interface(
@@ -109,6 +109,11 @@ if __name__ == "__main__":
         css_paths="/static/ocs.css",
     )
 
+    return app
+
+
+if __name__ == "__main__":
+    app = interface()
     app.launch(
         server_port=7861, server_name="0.0.0.0", show_api=False, root_path="/ngram"
     )

@@ -1,13 +1,9 @@
 #!/usr/bin/env python3
 
 from pathlib import Path
-from lxml import etree
-import regex as re
-from glob import glob
 
 import gradio as gr
 
-from settings import static_path
 from persist import find_regex, get_verse_text, get_sources
 from results import render_table, render_from_export, build_fname
 from results import pfa_templ, sources2code
@@ -100,7 +96,7 @@ def find(sources: list[str], fulltext: str, match_case: bool, whole_words: bool)
     return pat, *output
 
 
-if __name__ == "__main__":
+def interface() -> gr.Interface:
     sources = get_sources()
 
     app = gr.Interface(
@@ -127,6 +123,11 @@ if __name__ == "__main__":
         css_paths="/static/ocs.css",
     )
 
+    return app
+
+
+if __name__ == "__main__":
+    app = interface()
     app.launch(
         server_port=7861, server_name="0.0.0.0", show_api=False, root_path="/regex"
     )

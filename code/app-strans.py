@@ -36,10 +36,7 @@ def find(sources: list[str], fulltext: str, m: str) -> str:
     return output
 
 
-# def file2link(s: str) -> str:
-#     return f'<a href="{fname_result}">Download</a>'
-
-if __name__ == "__main__":
+def interface() -> gr.Interface:
     models = get_strans_models()
     sources = get_sources()
 
@@ -58,6 +55,11 @@ if __name__ == "__main__":
         css_paths="/static/ocs.css",
     )
 
+    return app
+
+
+if __name__ == "__main__":
+    app = interface()
     app.launch(
         server_port=7861, server_name="0.0.0.0", show_api=False, root_path="/strans"
     )

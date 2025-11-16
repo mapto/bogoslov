@@ -20,12 +20,7 @@ entry_templ = """<li>{link} [{accuarcy:.4f}]:<br/><span class="lg">{text}</span>
 
 export_templ = """<a href="{url}">[Export Results]</a>"""
 
-ms2color = {
-    "S": "#90AA00",
-    "B": "#00AA90",
-    "M": "#0090AA",
-    "Z": "#9000AA",
-}
+from settings import ms2color
 
 
 def urn2path(s: str) -> str:

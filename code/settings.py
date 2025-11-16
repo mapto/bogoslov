@@ -16,3 +16,17 @@ max_ngram = 5
 
 # debug = True
 debug = False
+
+ms2color = {
+    "S": "#90AA00",
+    "B": "#00AA90",
+    "M": "#0090AA",
+    "Z": "#9000AA",
+}
+
+ms2source = {
+    "S": "psalter.sinai.syntacticus",
+    "B": "psalter.bologna.oxford",
+    "M": "gospel.marianus.syntacticus",
+    "Z": "gospel.zographensis.syntacticus",
+}

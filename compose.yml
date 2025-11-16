@@ -15,87 +15,19 @@ services:
       test: ["CMD-SHELL", "wget -nv -t1 --spider http://localhost || exit 1"]
     restart: always
 
-  regex:
+  service:
     image: bogoslov
-    # ports:
-    #   - 8781:7861
+    ports:
+      - 8781:8000
     volumes:
       - ./static/ocs.css:/static/ocs.css:ro
       - ./results:/results
       - ./static/alphabet.tsv:/home/app/alphabet.tsv:ro
-    command: ./app-regex.py
-    restart: always
-    healthcheck:
-      test: ["CMD-SHELL", "python -c \"from urllib.request import urlopen; int(urlopen('http://localhost:7861/regex/').status >= 400)\""]
-
-  ngram:
-    image: bogoslov
-    # ports:
-    #   - 8782:7861
-#    environment:
-#      - LD_PRELOAD=/home/app/.local/lib/python3.11/site-packages/scikit_learn.libs/libgomp-d22c30c5.so.1.0.0
-    volumes:
-      - ./static/ocs.css:/static/ocs.css:ro
-      - ./results:/results
-      - ./static/alphabet.tsv:/home/app/alphabet.tsv:ro  # serves for escape characters
-    command: ./app-ngram.py
-    restart: always
-    healthcheck:
-      test: ["CMD-SHELL", "python -c \"from urllib.request import urlopen; int(urlopen('http://localhost:7861/ngram/').status >= 400)\""]
-    # deploy:
-    #   resources:
-    #     limits:
-    #       cpus: 1
-    #       memory: 1024M
-
-  lcs:
-    image: bogoslov
-    # ports:
-    #   - 8783:7861
-    # environment:
-    #   - LD_PRELOAD=/home/app/.local/lib/python3.11/site-packages/scikit_learn.libs/libgomp-d22c30c5.so.1.0.0
-    volumes:
-      - ./static/ocs.css:/static/ocs.css:ro
-      - ./results:/results
-    command: ./app-lcs.py
-    restart: always
-    healthcheck:
-      test: ["CMD-SHELL", "python -c \"from urllib.request import urlopen; int(urlopen('http://localhost:7861/lcs/').status >= 400)\""]
-
-
-  strans:
-    image: bogoslov
-    # ports:
-    #   - 8784:7861
-    environment:
-      - HF_HOME=/models/
-      # - LD_PRELOAD=/home/app/.local/lib/python3.11/site-packages/scikit_learn.libs/libgomp-d22c30c5.so.1.0.0
-    volumes:
-      - ./static/ocs.css:/static/ocs.css:ro
-      - ./results:/results
       - ./models:/models/
-    command: ./app-strans.py
+    command: ["python", "-m", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
     restart: always
     healthcheck:
-      test: ["CMD-SHELL", "python -c \"from urllib.request import urlopen; int(urlopen('http://localhost:7861/strans/').status >= 400)\""]
-    # deploy:
-    #   resources:
-    #     limits:
-    #       cpus: 1
-    #       memory: 4196M
-    #   memswap_limit: 4196m
-
-  bm25:
-    image: bogoslov
-    # ports:
-    #   - 8785:7861
-    volumes:
-      - ./static/ocs.css:/static/ocs.css:ro
-      - ./results:/results
-    command: ./app-bm25.py
-    restart: always
-    healthcheck:
-      test: ["CMD-SHELL", "python -c \"from urllib.request import urlopen; int(urlopen('http://localhost:7861/bm25/').status >= 400)\""]
+      test: ["CMD-SHELL", "python -c \"from urllib.request import urlopen; int(urlopen('http://localhost:8000/').status >= 400)\""]
 
   db:
     image: pgvector/pgvector:pg17

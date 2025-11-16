@@ -1,4 +1,7 @@
 FROM python:3-slim-buster
+
+EXPOSE 8000
+
 RUN adduser app
 WORKDIR /home/app
 USER app

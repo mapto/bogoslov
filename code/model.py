@@ -2,10 +2,9 @@
 # -*- coding: utf-8 -*-
 """"""
 
-from sqlalchemy import Column, Computed, ForeignKey  # type: ignore
-from sqlalchemy import Integer, String, DateTime  # type: ignore
-from sqlalchemy.sql import func  # type: ignore
-from sqlalchemy.orm import relationship, mapped_column
+from sqlalchemy import Column, ForeignKey  # type: ignore
+from sqlalchemy import Integer, String  # type: ignore
+from sqlalchemy.orm import mapped_column
 from pgvector.sqlalchemy import Vector
 
 from db import Base, Session, engine
