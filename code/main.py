@@ -59,14 +59,21 @@ async def query_regex(search: Annotated[SearchParams, Query()]):
     regex_str, link, html = regex.find(
         sources, search.fulltext, search.match_case, search.whole_words
     )
+    if not html:
+        raise HTTPException(204, detail="No result.")
+
     fname = link2fname(link)
     fpath = f"/results/{fname}"
     if Path(fpath).exists():
         return FileResponse(
-            fpath, code=201, filename=fname, media_type=mime_xlsx, headers=headers_xlsx
+            fpath,
+            status_code=201,
+            filename=fname,
+            media_type=mime_xlsx,
+            headers=headers_xlsx,
         )
     else:
-        raise HTTPException(204, detail="No result.")
+        raise HTTPException(500, detail="File not exported.")
 
 
 @app.get("/api/ngram")
@@ -74,14 +81,21 @@ async def query_ngram(search: Annotated[SearchParams, Query()]):
     """Considers only N"""
     sources = [ms2source[n] for n in search.sources]
     ltext, link, html = ngram.find(sources, search.fulltext, search.n)
+    if not html:
+        raise HTTPException(204, detail="No result.")
+
     fname = link2fname(link)
     fpath = f"/results/{fname}"
     if Path(fpath).exists():
         return FileResponse(
-            fpath, code=201, filename=fname, media_type=mime_xlsx, headers=headers_xlsx
+            fpath,
+            status_code=201,
+            filename=fname,
+            media_type=mime_xlsx,
+            headers=headers_xlsx,
         )
     else:
-        raise HTTPException(204, detail="No result.")
+        raise HTTPException(500, detail="File not exported.")
 
 
 @app.get("/api/lcs")
@@ -89,14 +103,21 @@ async def query_lcs(search: Annotated[SearchParams, Query()]):
     """No optional parameters"""
     sources = [ms2source[n] for n in search.sources]
     link, html = lcs.find(sources, search.fulltext)
+    if not html:
+        raise HTTPException(204, detail="No result.")
+
     fname = link2fname(link)
     fpath = f"/results/{fname}"
     if Path(fpath).exists():
         return FileResponse(
-            fpath, code=201, filename=fname, media_type=mime_xlsx, headers=headers_xlsx
+            fpath,
+            status_code=201,
+            filename=fname,
+            media_type=mime_xlsx,
+            headers=headers_xlsx,
         )
     else:
-        raise HTTPException(204, detail="No result.")
+        raise HTTPException(500, detail="File not exported.")
 
 
 @app.get("/api/strans")
@@ -104,14 +125,21 @@ async def query_strans(search: Annotated[SearchParams, Query()]):
     """Considers only model name"""
     sources = [ms2source[n] for n in search.sources]
     link, html = strans.find(sources, search.fulltext, search.model)
+    if not html:
+        raise HTTPException(204, detail="No result.")
+
     fname = link2fname(link)
     fpath = f"/results/{fname}"
     if Path(fpath).exists():
         return FileResponse(
-            fpath, code=201, filename=fname, media_type=mime_xlsx, headers=headers_xlsx
+            fpath,
+            status_code=201,
+            filename=fname,
+            media_type=mime_xlsx,
+            headers=headers_xlsx,
         )
     else:
-        raise HTTPException(204, detail="No result.")
+        raise HTTPException(500, detail="File not exported.")
 
 
 @app.get("/api/bm25")
@@ -119,14 +147,21 @@ async def query_bm25(search: Annotated[SearchParams, Query()]):
     """No optional parameters"""
     sources = [ms2source[n] for n in search.sources]
     link, html = bm25.find(sources, search.fulltext)
+    if not html:
+        raise HTTPException(204, detail="No result.")
+
     fname = link2fname(link)
     fpath = f"/results/{fname}"
     if Path(fpath).exists():
         return FileResponse(
-            fpath, code=201, filename=fname, media_type=mime_xlsx, headers=headers_xlsx
+            fpath,
+            status_code=201,
+            filename=fname,
+            media_type=mime_xlsx,
+            headers=headers_xlsx,
         )
     else:
-        raise HTTPException(204, detail="No result.")
+        raise HTTPException(500, detail="File not exported.")
 
 
 app = gr.mount_gradio_app(app, regex.interface(), path="/regex")
