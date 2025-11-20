@@ -27,10 +27,9 @@ def udpipe_sent_lemmatize(sent: str) -> list[tuple[str, str]]:
         if not lem or lem[0] == "#":
             continue
         p = lem.split("\t")
-        # if not p[1].isalpha():
-            # continue
         result += [(p[1], p[2])]
     return result
+
 
 if __name__ == "__main__":
     pass

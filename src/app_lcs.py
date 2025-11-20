@@ -2,6 +2,7 @@
 
 from pathlib import Path
 from difflib import SequenceMatcher
+import random
 
 import gradio as gr
 
@@ -9,7 +10,7 @@ from settings import threshold
 from persist import get_texts, get_sources
 from results import render_table, render_from_export, build_fname
 from results import pfa_templ, sources2code
-from settings import lang
+from settings import lang, examples
 
 
 def find(sources: list[str], fulltext: str) -> list[tuple[str, str, float]]:
@@ -60,10 +61,10 @@ def interface() -> gr.Interface:
 
     app = gr.Interface(
         fn=find,
-        description="""<h1>Longest Common Subsequence</h1><small>See <a href="http://www.eiti.uottawa.ca/~diana/publications/tkdd.pdf">Islam & Inkpen 2008</a> and <a href="https://github.com/mapto/bogoslov/blob/main/code/app-lcs.py#L13">implementation</a>.</small>""",
+        description="""<h1>Longest Common Subsequence</h1><small>See <a href="http://www.eiti.uottawa.ca/~diana/publications/tkdd.pdf">Islam & Inkpen 2008</a> and <a href="https://github.com/mapto/bogoslov/blob/main/code/app_lcs.py#L13">implementation</a>.</small>""",
         inputs=[
             gr.CheckboxGroup(sources, value=sources, label="Sources"),
-            gr.Textbox("Приде же въ градъ самарьскъ", lines=5, label="Search"),
+            gr.Textbox(random.choice(examples), lines=5, label="Search"),
         ],
         outputs=[
             gr.HTML(label="Download"),

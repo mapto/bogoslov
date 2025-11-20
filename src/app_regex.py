@@ -7,7 +7,8 @@ import gradio as gr
 from persist import find_regex, get_verse_text, get_sources
 from results import render_table, render_from_export, build_fname
 from results import pfa_templ, sources2code
-from settings import lang
+from settings import lang, examples
+
 
 def regex_escape(s: str) -> str:
     to_escape = "+?"
@@ -103,11 +104,11 @@ def interface() -> gr.Interface:
         fn=find,
         description=f"""<h1>Regular Expressions</h1>
         <small>See <a href="https://www.postgresql.org/docs/17/functions-matching.html#FUNCTIONS-POSIX-REGEXP">Regular Expressions</a> in PostgreSQL,
-        <a href="/static/alphabet.{lang}.tsv">equivalence table</a> and
-        <a href="https://github.com/mapto/bogoslov/blob/main/code/app-regex.py#L44">implementation</a>.</small>""",
+        <a href="/alphabet.{lang}.tsv">equivalence table</a> and
+        <a href="https://github.com/mapto/bogoslov/blob/main/code/app_regex.py#L44">implementation</a>.</small>""",
         inputs=[
             gr.CheckboxGroup(sources, value=sources, label="Sources"),
-            gr.Textbox("богомъ", lines=5, label="Search"),
+            gr.Textbox(min(examples, key=len), lines=5, label="Search"),
             gr.Checkbox(label="Match case"),
             gr.Checkbox(label="Whole words"),
         ],

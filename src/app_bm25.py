@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from pathlib import Path
+import random
 
 import bm25s
 import gradio as gr
@@ -8,7 +9,7 @@ import gradio as gr
 from persist import get_texts, get_sources
 from results import render_table, render_from_export, build_fname
 from results import pfa_templ, sources2code
-from settings import lang
+from settings import lang, examples
 
 
 def find(sources: list[str], fulltext: str) -> list[tuple[str, str, float]]:
@@ -57,10 +58,10 @@ def interface() -> gr.Interface:
 
     app = gr.Interface(
         fn=find,
-        description="""<h1>Best Match 25</h1><small>See <a href="https://www.staff.city.ac.uk/~sbrp622/papers/foundations_bm25_review.pdf">Robertson & Zaragoza 2009</a> and <a href="https://github.com/mapto/bogoslov/blob/main/code/app-bm25.py#L13">implementation</a>.</small>""",
+        description="""<h1>Best Match 25</h1><small>See <a href="https://www.staff.city.ac.uk/~sbrp622/papers/foundations_bm25_review.pdf">Robertson & Zaragoza 2009</a> and <a href="https://github.com/mapto/bogoslov/blob/main/code/app_bm25.py#L13">implementation</a>.</small>""",
         inputs=[
             gr.CheckboxGroup(sources, value=sources, label="Sources"),
-            gr.Textbox("Приде же въ градъ самарьскъ", lines=5, label="Search"),
+            gr.Textbox(random.choice(examples), lines=5, label="Search"),
         ],
         outputs=[
             gr.HTML(label="Download"),

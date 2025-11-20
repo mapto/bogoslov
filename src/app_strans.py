@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from pathlib import Path
+import random
 
 import gradio as gr
 
@@ -8,7 +9,7 @@ from settings import threshold
 from persist import find_embeddings, get_strans_models, get_sources
 from results import render_table, render_from_export, build_fname
 from results import pfa_templ, sources2code
-from settings import lang
+from settings import lang, strans_models, examples
 
 
 def find(sources: list[str], fulltext: str, m: str) -> str:
@@ -43,11 +44,11 @@ def interface() -> gr.Interface:
 
     app = gr.Interface(
         fn=find,
-        description="""<h1>Sentence Transformers</h1><small>See <a href="https://www.sbert.net">sbert.net</a> and <a href="https://github.com/mapto/bogoslov/blob/main/code/app-strans.py#L17">implementation</a>.</small>""",
+        description="""<h1>Sentence Transformers</h1><small>See <a href="https://www.sbert.net">sbert.net</a> and <a href="https://github.com/mapto/bogoslov/blob/main/code/app_strans.py#L17">implementation</a>.</small>""",
         inputs=[
             gr.CheckboxGroup(sources, value=sources, label="Sources"),
-            gr.Textbox("Не осѫждаите да не осѫждени бѫдете", lines=5, label="Search"),
-            gr.Dropdown(models, value="uaritm/multilingual_en_uk_pl_ru", label="Model"),
+            gr.Textbox(random.choice(examples), lines=5, label="Search"),
+            gr.Dropdown(models, value=strans_models[0], label="Model"),
         ],
         outputs=[
             gr.HTML(label="Download"),

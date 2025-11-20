@@ -2,6 +2,7 @@
 
 from pathlib import Path
 from collections import Counter
+import random
 
 import gradio as gr
 
@@ -14,7 +15,7 @@ from util import get_ngrams
 from persist import find_ngram, get_verse_text, get_sources
 from results import render_table, render_from_export, build_fname
 from results import pfa_templ, sources2code
-from settings import lang
+from settings import lang, examples
 
 sent_stemmers = {
     "dummy": lambda x: [(t, t) for t in tokenizer(x) if t.strip()],
@@ -89,12 +90,10 @@ def interface() -> gr.Interface:
 
     app = gr.Interface(
         fn=find,
-        description="""<h1>Lemmatized N-grams</h1><small>See <a href="https://stephanus.tlg.uci.edu/helppdf/ngrams.pdf">N-grams in TLG</a> and <a href="https://github.com/mapto/bogoslov/blob/main/code/app-ngram.py#L32">implementation</a>.</small>""",
+        description="""<h1>Lemmatized N-grams</h1><small>See <a href="https://stephanus.tlg.uci.edu/helppdf/ngrams.pdf">N-grams in TLG</a> and <a href="https://github.com/mapto/bogoslov/blob/main/code/app_ngram.py#L32">implementation</a>.</small>""",
         inputs=[
             gr.CheckboxGroup(sources, value=sources, label="Sources"),
-            gr.Textbox(
-                "въса землꙗ да поклонит ти се и поеть тебе", lines=5, label="Search"
-            ),
+            gr.Textbox(random.choice(examples), lines=5, label="Search"),
             # gr.Radio(
             #     choices=sent_stemmers.keys(),
             #     value="stanza",

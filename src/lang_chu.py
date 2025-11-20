@@ -19,10 +19,16 @@ strans_models = [
     # "cointegrated/rubert-tiny2", # 312
     "pouxie/LaBSE-en-ru-bviolet",  # 768
     # "Den4ikAI/sbert_large_mt_ru_retriever",  # 1024
-    "siberian-lang-lab/evenki-russian-parallel-corpora",  # 768
-    "Diiiann/ru_oss",  # 768
-    "DiTy/bi-encoder-russian-msmarco",  # 768
+    # "siberian-lang-lab/evenki-russian-parallel-corpora",  # 768
+    # "Diiiann/ru_oss",  # 768
+    # "DiTy/bi-encoder-russian-msmarco",  # 768
     # "BounharAbdelaziz/ModernBERT-Arabic-Embeddings", # 768, restricted access
     "sentence-transformers/LaBSE",  # 768
 ]
 
+examples = [
+    "богомъ",
+    "въса землꙗ да поклонит ти се и поеть тебе",
+    "Приде же въ градъ самарьскъ",
+    "Не осѫждаите да не осѫждени бѫдете",
+]
