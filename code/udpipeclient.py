@@ -1,14 +1,14 @@
 import requests
+from settings import udpipe_model
 
 url = "https://lindat.mff.cuni.cz/services/udpipe/api/process"
-
 
 def udpipe_sent_lemmatize(sent: str) -> list[tuple[str, str]]:
     data = {
         "data": sent,
         "tokenizer": "",
         "tagger": "",
-        "model": "old_church_slavonic-proiel-ud-2.15-241121",
+        "model": udpipe_model,
     }
 
     response = requests.post(url, files=data)

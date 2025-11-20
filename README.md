@@ -16,13 +16,15 @@ The BukyVede font is courtesy to [Kempgen and others](https://kodeks.de/AKSL/Sch
 
 ## Preparing the data
 
+Specify the language you are working with in `.env`. This is relevant for the corpora and the database derived from them. To support a language, alphabet.${LANG_CORPUS}.tsv and HuggingFace models need to be specified. Currently, `chu` and `lat` are supported.
+
 Make sure you have docker compose installed. We get started by creating the container image that will be used to deploy In the `code` directory run
 
     docker build -t bogoslov .
 
 Then in the root directory initialize the data with
 
-    docker compose up -f compose-init.yml
+    docker compose -f compose-init.yml up
 
 If you need to deploy to a machine where you cannot run the initialization scripts, make sure to export your data with:
 

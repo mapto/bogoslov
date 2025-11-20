@@ -9,6 +9,7 @@ from settings import threshold
 from persist import get_texts, get_sources
 from results import render_table, render_from_export, build_fname
 from results import pfa_templ, sources2code
+from settings import lang
 
 
 def find(sources: list[str], fulltext: str) -> list[tuple[str, str, float]]:
@@ -68,7 +69,7 @@ def interface() -> gr.Interface:
             gr.HTML(label="Download"),
             gr.HTML(label="Results"),
         ],
-        css_paths="/static/ocs.css",
+        css_paths=f"/static/{lang}.css",
     )
 
     return app

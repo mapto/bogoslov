@@ -191,7 +191,7 @@ def lemmatize_xml(
 
 def link2fname(link: str):
     """
-    >>> link2file('<a href="http://157.180.18.192:8780/results/lcs-BMSZ-ac3cb180f466a148f5a17264d531c0ba.xlsx">[Export Results]</a>')
+    >>> link2fname('<a href="http://157.180.18.192:8780/results/lcs-BMSZ-ac3cb180f466a148f5a17264d531c0ba.xlsx">[Export Results]</a>')
     'lcs-BMSZ-ac3cb180f466a148f5a17264d531c0ba.xlsx'
     """
     fname = link.split('"')[1].split("/")[-1]

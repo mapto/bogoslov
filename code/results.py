@@ -25,12 +25,12 @@ from settings import ms2color
 
 def urn2path(s: str) -> str:
     """
-    >>> urn2path("gospel.zographensis.syntacticus.marco:4.19")
-    'gospel.zographensis.syntacticus/marco.tei.xml#4_19'
-    >>> urn2path("psalter.bologna.oxford.BM8:112.7")
-    'psalter.bologna.oxford/BM8.tei.xml#112_7'
-    >>> urn2path("psalter.sinai.syntacticus.psal-sin:10.30")
-    'psalter.sinai.syntacticus/psal-sin.tei.xml#10_30'
+    >>> urn2path("syntacticus.gospel.zographensis.marco:4.19")
+    'syntacticus.gospel.zographensis/marco.tei.xml#4_19'
+    >>> urn2path("oxford.psalter.bologna.BM8:112.7")
+    'oxford.psalter.bologna/BM8.tei.xml#112_7'
+    >>> urn2path("syntacticus.psalter.sinai.psal-sin:10.30")
+    'syntacticus.psalter.sinai/psal-sin.tei.xml#10_30'
     """
     last = s.rfind(".")
     prev = s.rfind(".", 0, last)
@@ -39,12 +39,12 @@ def urn2path(s: str) -> str:
 
 def path2urn(s: str) -> str:
     """
-    >>> path2urn("gospel.zographensis.syntacticus/marco.tei.xml#4_19")
-    'gospel.zographensis.syntacticus.marco:4.19'
-    >>> path2urn("psalter.bologna.oxford/BM8.tei.xml#112_7")
-    'psalter.bologna.oxford.BM8:112.7'
-    >>> path2urn("psalter.sinai.syntacticus/psal-sin.tei.xml#10_30")
-    'psalter.sinai.syntacticus.psal-sin:10.30'
+    >>> path2urn("syntacticus.gospel.zographensis/marco.tei.xml#4_19")
+    'syntacticus.gospel.zographensis.marco:4.19'
+    >>> path2urn("oxford.psalter.bologna/BM8.tei.xml#112_7")
+    'oxford.psalter.bologna.BM8:112.7'
+    >>> path2urn("syntacticus.psalter.sinai/psal-sin.tei.xml#10_30")
+    'syntacticus.psalter.sinai.psal-sin:10.30'
     """
     return s.replace(".tei.xml#", ":").replace("_", ".").replace("/", ".")
 
@@ -59,11 +59,11 @@ def path2url(s: str) -> str:
 
 def path2loc(s: str) -> str:
     """
-    >>> path2loc("gospel.zographensis.syntacticus/marco.tei.xml#4_19")
+    >>> path2loc("syntacticus.gospel.zographensis./marco.tei.xml#4_19")
     'marco<br>4.19'
-    >>> path2loc("psalter.bologna.oxford/BM8.tei.xml#112_7")
+    >>> path2loc("oxford.psalter.bologna/BM8.tei.xml#112_7")
     'BM8<br>112.7'
-    >>> path2loc("psalter.sinai.syntacticus/psal-sin.tei.xml#10_30")
+    >>> path2loc("syntacticus.psalter.sinai/psal-sin.tei.xml#10_30")
     'psal-sin<br>10.30'
     """
     return s.split("/")[-1].replace(".tei.xml#", "<br>").replace("_", ".")
@@ -71,23 +71,25 @@ def path2loc(s: str) -> str:
 
 def source2ms(s: str) -> str:
     """
-    >>> path2ms("gospel.zographensis.syntacticus")
+    >>> path2ms("syntacticus.gospel.zographensis")
     'Z'
-    >>> path2ms("gospel.marianus.syntacticus")
+    >>> path2ms("syntacticus.gospel.marianus")
     'M'
-    >>> path2ms("psalter.bologna.oxford")
+    >>> path2ms("oxford.psalter.bologna")
     'B'
-    >>> path2ms("psalter.sinai.syntacticus")
+    >>> path2ms("syntacticus.psalter.sinai")
     'S'
+    >>> path2ms("syntacticus.gospel.vulgate")
+    'V'
     """
-    return s.split(".")[1][0].upper()
+    return s.split(".")[2][0].upper()
 
 
 def sources2code(sources: list[str]) -> str:
     """
-    >>> sources2code(["gospel.zographensis.syntacticus", "gospel.marianus.syntacticus"])
+    >>> sources2code(["syntacticus.gospel.zographensis", "syntacticus.gospel.marianus"])
     'MZ'
-    >>> sources2code(["psalter.bologna.oxford", "psalter.sinai.syntacticus"])
+    >>> sources2code(["oxford.psalter.bologna", "syntacticus.psalter.sinai"])
     'BS'
     """
     codes = [source2ms(s) for s in sources]
@@ -97,13 +99,13 @@ def sources2code(sources: list[str]) -> str:
 
 def path2ms(s: str) -> str:
     """
-    >>> path2ms("gospel.zographensis.syntacticus/marco.tei.xml#4_19")
+    >>> path2ms("syntacticus.gospel.zographensis/marco.tei.xml#4_19")
     'Z'
-    >>> path2ms("gospel.marianus.syntacticus/marco.tei.xml#4_19")
+    >>> path2ms("syntacticus.gospel.marianus/marco.tei.xml#4_19")
     'M'
-    >>> path2ms("psalter.bologna.oxford/BM8.tei.xml#112_7")
+    >>> path2ms("oxford.psalter.bologna/BM8.tei.xml#112_7")
     'B'
-    >>> path2ms("psalter.sinai.syntacticus/psal-sin.tei.xml#10_30")
+    >>> path2ms("syntacticus.psalter.sinai/psal-sin.tei.xml#10_30")
     'S'
     """
     return source2ms(s.split("/")[0])

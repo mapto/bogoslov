@@ -7,7 +7,7 @@ import gradio as gr
 from persist import find_regex, get_verse_text, get_sources
 from results import render_table, render_from_export, build_fname
 from results import pfa_templ, sources2code
-
+from settings import lang
 
 def regex_escape(s: str) -> str:
     to_escape = "+?"
@@ -18,7 +18,7 @@ def regex_escape(s: str) -> str:
 
 subst = {}
 skips = set()
-with open("alphabet.tsv", encoding="utf-8") as fal:
+with open(f"alphabet.{lang}.tsv", encoding="utf-8") as fal:
     for l in fal.readlines():
         # print(l[:-1].split("\t"))
         if " " in l[:-1].split("\t"):
@@ -101,9 +101,9 @@ def interface() -> gr.Interface:
 
     app = gr.Interface(
         fn=find,
-        description="""<h1>Regular Expressions</h1>
+        description=f"""<h1>Regular Expressions</h1>
         <small>See <a href="https://www.postgresql.org/docs/17/functions-matching.html#FUNCTIONS-POSIX-REGEXP">Regular Expressions</a> in PostgreSQL,
-        <a href="/static/alphabet.tsv">equivalence table</a> and
+        <a href="/static/alphabet.{lang}.tsv">equivalence table</a> and
         <a href="https://github.com/mapto/bogoslov/blob/main/code/app-regex.py#L44">implementation</a>.</small>""",
         inputs=[
             gr.CheckboxGroup(sources, value=sources, label="Sources"),
@@ -120,7 +120,7 @@ def interface() -> gr.Interface:
             gr.HTML(label="Download"),
             gr.HTML(label="Results"),
         ],
-        css_paths="/static/ocs.css",
+        css_paths=f"/static/{lang}.css",
     )
 
     return app

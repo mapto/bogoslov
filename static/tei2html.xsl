@@ -11,7 +11,7 @@
             <head>
                 <title><xsl:value-of select="//tei:text/tei:body/tei:head"/></title>
                 <meta charset="UTF-8"/>
-                <link rel="stylesheet" href="/ocs.css"/>
+                <link rel="stylesheet" href="/chu.css"/>
             </head>
             <body>
                 <xsl:apply-templates select="//tei:body"/>

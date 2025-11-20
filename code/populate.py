@@ -27,12 +27,11 @@ from glob import glob
 from tqdm import tqdm
 from docopt import docopt
 from sentence_transformers import SentenceTransformer
-from sqlalchemy import create_engine, delete  # type: ignore
-from sqlalchemy.orm import sessionmaker, declarative_base  # type: ignore
+from sqlalchemy import delete  # type: ignore
 
 from model import Verse, Ngram, Embedding
 
-from settings import ns, unit, max_ngram
+from settings import ns, unit, max_ngram, strans_models as models
 from db import engine, Session, Base
 
 src = "/corpora/*/*.tei.xml"
@@ -119,17 +118,6 @@ def persist_embedding(m: str, force=False):
     s.commit()
 
 
-models = [
-    "uaritm/multilingual_en_uk_pl_ru",  # 768
-    # "cointegrated/rubert-tiny2", # 312
-    "pouxie/LaBSE-en-ru-bviolet",  # 768
-    # "Den4ikAI/sbert_large_mt_ru_retriever",  # 1024
-    "siberian-lang-lab/evenki-russian-parallel-corpora",  # 768
-    "Diiiann/ru_oss",  # 768
-    "DiTy/bi-encoder-russian-msmarco",  # 768
-    # "BounharAbdelaziz/ModernBERT-Arabic-Embeddings", # 768, restricted access
-]
-
 if __name__ == "__main__":
     args = docopt(__doc__, version="BogoSlov Populate 1.0")
     # print(args)
@@ -152,7 +140,7 @@ if __name__ == "__main__":
         for path, filename in files:
             print(f"# Indexing N-grams: {path}/{filename}...")
             q = s.query(Verse).filter(Verse.path == path, Verse.filename == filename)
-            for v in tqdm(q.all(), q.count()):
+            for v in tqdm(q.all(), total=q.count()):
                 for n in range(2, max_ngram + 1):
                     persist_ngram(s, v, n)
 
@@ -167,4 +155,7 @@ if __name__ == "__main__":
             print(f"Available models: {models}")
         else:
             print(f"# Indexing model: {m}...")
-            persist_embedding(m, force=args["--force"])
+            try:
+                persist_embedding(m, force=args["--force"])
+            except ValueError as ve:
+                print(repr(ve))

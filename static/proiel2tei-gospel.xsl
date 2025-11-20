@@ -38,15 +38,17 @@
             <xsl:value-of select="substring-after(title, ' ')"/>
         </xsl:variable>
         <xsl:variable name="book-name">
-            <xsl:value-of select="substring-after(title, ' ')"/>
+            <xsl:value-of select="substring-before(title, ' ')"/>
         </xsl:variable>
         <xsl:variable name="book-name-new">
             <xsl:choose>
-                <xsl:when test="contains($book-name, 'Matthew')">Matthaeo</xsl:when>
+                <xsl:when test="contains($book-name, 'Matthew')">Matt</xsl:when>
                 <xsl:when test="contains($book-name, 'Mark')">Marco</xsl:when>
                 <xsl:when test="contains($book-name, 'Luke')">Luca</xsl:when>
-                <xsl:when test="contains($book-name, 'John')">Ioanne</xsl:when>
-                <xsl:otherwise>$book-name</xsl:otherwise>
+                <xsl:when test="contains($book-name, 'John')">Io</xsl:when>
+                <xsl:when test="contains($book-name, 'Acts')">Actus</xsl:when>
+                <xsl:when test="contains($book-name, 'Revelations')">Apocalypsis</xsl:when>
+                <xsl:otherwise><xsl:value-of select="$book-name"/></xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
         

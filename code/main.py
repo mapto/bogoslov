@@ -40,7 +40,7 @@ class SearchParams(BaseModel):
     whole_words: bool | None = Field(default=None)
     n: int | None = Field(default=None, examples=[4])
     model: str | None = Field(
-        default=None, examples=["uaritm/multilingual_en_uk_pl_ru"]
+        default=None, examples=["sentence-transformers/LaBSE"]
     )
 
 
@@ -55,12 +55,12 @@ app = FastAPI(
 @app.get("/api/regex")
 async def query_regex(search: Annotated[SearchParams, Query()]):
     """Considers match_case and whole_words"""
-    sources = [ms2source[n] for n in search.sources]
+    sources = [ms2source[s] for s in search.sources]
     regex_str, link, html = regex.find(
         sources, search.fulltext, search.match_case, search.whole_words
     )
-    if not html:
-        raise HTTPException(204, detail="No result.")
+    if "href" not in link:
+        raise HTTPException(204, detail=link)
 
     fname = link2fname(link)
     fpath = f"/results/{fname}"
@@ -79,10 +79,11 @@ async def query_regex(search: Annotated[SearchParams, Query()]):
 @app.get("/api/ngram")
 async def query_ngram(search: Annotated[SearchParams, Query()]):
     """Considers only N"""
-    sources = [ms2source[n] for n in search.sources]
-    ltext, link, html = ngram.find(sources, search.fulltext, search.n)
-    if not html:
-        raise HTTPException(204, detail="No result.")
+    n = search.n if search.n else 4
+    sources = [ms2source[s] for s in search.sources]
+    ltext, link, html = ngram.find(sources, search.fulltext, n)
+    if "href" not in link:
+        raise HTTPException(204, detail=link)
 
     fname = link2fname(link)
     fpath = f"/results/{fname}"
@@ -101,10 +102,10 @@ async def query_ngram(search: Annotated[SearchParams, Query()]):
 @app.get("/api/lcs")
 async def query_lcs(search: Annotated[SearchParams, Query()]):
     """No optional parameters"""
-    sources = [ms2source[n] for n in search.sources]
+    sources = [ms2source[s] for s in search.sources]
     link, html = lcs.find(sources, search.fulltext)
-    if not html:
-        raise HTTPException(204, detail="No result.")
+    if "href" not in link:
+        raise HTTPException(204, detail=link)
 
     fname = link2fname(link)
     fpath = f"/results/{fname}"
@@ -123,10 +124,11 @@ async def query_lcs(search: Annotated[SearchParams, Query()]):
 @app.get("/api/strans")
 async def query_strans(search: Annotated[SearchParams, Query()]):
     """Considers only model name"""
-    sources = [ms2source[n] for n in search.sources]
-    link, html = strans.find(sources, search.fulltext, search.model)
-    if not html:
-        raise HTTPException(204, detail="No result.")
+    model = search.model if search.model else "sentence-transformers/LaBSE"
+    sources = [ms2source[s] for s in search.sources]
+    link, html = strans.find(sources, search.fulltext, model)
+    if "href" not in link:
+        raise HTTPException(204, detail=link)
 
     fname = link2fname(link)
     fpath = f"/results/{fname}"
@@ -145,10 +147,10 @@ async def query_strans(search: Annotated[SearchParams, Query()]):
 @app.get("/api/bm25")
 async def query_bm25(search: Annotated[SearchParams, Query()]):
     """No optional parameters"""
-    sources = [ms2source[n] for n in search.sources]
+    sources = [ms2source[s] for s in search.sources]
     link, html = bm25.find(sources, search.fulltext)
-    if not html:
-        raise HTTPException(204, detail="No result.")
+    if "href" not in link:
+        raise HTTPException(204, detail=link)
 
     fname = link2fname(link)
     fpath = f"/results/{fname}"

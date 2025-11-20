@@ -1,3 +1,10 @@
+import importlib
+import os
+lang = os.environ.get('LANG_CORPUS', 'chu')
+langmod = importlib.import_module(f"lang_{lang}")
+
+print(f"Loading for LANG_CORPUS={lang}...")
+
 # DATABASE_URL = "sqlite+pysqlite:///:memory:"
 # DATABASE_URL = "postgresql://bogoslov:xxxxxx@localhost:5732/bogoslov"
 DATABASE_URL = "postgresql://bogoslov:xxxxxx@db:5432/bogoslov"
@@ -17,16 +24,8 @@ max_ngram = 5
 # debug = True
 debug = False
 
-ms2color = {
-    "S": "#90AA00",
-    "B": "#00AA90",
-    "M": "#0090AA",
-    "Z": "#9000AA",
-}
 
-ms2source = {
-    "S": "psalter.sinai.syntacticus",
-    "B": "psalter.bologna.oxford",
-    "M": "gospel.marianus.syntacticus",
-    "Z": "gospel.zographensis.syntacticus",
-}
+ms2color = langmod.ms2color
+ms2source = langmod.ms2source
+udpipe_model = langmod.udpipe_model
+strans_models = langmod.strans_models

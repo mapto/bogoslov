@@ -14,6 +14,7 @@ from util import get_ngrams
 from persist import find_ngram, get_verse_text, get_sources
 from results import render_table, render_from_export, build_fname
 from results import pfa_templ, sources2code
+from settings import lang
 
 sent_stemmers = {
     "dummy": lambda x: [(t, t) for t in tokenizer(x) if t.strip()],
@@ -106,7 +107,7 @@ def interface() -> gr.Interface:
             gr.HTML(label="Download"),
             gr.HTML(label="Results"),
         ],
-        css_paths="/static/ocs.css",
+        css_paths=f"/static/{lang}.css",
     )
 
     return app

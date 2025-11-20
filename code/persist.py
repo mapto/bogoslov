@@ -1,9 +1,7 @@
 from torch import float16
-from sqlalchemy import select
 from sentence_transformers import SentenceTransformer
 
-from settings import threshold
-from db import Session, Base, engine
+from db import Session
 from model import Verse, Ngram, Embedding
 
 strans_models = None

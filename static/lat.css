@@ -1,0 +1,60 @@
+@font-face {
+    font-family: 'Times New Roman';
+}
+
+.quote, .chapter .lg {
+    font-family: 'Times New Roman';
+}
+
+body {
+ margin: 20px;
+}
+
+.chapter {
+ margin-bottom: 30px;
+}
+
+.lg {
+    margin-bottom: 15px; 
+}
+
+.head { 
+    font-weight: bold;
+    font-size: 1.4em;
+    margin-bottom: 20px; 
+}
+
+.match {
+    background:yellow;
+}
+
+footer {
+    visibility: hidden;
+}
+
+table.results {
+    width: 100%;
+}
+
+table.results, table.results tr, table.results tr td {
+    border: none;
+    margin: 0;
+    padding: 0;
+    vertical-align:top;
+}
+
+table.results tr {
+    border-top: 1px solid lightgray;
+}
+
+table.results tr td.quote {
+    text-align: left;
+}
+
+table.results tr td.info {
+    text-align: center;
+}
+
+div.html-container {
+    padding: 0;
+}
