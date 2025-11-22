@@ -26,10 +26,12 @@ ns = {"tei": "http://www.tei-c.org/ns/1.0"}
 unit = "lg"
 
 threshold = 0.5
-
 spacy_models = []
 
-max_ngram = 5
+# ngrams
+ng_min = 1
+ng_default = 4
+ng_max = 6
 
 # debug = True
 debug = False

@@ -5,8 +5,39 @@ from functools import reduce
 import operator
 from lxml import etree
 from tqdm import tqdm
+from fuzzywuzzy import process
 
 from tei_util import word_templ
+
+
+def align_lemmas(words: list[str], lemmas: list[str]) -> list[str]:
+    """
+    Fuzzy-guesses how to make lemmas correspond to words.
+
+    >>> words = ['рѹвімьсцѣмь', 'ѡсана', 'с҃нѹ', 'д҃въ', 'г҃лѫште', 'рѹвімьсцѣмь', 'б҃лгнъ', 'грѧдѧі', 'въ', 'імѧ', 'г҃не', 'б҃лгнъ', 'грѧдѧі', 'б҃ъ', 'отъ']
+    >>> lemmas = ['рѹвімьсцѣти', 'ѡсана', 'сꙑнъ', 'давꙑдовъ', 'глаголати', 'и', 'рѹвімьсцѣти', 'благословлѥнъ', 'грѧсти', 'въ', 'имѧ', 'господьнь', 'благословлѥнъ', 'грѧсти', 'богъ', 'отъ']
+    >>> align_lemmas(words, lemmas)
+    ['рѹвімьсцѣти', 'ѡсана', 'сꙑнъ', 'давꙑдовъ', 'глаголати', 'рѹвімьсцѣти', 'благословлѥнъ', 'грѧсти', 'въ', 'имѧ', 'господьнь', 'благословлѥнъ', 'грѧсти', 'богъ', 'отъ']
+    """
+    # assert len(words) > len(lemmas), f"Expected more words than lemmas, but opposite:\nwords={len(words)}\nlemmas({len(lemmas)})"
+    # lw = [len(w) for w in words]
+    # ll = [len(w) for w in lemmas]
+    # result = [(fuzzywuzzy.extractOne(w, lemmas) if len(w) > 5 else "") for w in words]
+    result = []
+    for i, w in enumerate(words):
+        # abbreviations taken by first letter
+        if ord(w[1]) in [1155, 1159]:  # ['◌҃', '◌҇']
+            # print(f"tidlo at {i}")
+            # print(f"len:{len(words)},front:{i},back:{i-len(words)}")
+            if w[0] == lemmas[i][0]:
+                result += [lemmas[i]]
+            elif w[0] == lemmas[i - len(words)][0]:
+                result += [lemmas[i - len(words)]]
+            else:
+                raise NotImplementedError("Searching for abbreviation not trivial.")
+        else:
+            result += [process.extractOne(w, lemmas)[0]]
+    return result
 
 
 def get_word_ranges(fulltext: str, ltext: str) -> list[tuple[str, int, int, str]]:
@@ -25,8 +56,12 @@ def get_word_ranges(fulltext: str, ltext: str) -> list[tuple[str, int, int, str]
     >>> lemmas = 'и въ законъ и поучити себе дънъ и нощь и бꙑти ꙗко дрѣво садити при исходище вода'
     >>> get_word_ranges(xml, lemmas)
     [('и', 70, 71, 'И'), ('въ', 72, 74, 'въ'), ('законъ', 75, 81, 'законѣ'), ('и', 82, 85, 'его'), ('поучити', 86, 93, 'поѹчитъ'), ('себе', 94, 96, 'сѧ'), ('дънъ', 97, 101, 'дънъ'), ('и', 102, 103, 'и'), ('нощь', 104, 108, 'нощъ'), ('и', 130, 131, 'И'), ('бꙑти', 132, 138, 'бѫдетъ'), ('ꙗко', 139, 142, 'ꙗко'), ('дрѣво', 143, 148, 'дрѣво'), ('садити', 149, 157, 'сажденое'), ('при', 158, 161, 'при'), ('исходище', 162, 172, 'исходищихъ'), ('вода', 173, 179, 'водамъ')]
-    """
 
+    >>> ft = "рѹвімьсцѣмь • ѡсана с҃нѹ д҃въ г҃лѫште •  рѹвімьсцѣмь б҃лгнъ грѧдѧі въ імѧ г҃не • б҃лгнъ грѧдѧі б҃ъ отъ"
+    >>> lt = "рѹвімьсцѣти • ѡсана сꙑнъ давꙑдовъ глаголати и рѹвімьсцѣти благословлѥнъ грѧсти въ имѧ господьнь • благословлѥнъ грѧсти богъ отъ"
+    >>> get_word_ranges(ft, lt)
+    [('стати', 0, 5, 'стати'), ('и', 6, 7, 'и'), ('на', 8, 10, 'на')]
+    """
     lltokens = [
         [e for e in re.split(r"\W+", s) if e]
         for s in re.split(r"<.+?>+", fulltext)
@@ -35,10 +70,9 @@ def get_word_ranges(fulltext: str, ltext: str) -> list[tuple[str, int, int, str]
     # print(lltokens)
     ttokens = reduce(operator.concat, lltokens)
     ltokens = [e for e in re.split(r"\W+", ltext) if e]
-    # TODO: when gaps in lemmatization, the match result is inaccurate
-    # assert len(ttokens) == len(
-    #     ltokens
-    # ), f"Length of two texts is not equal:\n[{len(ttokens)}]: {ttokens[:100]}\n[{len(ltokens)}]: {ltokens[:100]}"
+    # Sometimes the match result is inaccurate, typically when abbreviations present
+    if len(ttokens) != len(ltokens):
+        ltokens = align_lemmas(ttokens, ltokens)
     result = []
     spos = 0
     epos = 0

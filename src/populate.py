@@ -31,7 +31,7 @@ from sqlalchemy import delete  # type: ignore
 
 from model import Verse, Ngram, Embedding
 
-from settings import ns, unit, max_ngram, strans_models as models
+from settings import ns, unit, strans_models as models, ng_min, ng_max, ng_default
 from db import engine, Session, Base
 
 src = "/corpora/*/*.tei.xml"
@@ -141,7 +141,7 @@ if __name__ == "__main__":
             print(f"# Indexing N-grams: {path}/{filename}...")
             q = s.query(Verse).filter(Verse.path == path, Verse.filename == filename)
             for v in tqdm(q.all(), total=q.count()):
-                for n in range(2, max_ngram + 1):
+                for n in range(ng_min, ng_max + 1):
                     persist_ngram(s, v, n)
 
     if args["--embeddings"]:

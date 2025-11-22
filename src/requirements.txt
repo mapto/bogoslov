@@ -1,5 +1,6 @@
 bm25s==0.2.14
 docopt==0.6.2
+fuzzywuzzy==0.18.0
 gradio==5.20.1
 lxml==5.3.1
 openpyxl==3.1.5

@@ -13,7 +13,9 @@ from results import pfa_templ, sources2code
 from settings import lang, examples
 
 
-def find(sources: list[str], fulltext: str, match_case: bool = False) -> list[tuple[str, str, float]]:
+def find(
+    sources: list[str], fulltext: str, match_case: bool = False
+) -> list[tuple[str, str, float]]:
     """
     The function that performs the search.
     Takes the query string as parameter.

@@ -6,10 +6,20 @@ import random
 import bm25s
 import gradio as gr
 
-from persist import get_texts, get_sources
+from udpipeclient import udpipe_sent_lemmatize
+from persist import get_texts, get_sources, get_lemmas
 from results import render_table, render_from_export, build_fname
 from results import pfa_templ, sources2code
 from settings import lang, examples
+
+
+def stemWords(tokens: list[str]) -> list[str]:
+    text = " ".join(tokens)
+    res = get_lemmas(text)
+    if not res:
+        udres = udpipe_sent_lemmatize(text)
+        res = [lem for _, lem in udres]
+    return res
 
 
 def find(sources: list[str], fulltext: str) -> list[tuple[str, str, float]]:
@@ -32,13 +42,13 @@ def find(sources: list[str], fulltext: str) -> list[tuple[str, str, float]]:
     corpus = [t for p, f, a, t in primary]
 
     # Tokenize the corpus and only keep the ids (faster and saves memory)
-    corpus_tokens = bm25s.tokenize(corpus)
+    corpus_tokens = bm25s.tokenize(corpus, stemmer=stemWords)
 
     # Create the BM25 model and index the corpus
     retriever.index(corpus_tokens)
 
     # Query the corpus
-    query_tokens = bm25s.tokenize(fulltext)
+    query_tokens = bm25s.tokenize(fulltext, stemmer=stemWords)
 
     # Get top-k results as a tuple of (doc ids, scores). Both are arrays of shape (n_queries, k).
     # To return docs instead of IDs, set the `corpus=corpus` parameter.

@@ -67,6 +67,16 @@ def find_ngram(
     return [(r[1].path, r[1].filename, r[1].address) for r in result]
 
 
+def get_lemmas(verse_text: str) -> list[str]:
+    s = Session()
+    q = (
+        s.query(Ngram.text)
+        .join(Verse, Ngram.verse_id == Verse.id)
+        .filter(Ngram.n == 1, Verse.text == verse_text)
+    )
+    return q.order_by(Ngram.pos.asc()).all()
+
+
 def get_strans_models() -> list[str]:
     s = Session()
 

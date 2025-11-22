@@ -9,7 +9,7 @@ from pathlib import Path
 
 import gradio as gr
 
-from settings import ms2source, examples, port, strans_models, lang
+from settings import ms2source, examples, port, strans_models, lang, ng_default
 from util import link2fname
 
 import app_regex
@@ -31,7 +31,7 @@ class SearchParams(BaseModel):
     fulltext: str = Field(examples=examples)
     match_case: bool | None = Field(default=False)
     whole_words: bool | None = Field(default=False)
-    n: int | None = Field(default=None, examples=[4])
+    n: int | None = Field(default=None, examples=[ng_default])
     model: str | None = Field(default=None, examples=strans_models)
 
 

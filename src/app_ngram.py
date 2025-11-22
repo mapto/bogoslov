@@ -10,7 +10,7 @@ from udpipeclient import udpipe_sent_lemmatize
 
 # from stanzacilent import stanza_sent_lemmatize
 
-from settings import max_ngram
+from settings import ng_min, ng_max, ng_default
 from util import get_ngrams
 from persist import find_ngram, get_verse_text, get_sources
 from results import render_table, render_from_export, build_fname
@@ -99,7 +99,9 @@ def interface() -> gr.Interface:
             #     value="stanza",
             #     label="Lemmatizer",
             # ),
-            gr.Slider(minimum=2, maximum=max_ngram, value=3, step=1, label="N-gram"),
+            gr.Slider(
+                minimum=ng_min, maximum=ng_max, value=ng_default, step=1, label="N-gram"
+            ),
         ],
         outputs=[
             gr.Textbox(label="Lemmatized"),
