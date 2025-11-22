@@ -10,7 +10,7 @@ from udpipeclient import udpipe_sent_lemmatize
 
 # from stanzacilent import stanza_sent_lemmatize
 
-from settings import ng_min, ng_max, ng_default
+from settings import ng_min, ng_max, ng_default, threshold_ngram
 from util import get_ngrams
 from persist import find_ngram, get_verse_text, get_sources
 from results import render_table, render_from_export, build_fname
@@ -40,7 +40,8 @@ def find(sources: list[str], fulltext: str, n: int = 4) -> str:
     if len(lemmatized) < n:
         return (
             ltext,
-            "Not enough tokens provided to search for N-grams",
+            "Not enough tokens provided to search for N-grams. "
+            "Maybe try Regex istead? "
             f"Tokens identified: {len(lemmatized)}. If this is wrong, consider simplifying your query.",
         )
 
@@ -75,9 +76,12 @@ def find(sources: list[str], fulltext: str, n: int = 4) -> str:
         (
             get_verse_text(p, f, a),
             pfa_templ.format(path=p, fname=f, addr=a),
-            ngrams_counter[(p, f, a)] / (len(lemmatized) - n + 1),
+            acc,
         )
-        for p, f, a in ngrams_counter.keys()  # if ngrams_counter[(p, f, a)] / (len(lemmatized) - n+1) >= threshold
+        for p, f, a in ngrams_counter.keys()
+        if (acc := ngrams_counter[(p, f, a)] / (len(lemmatized) - n + 1))
+        >= threshold_ngram
+        # if ngrams_counter[(p, f, a)] / (len(lemmatized) - n+1) >= threshold
     ]
 
     output = render_table(params, result)

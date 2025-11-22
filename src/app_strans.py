@@ -5,7 +5,7 @@ import random
 
 import gradio as gr
 
-from settings import threshold
+from settings import threshold_strans
 from persist import find_embeddings, get_strans_models, get_sources
 from results import render_table, render_from_export, build_fname
 from results import pfa_templ, sources2code
@@ -27,7 +27,7 @@ def find(sources: list[str], fulltext: str, m: str) -> str:
     if Path(fname_result).exists():
         return render_from_export(fname_result)
 
-    response = find_embeddings(m, fulltext, 1 - threshold, sources)
+    response = find_embeddings(m, fulltext, threshold_strans, sources)
     result = [
         (r[0], pfa_templ.format(path=r[1], fname=r[2], addr=r[3]), r[4])
         for r in response

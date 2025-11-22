@@ -1,8 +1,22 @@
 def dummy_lemmas(_):
-    return ["Исповѣдѧть", "сѧ", "тебѣ", "љѵдиѥ", "б҃же", "⁘", "Исповѣдѧть", "сѧ", "тебѣ"]
+    return [
+        "Исповѣдѧть",
+        "сѧ",
+        "тебѣ",
+        "љѵдиѥ",
+        "б҃же",
+        "⁘",
+        "Исповѣдѧть",
+        "сѧ",
+        "тебѣ",
+    ]
 
 
 class DummyClass:
+    class pos:
+        def asc(self):
+            return
+
     pass
 
 
@@ -31,11 +45,15 @@ def dummy_session():
 
 def fixture(func):
     def wrapper(monkeypatch, *args, **kwargs):
-        import db
+        # import db
 
-        monkeypatch.setattr(db, "engine", None)
-        monkeypatch.setattr(db, "Session", dummy_session)
-        monkeypatch.setattr(db, "Base", DummyClass)
+        # monkeypatch.setattr(db, "engine", None)
+        # monkeypatch.setattr(db, "Session", dummy_session)
+        # monkeypatch.setattr(db, "Base", DummyClass)
+
+        import persist
+
+        monkeypatch.setattr(persist, "get_lemmas", dummy_lemmas)
 
         return func(*args, **kwargs)
 

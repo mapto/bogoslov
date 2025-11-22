@@ -93,7 +93,7 @@ def get_strans_models() -> list[str]:
 def find_embeddings(
     model_name: str,
     text: str,
-    dist_threshold: float = 0.2,
+    sim_threshold: float = 0.8,
     sources: list[str] | None = None,
 ) -> list[tuple[str, str, float]]:
     s = Session()
@@ -109,7 +109,7 @@ def find_embeddings(
         s.query(Embedding, Verse, Embedding.vector.cosine_distance(quote))
         .filter(Embedding.model == model_name)
         .filter(Embedding.verse_id == Verse.id)
-        .filter(Embedding.vector.cosine_distance(quote) <= dist_threshold)
+        .filter(Embedding.vector.cosine_distance(quote) <= 1 - sim_threshold)
     )
     if sources:
         q = q.filter(Verse.path.in_(sources))

@@ -25,7 +25,10 @@ base_url = f"http://{host}:{port}"
 ns = {"tei": "http://www.tei-c.org/ns/1.0"}
 unit = "lg"
 
-threshold = 0.5
+threshold_lcs = 0.3
+threshold_ngram = 0.3
+threshold_strans = 0.75
+
 spacy_models = []
 
 # ngrams

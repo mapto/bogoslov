@@ -34,9 +34,17 @@ def align_lemmas(words: list[str], lemmas: list[str]) -> list[str]:
             elif w[0] == lemmas[i - len(words)][0]:
                 result += [lemmas[i - len(words)]]
             else:
-                raise NotImplementedError("Searching for abbreviation not trivial.")
+                # Unable to identify
+                result += [""]
         else:
-            result += [process.extractOne(w, lemmas)[0]]
+            # Limit search to vicinity of position
+            eps = 3
+            focus = lemmas
+            if i - len(words) + eps < 0:
+                focus = focus[: i - len(words) + eps]
+            if i - eps > 0:
+                focus = focus[i - eps :]
+            result += [process.extractOne(w, focus)[0]]
     return result
 
 
@@ -60,7 +68,7 @@ def get_word_ranges(fulltext: str, ltext: str) -> list[tuple[str, int, int, str]
     >>> ft = "рѹвімьсцѣмь • ѡсана с҃нѹ д҃въ г҃лѫште •  рѹвімьсцѣмь б҃лгнъ грѧдѧі въ імѧ г҃не • б҃лгнъ грѧдѧі б҃ъ отъ"
     >>> lt = "рѹвімьсцѣти • ѡсана сꙑнъ давꙑдовъ глаголати и рѹвімьсцѣти благословлѥнъ грѧсти въ имѧ господьнь • благословлѥнъ грѧсти богъ отъ"
     >>> get_word_ranges(ft, lt)
-    [('стати', 0, 5, 'стати'), ('и', 6, 7, 'и'), ('на', 8, 10, 'на')]
+    [('рѹвімьсцѣти', 0, 11, 'рѹвімьсцѣмь'), ('ѡсана', 14, 19, 'ѡсана'), ('сꙑнъ', 20, 24, 'с҃нѹ'), ('давꙑдовъ', 25, 29, 'д҃въ'), ('глаголати', 30, 37, 'г҃лѫште'), ('рѹвімьсцѣти', 41, 52, 'рѹвімьсцѣмь'), ('благословлѥнъ', 53, 59, 'б҃лгнъ'), ('грѧсти', 60, 66, 'грѧдѧі'), ('въ', 67, 69, 'въ'), ('имѧ', 70, 73, 'імѧ'), ('господьнь', 74, 78, 'г҃не'), ('благословлѥнъ', 81, 87, 'б҃лгнъ'), ('грѧсти', 88, 94, 'грѧдѧі'), ('богъ', 95, 98, 'б҃ъ'), ('отъ', 99, 102, 'отъ')]
     """
     lltokens = [
         [e for e in re.split(r"\W+", s) if e]

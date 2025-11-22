@@ -5,6 +5,7 @@ import random
 
 import bm25s
 import gradio as gr
+from fuzzywuzzy import fuzz
 
 from udpipeclient import udpipe_sent_lemmatize
 from persist import get_texts, get_sources, get_lemmas
@@ -54,8 +55,10 @@ def find(sources: list[str], fulltext: str) -> list[tuple[str, str, float]]:
     # To return docs instead of IDs, set the `corpus=corpus` parameter.
     results, scores = retriever.retrieve(query_tokens, k=1000, corpus=corpus)
 
+    coef = fuzz.ratio(fulltext, results[0, 0]) / (100 * scores[0, 0])
+
     result = [
-        (results[0, i], addresses[results[0, i]], (scores[0, i] / scores[0, 0]))
+        (results[0, i], addresses[results[0, i]], (scores[0, i] * coef))
         for i in range(results.shape[1])
     ]
 

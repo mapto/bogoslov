@@ -6,7 +6,7 @@ import random
 
 import gradio as gr
 
-from settings import threshold
+from settings import threshold_lcs
 from persist import get_texts, get_sources
 from results import render_table, render_from_export, build_fname
 from results import pfa_templ, sources2code
@@ -47,7 +47,7 @@ def find(
 
         lcs = "".join([fulltext[b.a : (b.a + b.size)] for b in blocks])
         accuracy = (2 * len(lcs)) / (textlen + len(stripped))
-        if accuracy >= threshold:
+        if accuracy >= threshold_lcs:
             result += [
                 (
                     stripped,
