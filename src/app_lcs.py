@@ -13,7 +13,7 @@ from results import pfa_templ, sources2code
 from settings import lang, examples
 
 
-def find(sources: list[str], fulltext: str) -> list[tuple[str, str, float]]:
+def find(sources: list[str], fulltext: str, match_case: bool = False) -> list[tuple[str, str, float]]:
     """
     The function that performs the search.
     Takes the query string as parameter.
@@ -21,6 +21,7 @@ def find(sources: list[str], fulltext: str) -> list[tuple[str, str, float]]:
     params = {
         "query": fulltext,
         "method": "lcs",
+        "match case": match_case,
         "sources": sources2code(sources),
     }
     fname_result = build_fname(params)
@@ -31,14 +32,16 @@ def find(sources: list[str], fulltext: str) -> list[tuple[str, str, float]]:
 
     result = []
     textlen = len(fulltext)
+    stext = fulltext if match_case else fulltext.lower()
     for path, filename, address, t in primary:
-        s = SequenceMatcher(None, fulltext, t)
+        st = t if match_case else t.lower()
+        s = SequenceMatcher(None, stext, st)
 
         blocks = [b for b in s.get_matching_blocks() if b.size]
         if blocks:
-            stripped = t[blocks[0].b : (blocks[-1].b + blocks[-1].size)]
+            stripped = st[blocks[0].b : (blocks[-1].b + blocks[-1].size)]
         else:
-            stripped = t
+            stripped = st
 
         lcs = "".join([fulltext[b.a : (b.a + b.size)] for b in blocks])
         accuracy = (2 * len(lcs)) / (textlen + len(stripped))
@@ -65,6 +68,7 @@ def interface() -> gr.Interface:
         inputs=[
             gr.CheckboxGroup(sources, value=sources, label="Sources"),
             gr.Textbox(random.choice(examples), lines=5, label="Search"),
+            gr.Checkbox(label="Match case"),
         ],
         outputs=[
             gr.HTML(label="Download"),

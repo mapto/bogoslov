@@ -29,8 +29,8 @@ headers_xlsx = {"content-type": mime_xlsx}
 class SearchParams(BaseModel):
     sources: str = Field(default=all_sources, examples=[all_sources])
     fulltext: str = Field(examples=examples)
-    match_case: bool | None = Field(default=None)
-    whole_words: bool | None = Field(default=None)
+    match_case: bool | None = Field(default=False)
+    whole_words: bool | None = Field(default=False)
     n: int | None = Field(default=None, examples=[4])
     model: str | None = Field(default=None, examples=strans_models)
 
