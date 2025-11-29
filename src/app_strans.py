@@ -12,7 +12,7 @@ from results import pfa_templ, sources2code
 from settings import lang, strans_models, examples
 
 
-def find(sources: list[str], fulltext: str, m: str) -> str:
+def find(sources: list[str], fulltext: str, m: str) -> tuple[str, str, str]:
     """
     The function that performs the search.
     Takes the query string as parameter and the model identifier on HuggingFace.

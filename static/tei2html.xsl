@@ -57,9 +57,22 @@
         </div>
     </xsl:template>
     
-    <!-- Template for cl (clauses/lines) -->
+    <!-- Template for cl (clauses) -->
     <xsl:template match="tei:cl">
         <span class="cl">
+            <xsl:if test="@id">
+                <xsl:attribute name="id"><xsl:value-of select="@id"/></xsl:attribute>
+            </xsl:if>
+            <xsl:apply-templates/>
+        </span>
+        <xsl:if test="position() != last()">
+            <br/>
+        </xsl:if>
+    </xsl:template>
+    
+    <!-- Template for l (lines) -->
+    <xsl:template match="tei:l">
+        <span class="l">
             <xsl:if test="@id">
                 <xsl:attribute name="id"><xsl:value-of select="@id"/></xsl:attribute>
             </xsl:if>

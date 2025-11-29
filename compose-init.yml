@@ -26,6 +26,7 @@ services:
       - ./corpora.${CORPUS_LANG}/:/corpora/:ro
       - ./models/:/models/
     command: ./populate.py -v -n -e
+    # command: ./populate.py -e
     # command: ./populate.py --embedding=sentence-transformers/LaBSE
     # command: tail -f /dev/null
     restart: no

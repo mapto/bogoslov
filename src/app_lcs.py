@@ -15,7 +15,7 @@ from settings import lang, examples
 
 def find(
     sources: list[str], fulltext: str, match_case: bool = False
-) -> list[tuple[str, str, float]]:
+) -> tuple[str, str]:
     """
     The function that performs the search.
     Takes the query string as parameter.

@@ -12,7 +12,24 @@ The contained corpora are courtesy to:
 
 The BukyVede font is courtesy to [Kempgen and others](https://kodeks.de/AKSL/Schrift/BukyVedeBackground.htm).
 
+# Architecture
+```WebSequenceDiagrams.com
+title Process Flow
+
+User->WebInterface: Open Page
+User->WebInterface: Choose Tool
+User->Tool: Enter Query
+Tool->DB: Get Primary Sources and their Representation
+DB-->Tool: Primary Sources and Representation
+Tool->Tool: Calculate Representation of Query
+Tool->DB: Compare Query to Primary Sources
+DB-->Tool: List of results
+Tool->User: List of results
+```
+
 # Installation
+
+Requirements `python` and `docker compose`.
 
 ## Preparing the data
 
@@ -82,7 +99,11 @@ We use the default accuracy function for transformer models, which is cosine sim
 
 ## BM25: Okapi Best Matching 25
 
-TODO
+TODO https://en.wikipedia.org/wiki/Okapi_BM25
+
+We lemmatize to improve indexing (whereas stemming seems to be expected).
+
+We normalise accuracy by dividing all accuracies by the largest one.
 
 # Bibliography
 

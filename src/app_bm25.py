@@ -23,7 +23,7 @@ def stemWords(tokens: list[str]) -> list[str]:
     return res
 
 
-def find(sources: list[str], fulltext: str) -> list[tuple[str, str, float]]:
+def find(sources: list[str], fulltext: str) -> tuple[str, str]:
     params = {
         "query": fulltext,
         "method": "bm25",

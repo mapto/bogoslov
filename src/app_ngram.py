@@ -30,7 +30,7 @@ ns = {"tei": "http://www.tei-c.org/ns/1.0"}
 unit = "lg"
 
 
-def find(sources: list[str], fulltext: str, n: int = 4) -> str:
+def find(sources: list[str], fulltext: str, n: int = 4) -> tuple[str, str, str]:
     """
     The function that performs the search.
     Takes the query string as parameter and the lenght of the (word token) n-gram.
@@ -40,9 +40,12 @@ def find(sources: list[str], fulltext: str, n: int = 4) -> str:
     if len(lemmatized) < n:
         return (
             ltext,
-            "Not enough tokens provided to search for N-grams. "
-            "Maybe try Regex istead? "
-            f"Tokens identified: {len(lemmatized)}. If this is wrong, consider simplifying your query.",
+            (
+                "Not enough tokens provided to search for N-grams. "
+                "Maybe try Regex istead? "
+                f"Tokens identified: {len(lemmatized)}. If this is wrong, consider simplifying your query."
+            ),
+            None,
         )
 
     params = {

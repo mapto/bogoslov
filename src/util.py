@@ -26,7 +26,7 @@ def align_lemmas(words: list[str], lemmas: list[str]) -> list[str]:
     result = []
     for i, w in enumerate(words):
         # abbreviations taken by first letter
-        if ord(w[1]) in [1155, 1159]:  # ['◌҃', '◌҇']
+        if w and len(w) > 1 and ord(w[1]) in [1155, 1159]:  # ['◌҃', '◌҇']
             # print(f"tidlo at {i}")
             # print(f"len:{len(words)},front:{i},back:{i-len(words)}")
             if w[0] == lemmas[i][0]:
@@ -104,7 +104,7 @@ def get_ngrams(fulltext: str, ltext: str, n: int = 3) -> dict[[tuple[str, ...], 
         if ngram not in result:
             result[ngram] = []
         spos = word_ranges[i - n + 1][1]
-        epos = word_ranges[i][2]
+        epos = word_ranges[i - n + 1][2]  # was word_ranges[i][2]
         result[ngram] += [(spos, epos, fulltext[spos:epos])]
         # print(f"{i}/{spos} {i-n+1}/{epos}|{fulltext[spos:epos]}|{ttokens[i]}|{ttokens[i-n+1]}|{ngram}")
         span = span[1:]

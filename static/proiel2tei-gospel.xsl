@@ -21,7 +21,10 @@
           </availability>
         </publicationStmt>
       </teiHeader>
-      <text xml:lang="chu">
+      <text>
+        <xsl:attribute name="xml:lang">
+          <xsl:value-of select="source/@language"/>
+        </xsl:attribute>
         <body>
           <head>
             <xsl:value-of select="source/title"/>
@@ -31,8 +34,8 @@
       </text>
     </TEI>
   </xsl:template>
-    
-    <!-- Template for div elements (chapters) -->
+
+  <!-- Template for div elements (chapters) -->
     <xsl:template match="div">
         <xsl:variable name="chapter-num">
             <xsl:value-of select="substring-after(title, ' ')"/>
@@ -63,7 +66,7 @@
             <xsl:apply-templates select="sentence"/>
         </div>
     </xsl:template>
-    
+
     <!-- Template for sentence elements -->
     <xsl:template match="sentence">
         <!-- Extract verse number from citation-part of first token -->
@@ -106,7 +109,7 @@
             <xsl:number count="sentence[substring-before(substring-after(token[@citation-part][1]/@citation-part, ' '), '.') = $book-chapter and substring-after(substring-after(token[@citation-part][1]/@citation-part, ' '), '.') = $verse-num]"/>
         </xsl:variable>
         
-        <cl xmlns="http://www.tei-c.org/ns/1.0">
+        <l xmlns="http://www.tei-c.org/ns/1.0">
             <xsl:attribute name="id">
                 <xsl:variable name="verse-id">
                     <xsl:value-of select="concat($book-chapter, '_', $verse-num)"/>
@@ -129,7 +132,7 @@
                     <xsl:text> </xsl:text>
                 </xsl:if>
             </xsl:for-each>
-        </cl>
+        </l>
     </xsl:template>
-    
+  
 </xsl:stylesheet>
