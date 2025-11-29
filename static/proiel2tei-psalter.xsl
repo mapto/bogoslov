@@ -21,10 +21,7 @@
           </availability>
         </publicationStmt>
       </teiHeader>
-      <text>
-        <xsl:attribute name="xml:lang">
-          <xsl:value-of select="source/@language"/>
-        </xsl:attribute>
+      <text xml:lang="chu">
         <body>
           <head>
             <xsl:value-of select="source/title"/>
@@ -65,7 +62,7 @@
         </xsl:variable>
         
         <!-- Group sentences by verse -->
-        <xsl:if test="not(preceding-sibling::sentence[substring-before(substring-after(token[@citation-part][1]/@citation-part, ' '), '.') = $book-chapter and substring-after(substring-after(token[@citation-part][1]/@citation-part, ' '), '.') = $verse-num])">
+        <xsl:if test="not(preceding-sibling::sentence[substring-before(token[@citation-part][1]/@citation-part, '.') = $book-chapter and substring-after(token[@citation-part][1]/@citation-part, '.') = $verse-num])">
             <lg xmlns="http://www.tei-c.org/ns/1.0">
                 <xsl:attribute name="id">
                    <xsl:value-of select="concat($book-chapter, '_', $verse-num)"/>
@@ -82,8 +79,7 @@
     
     <!-- Template for processing sentences as clauses -->
     <xsl:template match="sentence" mode="clause">
-        <xsl:variable name="citation" select="token[@citation-part][1]/@citation-part"/>
-        <xsl:variable name="address" select="$citation"/>
+        <xsl:variable name="address" select="token[@citation-part][1]/@citation-part"/>
         <xsl:variable name="verse-num">
             <xsl:value-of select="substring-after($address, '.')"/>
         </xsl:variable>
