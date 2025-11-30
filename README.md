@@ -43,11 +43,9 @@ Then in the root directory initialize the data with
 
     docker compose -f compose-init.yml up --abort-on-container-exit --exit-code-from populate
 
-If you need to deploy to a machine where you cannot run the initialization scripts, make sure to export your data with:
+If you need to deploy to a machine where you cannot run the initialization scripts, make sure to export your data on a *nix environment with (making sure to enable the lines for the correct language):
 
-    docker exec bogoslov-db-1 pg_dump -Ubogoslov -tverses bogoslov -a > dump-verses.sql
-    docker exec bogoslov-db-1 pg_dump -Ubogoslov -tngrams bogoslov -a > dump-ngrams.sql	
-    docker exec bogoslov-db-1 pg_dump -Ubogoslov -tembeddings bogoslov -a > dump-embeddings.sql
+    ./dump-db.sh
 
 Then make sure to have the exported files in the init directory of your deployment at the first launch of your `db` container.
 

@@ -14,6 +14,7 @@ vdims = 768
 
 
 class Verse(Base):
+    """Corpus representation, used by all methods for better performance"""
     __tablename__ = "verses"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -28,7 +29,7 @@ class Verse(Base):
 
 
 class Ngram(Base):
-    """Used only by the n-gram app, pos is used for uniqueness validation only"""
+    """Used by the N-gram and BM25 (latter uses 1-grams only), pos is used for uniqueness validation only"""
 
     __tablename__ = "ngrams"
 
@@ -45,7 +46,7 @@ class Ngram(Base):
 
 
 class Embedding(Base):
-    """Used only by the strans app"""
+    """Used only by the strans methods. This is the source of knowledge about available models"""
 
     __tablename__ = "embeddings"
 

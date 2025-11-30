@@ -8,6 +8,7 @@ ms2source = {
 
 udpipe_model = "latin-ittb-ud-2.15-241121"
 
+# This is used for DB generation only. Runtime checks models available in memory
 strans_models = [
     "sentence-transformers/LaBSE",  # 768
     "intfloat/multilingual-e5-base",  # 768

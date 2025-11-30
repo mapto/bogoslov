@@ -14,6 +14,7 @@ ms2source = {
 
 udpipe_model = "old_church_slavonic-proiel-ud-2.15-241121"
 
+# This is used for DB generation only. Runtime checks models available in memory
 strans_models = [
     "uaritm/multilingual_en_uk_pl_ru",  # 768
     "pouxie/LaBSE-en-ru-bviolet",  # 768

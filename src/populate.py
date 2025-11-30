@@ -17,7 +17,7 @@ Options:
   -n --ngrams          Generate index for Ngrams (requires index for Verses).
   -e --embeddings      Generate index for Embeddings (requires index for Verses).
   --embedding=<name>   Generate index for Embeddings only for model <name> (requires index for Verses).
-  -f --force           Force Embedding regeneration even if it exists already.
+  -f --force           Force regeneration even if it exists already.
 
 """
 
@@ -103,7 +103,7 @@ def persist_embedding(m: str, force=False):
         print(f"Model {m} already loaded.")
         return
     if preexistent > 0:
-        print(f"Cleaning up partially preloaded model {m}.")
+        print(f"Cleaning up preloaded model {m}.")
         s.execute(delete(Embedding).where(Embedding.model == m))
     for v in tqdm(q.all(), total=cnt):
         primary = model.encode(v.text)
@@ -126,6 +126,9 @@ if __name__ == "__main__":
     s = Session()
 
     if args["--verses"]:
+        if args["--force"]:
+            print("Cleaning up preloaded verses.")
+            s.execute(delete(Verse))
         print("# Indexing Verses...")
         for fname in glob(src):
             persist_verse(s, fname)
@@ -137,6 +140,9 @@ if __name__ == "__main__":
             .all()
         )
         # print(files)
+        if args["--force"]:
+            print("Cleaning up preloaded N-grams.")
+            s.execute(delete(Ngram))
         for path, filename in files:
             print(f"# Indexing N-grams: {path}/{filename}...")
             q = s.query(Verse).filter(Verse.path == path, Verse.filename == filename)

@@ -2,8 +2,8 @@
 """The BogoSlov API, see 4euplus.eu/4EU-1150.html and https://ceur-ws.org/Vol-3937/short8.pdf"""
 
 from typing import Annotated
-from fastapi import FastAPI, Query, HTTPException, Response
-from fastapi.responses import FileResponse
+from fastapi import FastAPI, Query, HTTPException
+from fastapi.responses import FileResponse, JSONResponse
 from pydantic import BaseModel, Field
 from pathlib import Path
 
@@ -39,7 +39,7 @@ app = FastAPI(
     version="0.0.1",
 )
 
-
+# Make sure to allow entrypoints in nginx.conf
 @app.get("/api/regex")
 async def query_regex(search: Annotated[SearchParams, Query()]):
     sources = [ms2source[s] for s in search.sources]
@@ -156,9 +156,10 @@ gr.mount_gradio_app(app, app_strans.interface(), path="/strans")
 gr.mount_gradio_app(app, app_bm25.interface(), path="/bm25")
 
 
-@app.get("/healthcheck")
-async def healthcheck():
-    return Response(content="ok", status_code=200)
+@app.get("/language")
+async def language():
+    """Returns the language of the installation. Also serves as healthcheck"""
+    return JSONResponse(content={"language": lang}, status_code=200)
 
 
 if __name__ == "__main__":
