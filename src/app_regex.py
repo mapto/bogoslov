@@ -53,7 +53,12 @@ def generalize(s: str) -> str:
     return res
 
 
-def find(sources: list[str], fulltext: str, match_case: bool, whole_words: bool)  -> tuple[str, str, str]:
+def find(
+    sources: list[str],
+    fulltext: str,
+    match_case: bool = False,
+    whole_words: bool = False,
+) -> tuple[str, str, str]:
     """
     The function that performs the search.
     Takes the query string as parameter and relevant regex flags.

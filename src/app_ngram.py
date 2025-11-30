@@ -30,12 +30,21 @@ ns = {"tei": "http://www.tei-c.org/ns/1.0"}
 unit = "lg"
 
 
-def find(sources: list[str], fulltext: str, n: int = 4) -> tuple[str, str, str]:
+def find(sources: list[str], fulltext: str, n: int = 0) -> tuple[str, str, str]:
     """
     The function that performs the search.
     Takes the query string as parameter and the lenght of the (word token) n-gram.
     """
     lemmatized = sent_stemmers[stemmer](fulltext)
+    if not n:
+        ln = len(lemmatized)
+        if ln > 6:
+            n = 3
+        elif ln > 3:
+            n = 2
+        else:
+            n = 1
+
     ltext = " ".join(lem for w, lem in lemmatized)
     if len(lemmatized) < n:
         return (

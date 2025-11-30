@@ -25,16 +25,22 @@ base_url = f"http://{host}:{port}"
 ns = {"tei": "http://www.tei-c.org/ns/1.0"}
 unit = "lg"
 
-threshold_lcs = 0.3
-threshold_ngram = 0.3
-threshold_strans = 0.75
+# usability
+# threshold_lcs = 0.3
+# threshold_ngram = 0.3
+# threshold_strans = 0.75
+
+# evaluation
+threshold_lcs = 0.01
+threshold_ngram = 0.01
+threshold_strans = 0.1
 
 spacy_models = []
 
-# ngrams
+# ngrams, see app_ngram.py#39
 ng_min = 1
-ng_default = 4
-ng_max = 6
+ng_default = 3
+ng_max = 3
 
 # debug = True
 debug = False

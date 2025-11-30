@@ -142,7 +142,7 @@ def lemmatize_xml(
     fname: str, sentence_lemmatizer_func: Callable[[str], list[tuple[str, str]]]
 ) -> str:
     ns = {"tei": "http://www.tei-c.org/ns/1.0"}
-    ns_def = f''' xmlns="{ns['tei']}"'''
+    ns_def = f''' xmlns="{ns["tei"]}"'''
     root = etree.parse(fname, parser=etree.XMLParser())
     ranges = []
     xml = etree.tostring(root, encoding="unicode")
@@ -218,7 +218,7 @@ def lemmatize_xml(
     for i, r in enumerate(reversed(ranges)):
         assert not any(
             char in r[0] for char in "<>"
-        ), f"Lemma {r[0]} for word {xml[r[1]:r[2]]} contains non-compliant characters"
+        ), f"Lemma {r[0]} for word {xml[r[1] : r[2]]} contains non-compliant characters"
         ri = len(ranges) - i
         xml = (
             xml[: r[1]]

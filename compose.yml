@@ -32,7 +32,7 @@ services:
     command: ["python", "-m", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
     restart: always
     healthcheck:
-      test: ["CMD-SHELL", "python -c \"from urllib.request import urlopen; int(urlopen('http://localhost:8000/').status >= 400)\""]
+      test: ["CMD-SHELL", "python -c \"from urllib.request import urlopen; int(urlopen('http://localhost:8000/healthcheck').status >= 400)\""]
 
   db:
     image: pgvector/pgvector:pg17

@@ -34,7 +34,9 @@ def urn2path(s: str) -> str:
     """
     last = s.rfind(".")
     prev = s.rfind(".", 0, last)
-    return f"""{s[:prev]}/{s[prev+1:last].replace(":", ".tei.xml#")}_{s[last+1:]}"""
+    return (
+        f"""{s[:prev]}/{s[prev + 1 : last].replace(":", ".tei.xml#")}_{s[last + 1 :]}"""
+    )
 
 
 def path2urn(s: str) -> str:
@@ -133,7 +135,6 @@ def build_fname(params: dict[str, str]) -> str:
 
 
 def render_from_export(fname: str) -> tuple[str, str]:
-
     df = pd.read_excel(fname)
 
     html_rows = []
