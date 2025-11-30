@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+echo "Starting DB..."
+docker compose up db
+
 printf -v date '%(%Y%m%d)T' -1
 echo "Date is $date"
 
@@ -12,6 +15,9 @@ docker exec bogoslov-db-1 pg_dump -Ubogoslov -tngrams bogoslov -a > 2-ngrams-$da
 gzip 2-ngrams-$date.sql
 
 docker exec bogoslov-db-1 pg_dump -Ubogoslov -tembeddings bogoslov -a > 3-embeddings-$date.sql
+
+echo "Stopping DB..."
+docker compose down db
 
 # chu
 declare -a models=("multilingual_en_uk_pl_ru" "LaBSE-en-ru-bviolet" "evenki-russian-parallel-corpora" "ru_oss" "bi-encoder-russian-msmarco" "sentence-transformers")
@@ -28,3 +34,4 @@ do
 done
 
 rm 3-embeddings-${date}.sql
+
