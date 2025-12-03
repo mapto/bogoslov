@@ -7,7 +7,7 @@ import bm25s
 import gradio as gr
 from fuzzywuzzy import fuzz
 
-from udpipeclient import udpipe_sent_lemmatize
+from lemmatizer import lemmatizer
 from persist import get_texts, get_sources, get_lemmas
 from results import render_table, render_from_export, build_fname
 from results import pfa_templ, sources2code
@@ -18,12 +18,15 @@ def stemWords(tokens: list[str]) -> list[str]:
     text = " ".join(tokens)
     res = get_lemmas(text)
     if not res:
-        udres = udpipe_sent_lemmatize(text)
+        udres = lemmatizer(text)
         res = [lem for _, lem in udres]
     return res
 
 
 def find(sources: list[str], fulltext: str) -> tuple[str, str]:
+    lemmatized = lemmatizer(fulltext)
+    ltext = " ".join(lem for w, lem in lemmatized)
+
     params = {
         "query": fulltext,
         "method": "bm25",
@@ -31,7 +34,7 @@ def find(sources: list[str], fulltext: str) -> tuple[str, str]:
     }
     fname_result = build_fname(params)
     if Path(fname_result).exists():
-        return render_from_export(fname_result)
+        return ltext, *render_from_export(fname_result)
 
     primary = get_texts(sources)
 
@@ -63,8 +66,7 @@ def find(sources: list[str], fulltext: str) -> tuple[str, str]:
     ]
 
     output = render_table(params, result)
-    return output
-
+    return ltext, *output
 
 def interface() -> gr.Interface:
     sources = get_sources()
@@ -77,6 +79,7 @@ def interface() -> gr.Interface:
             gr.Textbox(random.choice(examples), lines=5, label="Search"),
         ],
         outputs=[
+            gr.Textbox(label="Lemmatized"),
             gr.HTML(label="Download"),
             gr.HTML(label="Results"),
         ],

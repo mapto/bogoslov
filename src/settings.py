@@ -35,6 +35,11 @@ threshold_lcs = 0.01
 threshold_ngram = 0.01
 threshold_strans = 0.1
 
+# actually lemmatizer
+stemmer = "udpipe"
+# stemmer = "stanza"
+
+
 spacy_models = []
 
 # ngrams, see app_ngram.py#39

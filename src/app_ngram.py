@@ -6,25 +6,13 @@ import random
 
 import gradio as gr
 
-from udpipeclient import udpipe_sent_lemmatize
-
-# from stanzacilent import stanza_sent_lemmatize
-
 from settings import ng_min, ng_max, ng_default, threshold_ngram
 from util import get_ngrams
 from persist import find_ngram, get_verse_text, get_sources
 from results import render_table, render_from_export, build_fname
 from results import pfa_templ, sources2code
 from settings import lang, examples
-
-sent_stemmers = {
-    "dummy": lambda x: [(t, t) for t in tokenizer(x) if t.strip()],
-    # "stanza": stanza_sent_lemmatize,
-    "udpipe": udpipe_sent_lemmatize,
-}
-
-stemmer = "udpipe"
-# stemmer = "stanza"
+from lemmatizer import lemmatizer
 
 ns = {"tei": "http://www.tei-c.org/ns/1.0"}
 unit = "lg"
@@ -35,7 +23,7 @@ def find(sources: list[str], fulltext: str, n: int = 0) -> tuple[str, str, str]:
     The function that performs the search.
     Takes the query string as parameter and the lenght of the (word token) n-gram.
     """
-    lemmatized = sent_stemmers[stemmer](fulltext)
+    lemmatized = lemmatizer(fulltext)
     if not n:
         ln = len(lemmatized)
         if ln > 6:

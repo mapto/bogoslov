@@ -39,9 +39,9 @@ Make sure you have docker compose installed. We get started by creating the cont
 
     docker build -t bogoslov .
 
-Then in the root directory initialize the data with
+Then in the root directory initialize the data with (potentially changing the env file)
 
-    docker compose -f compose-init.yml up --abort-on-container-exit --exit-code-from populate
+    docker compose -f compose-init.yml --env-file env.chu up --abort-on-container-exit --exit-code-from populate
 
 If you need to deploy to a machine where you cannot run the initialization scripts, make sure to export your data on a *nix environment with (making sure to enable the lines for the correct language):
 
@@ -51,9 +51,9 @@ Then make sure to have the exported files in the init directory of your deployme
 
 ## Running
 
-After having initialized the data, run:
+After having initialized the data, run (selecting the env file of choice):
 
-    docker compose up
+    docker compose --env-file env.chu up
 
 Open http://localhost:8780 with your browser.
 
