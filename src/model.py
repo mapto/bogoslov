@@ -2,10 +2,10 @@
 # -*- coding: utf-8 -*-
 """"""
 
-from sqlalchemy import Column, ForeignKey  # type: ignore
-from sqlalchemy import Integer, String  # type: ignore
+from sqlalchemy import Column, ForeignKey
+from sqlalchemy import Integer, String
 from sqlalchemy.orm import mapped_column
-from pgvector.sqlalchemy import Vector
+from pgvector.sqlalchemy import Vector  # type: ignore
 
 from db import Base, Session, engine
 
@@ -15,6 +15,7 @@ vdims = 768
 
 class Verse(Base):
     """Corpus representation, used by all methods for better performance"""
+
     __tablename__ = "verses"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -68,7 +69,7 @@ def init():
 
 
 def preview():
-    from eralchemy2 import render_er
+    from eralchemy2 import render_er  # type: ignore
 
     render_er(Base, "model.png")
 

@@ -19,7 +19,7 @@ DATABASE_URL = "postgresql://bogoslov:xxxxxx@db:5432/bogoslov"
 
 static_path = "/corpora/"
 host = os.environ.get("DEPLOY_HOST", "127.0.0.1")
-port = os.environ.get("DEPLOY_PORT", "8780")
+port = int(os.environ.get("DEPLOY_PORT", "8780"))
 base_url = f"http://{host}:{port}"
 
 ns = {"tei": "http://www.tei-c.org/ns/1.0"}
@@ -39,8 +39,6 @@ threshold_strans = 0.1
 stemmer = "udpipe"
 # stemmer = "stanza"
 
-
-spacy_models = []
 
 # ngrams, see app_ngram.py#39
 ng_min = 1

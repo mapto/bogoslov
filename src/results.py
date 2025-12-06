@@ -1,8 +1,10 @@
+from typing import Any
+
 import hashlib
 from urllib.parse import quote_plus
 
-import pandas as pd
-from openpyxl.styles import Alignment, Font
+import pandas as pd  # type: ignore
+from openpyxl.styles import Alignment, Font  # type: ignore
 
 from settings import static_path, base_url
 
@@ -51,6 +53,10 @@ def path2urn(s: str) -> str:
     return s.replace(".tei.xml#", ":").replace("_", ".").replace("/", ".")
 
 
+def path2source(s) -> str:
+    return path2urn(s).split(":")[0]
+
+
 def path2link(s: str) -> str:
     return f"{static_path}{s.replace('.tei.xml', '.html')}"
 
@@ -62,13 +68,13 @@ def path2url(s: str) -> str:
 def path2loc(s: str) -> str:
     """
     >>> path2loc("syntacticus.gospel.zographensis./marco.tei.xml#4_19")
-    'marco<br>4.19'
+    'marco 4.19'
     >>> path2loc("oxford.psalter.bologna/BM8.tei.xml#112_7")
-    'BM8<br>112.7'
+    'BM8 112.7'
     >>> path2loc("syntacticus.psalter.sinai/psal-sin.tei.xml#10_30")
-    'psal-sin<br>10.30'
+    'psal-sin 10.30'
     """
-    return s.split("/")[-1].replace(".tei.xml#", "<br>").replace("_", ".")
+    return s.split("/")[-1].replace(".tei.xml#", " ").replace("_", ".")
 
 
 def source2ms(s: str) -> str:
@@ -158,43 +164,18 @@ def render_from_export(fname: str) -> tuple[str, str]:
     return export_templ.format(url=base_url + fname), html_result
 
 
-def render_table(
+def render_excel(
     params: dict[str, str],
     data: list[tuple[str, str, float]],
-) -> tuple[str, str]:
-    """A list of <text, address, accuracy>. Returns path to export and HTML body.
-    A precondition is that build_fname(params) does not exist.
-
-    >> params = {"query": "hello", "method": "regex", "sources":"BMSZ"}
-    >> data = [("text", "psalter.bologna.oxford", 1)]
-    >> render_table(params, data)
-    """
-
-    data.sort(key=lambda x: x[2], reverse=True)
-    if not data:
-        return "Result is empty.", None
-
-    html_rows = []
-    for text, addr, acc in data:
-        html_rows += [
-            trow_templ.format(
-                text=text,
-                acc="1.0" if acc > 0.99 else (f"{acc:.2f}"[1:]),
-                href=path2link(addr),
-                ref=path2loc(addr),
-                color=ms2color[path2ms(addr)],
-                src=path2ms(addr),
-                urn=path2urn(addr),
-            )
-        ]
-    html_result = table_templ.format(body="\n".join(html_rows))
-
+) -> str:
     result = [
         {
             "found": d[0],
             "similarity": f"{d[2]:0.4f}",
-            "location": path2urn(d[1]),
+            "location": path2loc(d[1]),
+            "source": path2source(d[1]),
             "url": path2url(d[1]),
+            "urn": path2urn(d[1]),
         }
         for d in data
     ]
@@ -235,5 +216,61 @@ def render_table(
         ws.column_dimensions["C"].width = 10
         ws.column_dimensions["D"].width = 30
         ws.column_dimensions["E"].width = 40
+
+    return fname_result
+
+
+def render_html(data: list[tuple[str, str, float]]) -> str:
+    html_rows = []
+    for text, addr, acc in data:
+        html_rows += [
+            trow_templ.format(
+                text=text,
+                acc="1.0" if acc > 0.99 else (f"{acc:.2f}"[1:]),
+                href=path2link(addr),
+                ref=path2loc(addr).replace(" ", "<br>"),
+                color=ms2color[path2ms(addr)],
+                src=path2ms(addr),
+                urn=path2urn(addr),
+            )
+        ]
+    html_result = table_templ.format(body="\n".join(html_rows))
+
+    return html_result
+
+
+def render_json(data: list[tuple[str, str, float]]) -> list[dict[str, str]]:
+    result = [
+        {
+            "found": d[0],
+            "accuracy": f"{d[2]:0.4f}",
+            "location": path2loc(d[1]),
+            "source": path2source(d[1]),
+            "urn": path2urn(d[1]),
+        }
+        for d in data
+    ]
+
+    return result
+
+
+def render_table(
+    params: dict[str, str],
+    data: list[tuple[str, str, float]],
+) -> tuple[str, str]:
+    """A list of <text, address, accuracy>. Returns path to export and HTML body.
+    A precondition is that build_fname(params) does not exist.
+
+    >> params = {"query": "hello", "method": "regex", "sources":"BMSZ"}
+    >> data = [("text", "psalter.bologna.oxford", 1)]
+    >> render_table(params, data)
+    """
+
+    data.sort(key=lambda x: x[2], reverse=True)
+    if not data:
+        return "Result is empty.", ""
+
+    html_result = render_html(data)
+    fname_result = render_excel(params, data)
 
     return export_templ.format(url=base_url + fname_result), html_result

@@ -54,9 +54,7 @@ def find(sources: list[str], fulltext: str) -> list[tuple[str, str, float]]:
     return result
 
 
-def wrapper(
-    sources: list[str], fulltext: str, match_case: bool
-) -> tuple[str, str, str]:
+def wrapper(sources: list[str], fulltext: str) -> tuple[str, str, str]:
     lemmatized = lemmatizer(fulltext)
     ltext = " ".join(lem for w, lem in lemmatized)
 

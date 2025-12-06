@@ -1,11 +1,11 @@
 from typing import Callable
 
-import regex as re
+import regex as re  # type: ignore
 from functools import reduce
 import operator
-from lxml import etree
-from tqdm import tqdm
-from fuzzywuzzy import process
+from lxml import etree  # type: ignore
+from tqdm import tqdm  # type: ignore
+from fuzzywuzzy import process  # type: ignore
 
 from tei_util import word_templ
 
@@ -76,7 +76,7 @@ def get_word_ranges(fulltext: str, ltext: str) -> list[tuple[str, int, int, str]
         if s
     ]
     # print(lltokens)
-    ttokens = reduce(operator.concat, lltokens)
+    ttokens = reduce(operator.concat, lltokens)  # type: ignore
     ltokens = [e for e in re.split(r"\W+", ltext) if e]
     # Sometimes the match result is inaccurate, typically when abbreviations present
     if len(ttokens) != len(ltokens):
@@ -91,11 +91,13 @@ def get_word_ranges(fulltext: str, ltext: str) -> list[tuple[str, int, int, str]
     return result
 
 
-def get_ngrams(fulltext: str, ltext: str, n: int = 3) -> dict[[tuple[str, ...], list]]:
+def get_ngrams(
+    fulltext: str, ltext: str, n: int = 3
+) -> dict[tuple[str, ...], list[tuple[int, int, str]]]:
     word_ranges = get_word_ranges(fulltext, ltext)
     ltokens = [e for e in re.split(r"\W+", ltext) if e]
     span = []
-    result = {}
+    result: dict[tuple[str, ...], list[tuple[int, int, str]]] = {}
     for i, t in enumerate(ltokens):
         span += [t]
         if len(span) < n:
@@ -117,7 +119,7 @@ def extract_text(node) -> str:
 
 def lemmatize_node(
     node, sentence_lemmatizer_func: Callable[[str], list[tuple[str, str]]]
-) -> list[tuple[str, int, int]]:
+) -> list[tuple[str, int, int, str, str]]:
     """
     Returns lemma, positions range, word and xml snippet in range
     >>> from lxml import etree
@@ -156,7 +158,7 @@ def lemmatize_xml(
             # print(subxml)
             offset = xml.find(subxml) - len(ns_def)
             # print(offset)
-            newranges = lemmatize_node(node, sentence_lemmatizer_func)
+            lranges = lemmatize_node(node, sentence_lemmatizer_func)
             newranges = [
                 (
                     r[0],
@@ -166,7 +168,7 @@ def lemmatize_xml(
                     r[4],
                     xml[r[1] + offset : r[2] + offset],
                 )
-                for r in newranges
+                for r in lranges
             ]
             ranges += newranges
             # print("verse", offset, newranges)
@@ -183,7 +185,7 @@ def lemmatize_xml(
                 subxml = subxml.replace(ns_def, "")
                 try:
                     offset = xml.find(subxml) - len(ns_def)
-                    newranges = lemmatize_node(node2, sentence_lemmatizer_func)
+                    llranges = lemmatize_node(node2, sentence_lemmatizer_func)
                     newranges = [
                         (
                             r[0],
@@ -193,7 +195,7 @@ def lemmatize_xml(
                             r[4],
                             xml[r[1] + offset : r[2] + offset],
                         )
-                        for r in newranges
+                        for r in llranges
                     ]
                     ranges += newranges
                     # print("line", offset, newranges)
@@ -210,7 +212,7 @@ def lemmatize_xml(
                             spos + offset,
                             epos + offset,
                             xml[spos + offset : epos + offset],
-                        )
+                        )  # type: ignore
                     ]
                     ranges += newranges
                     # print("multiword", offset, newranges)

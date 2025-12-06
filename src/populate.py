@@ -21,23 +21,23 @@ Options:
 
 """
 
-from lxml import etree
+from lxml import etree  # type: ignore
 from glob import glob
 
-from tqdm import tqdm
-from docopt import docopt
+from tqdm import tqdm  # type: ignore
+from docopt import docopt  # type: ignore
 from sentence_transformers import SentenceTransformer
 from sqlalchemy import delete  # type: ignore
 
 from model import Verse, Ngram, Embedding
 
-from settings import ns, unit, strans_models as models, ng_min, ng_max, ng_default
+from settings import ns, unit, strans_models as models, ng_min, ng_max
 from db import engine, Session, Base
 
 src = "/corpora/*/*.tei.xml"
 
 
-def persist_verse(s: Session, fname: str):
+def persist_verse(s: Session, fname: str):  # type: ignore
     print(fname)
     corpus = fname.split("/")[-2]
     ch = fname.split("/")[-1]
@@ -63,8 +63,8 @@ def persist_verse(s: Session, fname: str):
                 lemmas=",".join(lcontents),
             )
         ]
-    s.add_all(data)
-    s.commit()
+    s.add_all(data)  # type: ignore
+    s.commit()  # type: ignore
 
 
 def persist_ngram(s, verse: str, n: int):

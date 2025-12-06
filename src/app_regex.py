@@ -17,7 +17,7 @@ def regex_escape(s: str) -> str:
     return s
 
 
-subst = {}
+subst: dict[str, set[str]] = {}
 skips = set()
 with open(f"alphabet.{lang}.tsv", encoding="utf-8") as fal:
     for l in fal.readlines():
@@ -70,7 +70,7 @@ def find(
         (
             get_verse_text(p, f, a),
             pfa_templ.format(path=p, fname=f, addr=a),
-            1,
+            1.0,
         )
         for p, f, a in matches
     ]
@@ -80,7 +80,7 @@ def find(
 
 def wrapper(
     sources: list[str], fulltext: str, match_case: bool, whole_words: bool
-) -> tuple[str, str]:
+) -> tuple[str, str, str]:
     pattern = generalize(fulltext)
     noword = (
         r"(\s|"
@@ -93,8 +93,8 @@ def wrapper(
     params = {
         "query": fulltext,
         "method": "regex",
-        "match case": match_case,
-        "whole words": whole_words,
+        "match case": str(match_case),
+        "whole words": str(whole_words),
         "pattern": pat,
         "sources": sources2code(sources),
     }
@@ -105,7 +105,7 @@ def wrapper(
     result = find(sources, fulltext, pat, op)
     output = render_table(params, result)
 
-    return output
+    return pat, *output
 
 
 def interface() -> gr.Interface:

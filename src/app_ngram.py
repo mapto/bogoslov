@@ -13,6 +13,9 @@ from results import render_table, render_from_export, build_fname
 from results import pfa_templ, sources2code
 from settings import lang, examples
 from lemmatizer import lemmatizer
+import logging
+
+logger = logging.getLogger(__name__)
 
 ns = {"tei": "http://www.tei-c.org/ns/1.0"}
 unit = "lg"
@@ -44,12 +47,11 @@ def find(
     try:
         new_ngrams = get_ngrams(fulltext, ltext, n)
     except AssertionError as ae:
-        return ltext, f"Cannot make n-grams. {ae}", str(ae)
-    # print(new_ngrams)
-    # print(ngrams)
+        logger.error(repr(ae))
+        return []
 
     # print(new_ngrams)
-    ngrams_counter = Counter()
+    ngrams_counter = Counter()  # type: ignore
     for kng, vtloc in new_ngrams.items():
         for estart, eend, etext in vtloc:
             nxt = find_ngram(n, ",".join(kng), estart, eend, etext, sources)
@@ -92,13 +94,13 @@ def wrapper(sources: list[str], fulltext: str, n: int) -> tuple[str, str, str]:
                 "Maybe try Regex istead? "
                 f"Tokens identified: {len(lemmatized)}. If this is wrong, consider simplifying your query."
             ),
-            None,
+            "",
         )
 
     params = {
         "query": fulltext,
         "method": "ngram",
-        "n": n,
+        "n": str(n),
         "lemmatized": ltext,
         "sources": sources2code(sources),
     }

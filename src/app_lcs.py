@@ -53,7 +53,7 @@ def wrapper(sources: list[str], fulltext: str, match_case: bool) -> tuple[str, s
     params = {
         "query": fulltext,
         "method": "lcs",
-        "match case": match_case,
+        "match case": str(match_case),
         "sources": sources2code(sources),
     }
     fname_result = build_fname(params)

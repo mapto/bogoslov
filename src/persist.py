@@ -21,7 +21,7 @@ def get_verse_text(path, filename, address) -> str:
         .filter(Verse.address == address)
         .first()
     )
-    return result[0]
+    return result[0] if result else ""
 
 
 def get_texts(sources: list[str] | None = None) -> list[tuple[str, str, str, str]]:
@@ -31,7 +31,7 @@ def get_texts(sources: list[str] | None = None) -> list[tuple[str, str, str, str
     if sources:
         q = q.filter(Verse.path.in_(sources))
     result = q.all()
-    return [(r.path, r.filename, r.address, r.text) for r in result]
+    return [(str(r.path), str(r.filename), str(r.address), str(r.text)) for r in result]
 
 
 def find_regex(
@@ -44,7 +44,7 @@ def find_regex(
         q = q.filter(Verse.path.in_(sources))
     result = q.all()
 
-    return [(r.path, r.filename, r.address) for r in result]
+    return [(str(r.path), str(r.filename), str(r.address)) for r in result]
 
 
 def find_ngram(
@@ -74,7 +74,7 @@ def get_lemmas(verse_text: str) -> list[str]:
         .join(Verse, Ngram.verse_id == Verse.id)
         .filter(Ngram.n == 1, Verse.text == verse_text)
     )
-    return q.order_by(Ngram.pos.asc()).all()
+    return [str(res) for res in q.order_by(Ngram.pos.asc()).all()]
 
 
 def get_strans_models() -> list[str]:
@@ -82,12 +82,11 @@ def get_strans_models() -> list[str]:
 
     if "available_models" not in globals():
         global available_models
-        available_models = [
+        available_models = [  # type: ignore
             r.model for r in s.query(Embedding.model).group_by(Embedding.model).all()
         ]
-        # strans_models = {m: SentenceTransformer(m) for m in available_models}
 
-    return available_models
+    return available_models  # type: ignore
 
 
 def find_embeddings(
@@ -95,7 +94,7 @@ def find_embeddings(
     text: str,
     sim_threshold: float = 0.8,
     sources: list[str] | None = None,
-) -> list[tuple[str, str, float]]:
+) -> list[tuple[str, str, str, str, float]]:
     s = Session()
     # Done so in order to release memory ASAP
     quote = SentenceTransformer(
@@ -116,7 +115,14 @@ def find_embeddings(
     result = q.all()
 
     return [
-        (r[1].text, r[1].path, r[1].filename, r[1].address, 1 - r[2]) for r in result
+        (
+            str(r[1].text),
+            str(r[1].path),
+            str(r[1].filename),
+            str(r[1].address),
+            1 - r[2],
+        )
+        for r in result
     ]
 
 
