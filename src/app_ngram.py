@@ -18,11 +18,61 @@ ns = {"tei": "http://www.tei-c.org/ns/1.0"}
 unit = "lg"
 
 
-def find(sources: list[str], fulltext: str, n: int = 0) -> tuple[str, str, str]:
+def find(
+    sources: list[str],
+    fulltext: str,
+    lemmatized: list[tuple[str, str]] = [],
+    n: int = 0,
+) -> list[tuple[str, str, float]]:
     """
     The function that performs the search.
     Takes the query string as parameter and the lenght of the (word token) n-gram.
     """
+    if not lemmatized:
+        lemmatized = lemmatizer(fulltext)
+    if not n:
+        ln = len(lemmatized)
+        if ln > 6:
+            n = 3
+        elif ln > 3:
+            n = 2
+        else:
+            n = 1
+
+    ltext = " ".join(lem for w, lem in lemmatized)
+
+    try:
+        new_ngrams = get_ngrams(fulltext, ltext, n)
+    except AssertionError as ae:
+        return ltext, f"Cannot make n-grams. {ae}", str(ae)
+    # print(new_ngrams)
+    # print(ngrams)
+
+    # print(new_ngrams)
+    ngrams_counter = Counter()
+    for kng, vtloc in new_ngrams.items():
+        for estart, eend, etext in vtloc:
+            nxt = find_ngram(n, ",".join(kng), estart, eend, etext, sources)
+            ngrams_counter += Counter(nxt)
+            # for path, fname, addr in nxt:
+            #     ngrams_counter[(path, fname, addr)] += 1
+
+    result = [
+        (
+            get_verse_text(p, f, a),
+            pfa_templ.format(path=p, fname=f, addr=a),
+            acc,
+        )
+        for p, f, a in ngrams_counter.keys()
+        if (acc := ngrams_counter[(p, f, a)] / (len(lemmatized) - n + 1))
+        >= threshold_ngram
+        # if ngrams_counter[(p, f, a)] / (len(lemmatized) - n+1) >= threshold
+    ]
+
+    return result
+
+
+def wrapper(sources: list[str], fulltext: str, n: int) -> tuple[str, str, str]:
     lemmatized = lemmatizer(fulltext)
     if not n:
         ln = len(lemmatized)
@@ -56,34 +106,7 @@ def find(sources: list[str], fulltext: str, n: int = 0) -> tuple[str, str, str]:
     if Path(fname_result).exists():
         return ltext, *render_from_export(fname_result)
 
-    try:
-        new_ngrams = get_ngrams(fulltext, ltext, n)
-    except AssertionError as ae:
-        return ltext, f"Cannot make n-grams. {ae}", str(ae)
-    # print(new_ngrams)
-    # print(ngrams)
-
-    # print(new_ngrams)
-    ngrams_counter = Counter()
-    for kng, vtloc in new_ngrams.items():
-        for estart, eend, etext in vtloc:
-            nxt = find_ngram(n, ",".join(kng), estart, eend, etext, sources)
-            ngrams_counter += Counter(nxt)
-            # for path, fname, addr in nxt:
-            #     ngrams_counter[(path, fname, addr)] += 1
-
-    result = [
-        (
-            get_verse_text(p, f, a),
-            pfa_templ.format(path=p, fname=f, addr=a),
-            acc,
-        )
-        for p, f, a in ngrams_counter.keys()
-        if (acc := ngrams_counter[(p, f, a)] / (len(lemmatized) - n + 1))
-        >= threshold_ngram
-        # if ngrams_counter[(p, f, a)] / (len(lemmatized) - n+1) >= threshold
-    ]
-
+    result = find(sources, fulltext, lemmatized)
     output = render_table(params, result)
 
     return ltext, *output
@@ -93,7 +116,7 @@ def interface() -> gr.Interface:
     sources = get_sources()
 
     app = gr.Interface(
-        fn=find,
+        fn=wrapper,
         description="""<h1>Lemmatized N-grams</h1><small>See <a href="https://stephanus.tlg.uci.edu/helppdf/ngrams.pdf">N-grams in TLG</a> and <a href="https://github.com/mapto/bogoslov/blob/main/code/app_ngram.py#L32">implementation</a>.</small>""",
         inputs=[
             gr.CheckboxGroup(sources, value=sources, label="Sources"),

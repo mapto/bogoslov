@@ -23,22 +23,8 @@ def stemWords(tokens: list[str]) -> list[str]:
     return res
 
 
-def find(sources: list[str], fulltext: str) -> tuple[str, str]:
-    lemmatized = lemmatizer(fulltext)
-    ltext = " ".join(lem for w, lem in lemmatized)
-
-    params = {
-        "query": fulltext,
-        "method": "bm25",
-        "sources": sources2code(sources),
-    }
-    fname_result = build_fname(params)
-    if Path(fname_result).exists():
-        return ltext, *render_from_export(fname_result)
-
+def find(sources: list[str], fulltext: str) -> list[tuple[str, str, float]]:
     primary = get_texts(sources)
-
-    result = []
 
     retriever = bm25s.BM25()
 
@@ -65,14 +51,36 @@ def find(sources: list[str], fulltext: str) -> tuple[str, str]:
         for i in range(results.shape[1])
     ]
 
+    return result
+
+
+def wrapper(
+    sources: list[str], fulltext: str, match_case: bool
+) -> tuple[str, str, str]:
+    lemmatized = lemmatizer(fulltext)
+    ltext = " ".join(lem for w, lem in lemmatized)
+
+    params = {
+        "query": fulltext,
+        "method": "bm25",
+        "sources": sources2code(sources),
+    }
+
+    fname_result = build_fname(params)
+    if Path(fname_result).exists():
+        return ltext, *render_from_export(fname_result)
+
+    result = find(sources, fulltext)
     output = render_table(params, result)
+
     return ltext, *output
+
 
 def interface() -> gr.Interface:
     sources = get_sources()
 
     app = gr.Interface(
-        fn=find,
+        fn=wrapper,
         description="""<h1>Best Match 25</h1><small>See <a href="https://www.staff.city.ac.uk/~sbrp622/papers/foundations_bm25_review.pdf">Robertson & Zaragoza 2009</a> and <a href="https://github.com/mapto/bogoslov/blob/main/code/app_bm25.py#L13">implementation</a>.</small>""",
         inputs=[
             gr.CheckboxGroup(sources, value=sources, label="Sources"),

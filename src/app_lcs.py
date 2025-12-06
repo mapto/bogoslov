@@ -15,21 +15,11 @@ from settings import lang, examples
 
 def find(
     sources: list[str], fulltext: str, match_case: bool = False
-) -> tuple[str, str]:
+) -> list[tuple[str, str, float]]:
     """
     The function that performs the search.
     Takes the query string as parameter.
     """
-    params = {
-        "query": fulltext,
-        "method": "lcs",
-        "match case": match_case,
-        "sources": sources2code(sources),
-    }
-    fname_result = build_fname(params)
-    if Path(fname_result).exists():
-        return render_from_export(fname_result)
-
     primary = get_texts(sources)
 
     result = []
@@ -56,6 +46,21 @@ def find(
                 )
             ]
 
+    return result
+
+
+def wrapper(sources: list[str], fulltext: str, match_case: bool) -> tuple[str, str]:
+    params = {
+        "query": fulltext,
+        "method": "lcs",
+        "match case": match_case,
+        "sources": sources2code(sources),
+    }
+    fname_result = build_fname(params)
+    if Path(fname_result).exists():
+        return render_from_export(fname_result)
+
+    result = find(sources, fulltext, match_case)
     output = render_table(params, result)
 
     return output
@@ -65,7 +70,7 @@ def interface() -> gr.Interface:
     sources = get_sources()
 
     app = gr.Interface(
-        fn=find,
+        fn=wrapper,
         description="""<h1>Longest Common Subsequence</h1><small>See <a href="http://www.eiti.uottawa.ca/~diana/publications/tkdd.pdf">Islam & Inkpen 2008</a> and <a href="https://github.com/mapto/bogoslov/blob/main/code/app_lcs.py#L13">implementation</a>.</small>""",
         inputs=[
             gr.CheckboxGroup(sources, value=sources, label="Sources"),

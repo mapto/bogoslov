@@ -54,15 +54,33 @@ def generalize(s: str) -> str:
 
 
 def find(
-    sources: list[str],
-    fulltext: str,
-    match_case: bool = False,
-    whole_words: bool = False,
-) -> tuple[str, str, str]:
+    sources: list[str], fulltext: str, pat: str = "", op: str = "~*"
+) -> list[tuple[str, str, float]]:
     """
     The function that performs the search.
     Takes the query string as parameter and relevant regex flags.
     """
+    if not pat:
+        pat = generalize(fulltext)
+
+    # see https://www.postgresql.org/docs/17/functions-matching.html#FUNCTIONS-POSIX-REGEXP
+    matches = find_regex(pat, op, sources)
+
+    result = [
+        (
+            get_verse_text(p, f, a),
+            pfa_templ.format(path=p, fname=f, addr=a),
+            1,
+        )
+        for p, f, a in matches
+    ]
+
+    return result
+
+
+def wrapper(
+    sources: list[str], fulltext: str, match_case: bool, whole_words: bool
+) -> tuple[str, str]:
     pattern = generalize(fulltext)
     noword = (
         r"(\s|"
@@ -70,6 +88,7 @@ def find(
         + ")+"
     )
     pat = (noword + pattern + noword) if whole_words else pattern
+    op = "~" if match_case else "~*"
 
     params = {
         "query": fulltext,
@@ -83,30 +102,17 @@ def find(
     if Path(fname_result).exists():
         return pat, *render_from_export(fname_result)
 
-    # see https://www.postgresql.org/docs/17/functions-matching.html#FUNCTIONS-POSIX-REGEXP
-    op = "~" if match_case else "~*"
-
-    matches = find_regex(pat, op, sources)
-
-    result = [
-        (
-            get_verse_text(p, f, a),
-            pfa_templ.format(path=p, fname=f, addr=a),
-            1,
-        )
-        for p, f, a in matches
-    ]
-
+    result = find(sources, fulltext, pat, op)
     output = render_table(params, result)
 
-    return pat, *output
+    return output
 
 
 def interface() -> gr.Interface:
     sources = get_sources()
 
     app = gr.Interface(
-        fn=find,
+        fn=wrapper,
         description=f"""<h1>Regular Expressions</h1>
         <small>See <a href="https://www.postgresql.org/docs/17/functions-matching.html#FUNCTIONS-POSIX-REGEXP">Regular Expressions</a> in PostgreSQL,
         <a href="/alphabet.{lang}.tsv">equivalence table</a> and
