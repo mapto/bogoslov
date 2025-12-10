@@ -31,9 +31,13 @@ Tool->User: List of results
 
 Requirements `python` and `docker compose`.
 
+## Language support
+
+A starting point for a new setup is the choice of language. This is relevant for the corpora and the database derived from them. To support a language, alphabet.${CORPUS_LANG}.tsv (for examples see [slavonic](static/alphabet.chu.tsv) and [latin](static/alphabet.lat.tsv)) and a lang_.${CORPUS_LANG}.py. For this you would need to specify HuggingFace and [UDPipe](https://lindat.mff.cuni.cz/services/udpipe/) models. Currently, `chu`, `lat` and `grc` are supported.
+
 ## Preparing the data
 
-Specify the language you are working with in `.env`. This is relevant for the corpora and the database derived from them. To support a language, alphabet.${LANG_CORPUS}.tsv and HuggingFace models need to be specified. Currently, `chu` and `lat` are supported.
+Specify the language you are working with in `.env`. 
 
 Make sure you have docker compose installed. We get started by creating the container image that will be used to deploy In the `code` directory run
 
@@ -41,7 +45,8 @@ Make sure you have docker compose installed. We get started by creating the cont
 
 Then in the root directory initialize the data with (potentially changing the env file)
 
-    docker compose -f compose-init.yml --env-file env.chu up --abort-on-container-exit --exit-code-from populate
+    docker compose --env-file env.chu -f compose-init.yml up --abort-on-container-exit --exit-code-from populate
+
 
 If you need to deploy to a machine where you cannot run the initialization scripts, make sure to export your data on a *nix environment with (making sure to enable the lines for the correct language):
 

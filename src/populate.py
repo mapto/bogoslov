@@ -128,6 +128,8 @@ if __name__ == "__main__":
     if args["--verses"]:
         if args["--force"]:
             print("Cleaning up preloaded verses.")
+            s.execute(delete(Embedding))
+            s.execute(delete(Ngram))
             s.execute(delete(Verse))
         print("# Indexing Verses...")
         for fname in glob(src):

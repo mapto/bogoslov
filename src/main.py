@@ -32,6 +32,7 @@ algos: dict[str, Callable[[list[str], str], list[tuple[str, str, float]]]] = {
     "b25": app_bm25.find,
 }
 
+
 class SearchParams(BaseModel):
     sources: str = Field(
         default=all_sources,
@@ -54,7 +55,6 @@ app = FastAPI(
     # docs_url="/",
     version="0.1.0",
 )
-
 
 
 @app.get("/api/{algo}")

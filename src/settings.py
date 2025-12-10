@@ -2,7 +2,6 @@ import importlib
 import os
 
 lang = os.environ.get("LANG_CORPUS", "chu")
-lang = os.environ.get("LANG_CORPUS", "chu")
 langmod = importlib.import_module(f"lang_{lang}")
 
 print(f"Loading for LANG_CORPUS={lang}...")
