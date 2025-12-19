@@ -1,9 +1,10 @@
 @font-face {
-    font-family: 'Times New Roman';
+    font-family: TrajanusRoman;
+    src: url(/TrajanusRoman-6aEq.ttf) format('truetype');
 }
 
 .quote, .chapter .lg {
-    font-family: 'Times New Roman';
+    font-family: TrajanusRoman;
 }
 
 body {

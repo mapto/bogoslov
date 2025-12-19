@@ -53,6 +53,10 @@
             <xsl:if test="@id">
                 <xsl:attribute name="id"><xsl:value-of select="@id"/></xsl:attribute>
             </xsl:if>
+            [<xsl:element name="a">
+                <xsl:attribute name="href"><xsl:value-of select="concat('#', @id)"/></xsl:attribute>
+                <xsl:value-of select="substring-after(@id, '_')"/>
+            </xsl:element>]
             <xsl:apply-templates/>
         </div>
     </xsl:template>

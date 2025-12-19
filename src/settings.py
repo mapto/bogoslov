@@ -31,8 +31,9 @@ unit = "lg"
 
 # evaluation
 threshold_lcs = 0.01
-threshold_ngram = 0.01
+threshold_ngram = 0.005
 threshold_strans = 0.1
+threshold_bm25 = 2000
 
 # actually lemmatizer
 stemmer = "udpipe"

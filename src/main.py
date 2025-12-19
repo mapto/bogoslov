@@ -29,7 +29,7 @@ algos: dict[str, Callable[[list[str], str], list[tuple[str, str, float]]]] = {
     "regex": app_regex.find,
     "lcs": app_lcs.find,
     "ngram": app_ngram.find,
-    "b25": app_bm25.find,
+    "bm25": app_bm25.find,
 }
 
 

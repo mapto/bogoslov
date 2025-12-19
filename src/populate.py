@@ -68,11 +68,10 @@ def persist_verse(s: Session, fname: str):  # type: ignore
 
 
 def persist_ngram(s, verse: str, n: int):
+    tokens = [tex for tex in v.text.split(" ") if tex]
+    lemmas = [lem for lem in v.lemmas.split(",") if lem]
     ngrams = []
-    tokens = [l for l in v.text.split(" ") if l]
-    lemmas = [l for l in v.lemmas.split(",") if l]
     for i in range(len(lemmas) - n + 1):
-        ng = tuple(lemmas[i : i + n])
         # TODO: handle better lemmatization mismatches
         if len(tokens) >= i + n:
             text = " ".join(tokens[i : i + n])

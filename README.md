@@ -29,13 +29,13 @@ Tool->User: List of results
 
 # Installation
 
-Requirements `python` and `docker compose`.
+Requirements [python](https://www.python.org) and [docker compose](https://docs.docker.com/compose).
 
 ## Language support
 
-A starting point for a new setup is the choice of language. This is relevant for the corpora and the database derived from them. To support a language, alphabet.${CORPUS_LANG}.tsv (for examples see [slavonic](static/alphabet.chu.tsv) and [latin](static/alphabet.lat.tsv)) and a lang_.${CORPUS_LANG}.py. For this you would need to specify HuggingFace and [UDPipe](https://lindat.mff.cuni.cz/services/udpipe/) models. Currently, `chu`, `lat` and `grc` are supported.
+A starting point for a new setup is the choice of language. This is relevant for the corpora and the database derived from them. To support a language the following are needed: alphabet.${CORPUS_LANG}.tsv (for examples see [slavonic](static/alphabet.chu.tsv) and [latin](static/alphabet.lat.tsv)) and a lang_.${CORPUS_LANG}.py. For this you would need to specify HuggingFace and [UDPipe](https://lindat.mff.cuni.cz/services/udpipe/) models. Currently, `chu`, `lat` and `grc` are supported. Finally, a `static/${CORPUS_LANG}.css` is needed in case historical fonts are preferred.
 
-## Preparing the data
+## Preparing the data {#datapreparation}
 
 Specify the language you are working with in `.env`. 
 
@@ -65,6 +65,12 @@ Open http://localhost:8780 with your browser.
 # Corpora
 
 The N-gram approach relies on lemmatisation. This is the reason why we prefer adopting texts from treebanks, and PROIEL and its sister projects in particular. In such treebanks lemmatisation was manually verified. Automatic lemmatization is used for other corpora, but due to variation in historical languages, this is less reliable.
+
+## Adding a new corpus
+
+New corpora need to be lemmatized. We use TEI as a representation of a lemmatized text. If your source is in another format, you would need to convert it. Example XSLT transformations for sources from PROIEL are available in the `static/` directory. If you do not have lemmatized data, you could use an automatic lemmatizer like UDPipe.
+
+To use the data, it needs to be available in .html format for viewing (see the corresponding [XSLT transformation](static/tei2html.xsl)). For performance reasons, it also needs to be imported as explained in the [Preparing the data](#datapreparation). It also needs to be included in the corresponding `lang_*.py`, see e.g. [lang_chu.py](https://github.com/mapto/bogoslov/blob/main/src/lang_chu.py#L8).
 
 # Algorithms
 
@@ -102,11 +108,11 @@ We use the default accuracy function for transformer models, which is cosine sim
 
 ## BM25: Okapi Best Matching 25
 
-TODO https://en.wikipedia.org/wiki/Okapi_BM25
+The inclusion of this algorithm was inspired by William Mattingly and his [Latin Vulgate Verse Similarity Search](https://huggingface.co/spaces/medieval-data/latin-vulgate). This algorithm is based on [word frequencies](https://en.wikipedia.org/wiki/Okapi_BM25#The_ranking_function) disregarding word order. We lemmatize to improve indexing (whereas stemming seems to be expected). We normalise accuracy by dividing all accuracies by the largest one.
 
-We lemmatize to improve indexing (whereas stemming seems to be expected).
+## Adding a new algorithm
 
-We normalise accuracy by dividing all accuracies by the largest one.
+To add a new algorithm, it needs to implement the logic of `app_*.py`. The find() method should provide a common set of parameters, wrapper() provides these and additional that could potentially be parametrised by gradio. interface() and __main__ are needed to run the gradio endpoint. To include the algorithm in the application, add it to the [list of available methods](https://github.com/mapto/bogoslov/blob/635e37f7eb61130441686706151fed30465510e2/src/main.py#L28). Finally, for advanced access, make sure to add the endpoint name of your model in the [web gateway](https://github.com/mapto/bogoslov/blob/635e37f7eb61130441686706151fed30465510e2/nginx.conf#L33), [exploratory interface](https://github.com/mapto/bogoslov/blob/635e37f7eb61130441686706151fed30465510e2/static/index.html#L101).
 
 # Bibliography
 

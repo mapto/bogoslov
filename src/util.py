@@ -148,12 +148,12 @@ def lemmatize_xml(
     root = etree.parse(fname, parser=etree.XMLParser())
     ranges = []
     xml = etree.tostring(root, encoding="unicode")
-    for verse_id in tqdm(root.xpath("//tei:lg/@id", namespaces=ns)):
+    for verse_id in tqdm(root.xpath("//tei:lg/@id", namespaces=ns)):  # type: ignore
         # print(verse_id)
-        node = root.xpath(f"//tei:lg[@id='{verse_id}']", namespaces=ns)[0]
+        node = root.xpath(f"//tei:lg[@id='{verse_id}']", namespaces=ns)[0]  # type: ignore
         try:
-            subxml = etree.tostring(node, encoding="unicode")
-            subxml = subxml.replace(ns_def, "")
+            subxml = etree.tostring(node, encoding="unicode")  # type: ignore
+            subxml = subxml.replace(ns_def, "")  # type: ignore
             # print(xml)
             # print(subxml)
             offset = xml.find(subxml) - len(ns_def)

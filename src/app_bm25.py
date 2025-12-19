@@ -11,7 +11,7 @@ from lemmatizer import lemmatizer
 from persist import get_texts, get_sources, get_lemmas
 from results import render_table, render_from_export, build_fname
 from results import pfa_templ, sources2code
-from settings import lang, examples
+from settings import lang, examples, threshold_bm25
 
 
 def stemWords(tokens: list[str]) -> list[str]:
@@ -42,7 +42,7 @@ def find(sources: list[str], fulltext: str) -> list[tuple[str, str, float]]:
 
     # Get top-k results as a tuple of (doc ids, scores). Both are arrays of shape (n_queries, k).
     # To return docs instead of IDs, set the `corpus=corpus` parameter.
-    results, scores = retriever.retrieve(query_tokens, k=1000, corpus=corpus)
+    results, scores = retriever.retrieve(query_tokens, k=threshold_bm25, corpus=corpus)
 
     coef = fuzz.ratio(fulltext, results[0, 0]) / (100 * scores[0, 0])
 

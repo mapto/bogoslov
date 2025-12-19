@@ -17,6 +17,7 @@ strans_models = [
     # "setu4993/LEALLA-small", #192
     # "setu4993/LEALLA-base", #192
     "bowphs/SPhilBerta",  # 768
+    "sentence-transformers/paraphrase-multilingual-mpnet-base-v2",  # 768
 ]
 
 examples = [
