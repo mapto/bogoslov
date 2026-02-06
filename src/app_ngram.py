@@ -3,6 +3,7 @@
 from pathlib import Path
 from collections import Counter
 import random
+import logging
 
 import gradio as gr
 
@@ -13,7 +14,6 @@ from results import render_table, render_from_export, build_fname
 from results import pfa_templ, sources2code
 from settings import lang, examples
 from lemmatizer import lemmatizer
-import logging
 
 logger = logging.getLogger(__name__)
 
@@ -31,6 +31,7 @@ def find(
     The function that performs the search.
     Takes the query string as parameter and the lenght of the (word token) n-gram.
     """
+    logger.debug(f"Starting {__name__}")
     if not lemmatized:
         lemmatized = lemmatizer(fulltext)
     if not n:

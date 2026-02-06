@@ -1,0 +1,32 @@
+# DATABASE_URL = "sqlite+pysqlite:///:memory:"
+# DATABASE_URL = "postgresql://bogoslov:xxxxxx@localhost:5732/bogoslov
+
+DATABASE_URL = "postgresql://bogoslov:xxxxxx@db:5432/bogoslov"
+
+static_path = "/corpora/"
+unit = "lg"
+
+# usability
+threshold_lcs = 0.3
+threshold_ngram = 0.3
+threshold_strans = 0.75
+threshold_bm25 = 500
+
+# evaluation
+# threshold_lcs = 0.01
+# threshold_ngram = 0.005
+# threshold_strans = 0.1
+# threshold_bm25 = 2000
+
+# actually lemmatizer
+stemmer = "udpipe"
+# stemmer = "stanza"
+
+
+# ngrams, see app_ngram.py#39
+ng_min = 1
+ng_default = 3
+ng_max = 3
+
+debug = true
+# debug = false

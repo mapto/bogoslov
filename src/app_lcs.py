@@ -3,6 +3,7 @@
 from pathlib import Path
 from difflib import SequenceMatcher
 import random
+import logging
 
 import gradio as gr
 
@@ -12,6 +13,7 @@ from results import render_table, render_from_export, build_fname
 from results import pfa_templ, sources2code
 from settings import lang, examples
 
+logger = logging.getLogger(__name__)
 
 def find(
     sources: list[str], fulltext: str, match_case: bool = False
@@ -20,6 +22,7 @@ def find(
     The function that performs the search.
     Takes the query string as parameter.
     """
+    logger.debug(f"Starting {__name__}")
     primary = get_texts(sources)
 
     result = []

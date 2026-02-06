@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from pathlib import Path
+import logging
 
 import gradio as gr
 
@@ -8,6 +9,8 @@ from persist import find_regex, get_verse_text, get_sources
 from results import render_table, render_from_export, build_fname
 from results import pfa_templ, sources2code
 from settings import lang, examples
+
+logger = logging.getLogger(__name__)
 
 
 def regex_escape(s: str) -> str:
@@ -60,6 +63,7 @@ def find(
     The function that performs the search.
     Takes the query string as parameter and relevant regex flags.
     """
+    logger.debug(f"Starting {__name__}")
     if not pat:
         pat = generalize(fulltext)
 

@@ -29,6 +29,7 @@ services:
       - ./results:/results
       - ./static/alphabet.${CORPUS_LANG}.tsv:/home/app/alphabet.${CORPUS_LANG}.tsv:ro
       - ./models:/models/
+      - ./config.toml:/home/app/config.toml:ro
     command: ["python", "-m", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
     restart: always
     healthcheck:
@@ -40,8 +41,8 @@ services:
       - POSTGRES_DB=bogoslov
       - POSTGRES_USER=bogoslov
       - POSTGRES_HOST_AUTH_METHOD=trust
-    # ports:
-    #   - 5732:5432
+    ports:
+      - 5732:5432
     volumes:
       - ./db/data.${CORPUS_LANG}/:/var/lib/postgresql/data/
       - ./db/init.${CORPUS_LANG}/:/docker-entrypoint-initdb.d/:ro

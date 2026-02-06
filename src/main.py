@@ -20,6 +20,10 @@ import app_ngram
 import app_strans
 import app_bm25
 
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
+
 all_sources = "".join(ms2source.keys())
 strans_models = {m.split("/")[1]: m for m in get_strans_models()}
 mime_xlsx = "application/vnd.ms-excel"

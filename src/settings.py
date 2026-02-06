@@ -1,5 +1,9 @@
 import importlib
 import os
+import tomllib
+
+with open("config.toml", "rb") as f:
+    config = tomllib.load(f)
 
 lang = os.environ.get("LANG_CORPUS", "chu")
 langmod = importlib.import_module(f"lang_{lang}")
@@ -25,19 +29,13 @@ ns = {"tei": "http://www.tei-c.org/ns/1.0"}
 unit = "lg"
 
 # usability
-# threshold_lcs = 0.3
-# threshold_ngram = 0.3
-# threshold_strans = 0.75
-
-# evaluation
-threshold_lcs = 0.01
-threshold_ngram = 0.005
-threshold_strans = 0.1
-threshold_bm25 = 2000
+threshold_lcs = config["threshold_lcs"]
+threshold_ngram = config["threshold_ngram"]
+threshold_strans = config["threshold_strans"]
+threshold_bm25 = config["threshold_bm25"]
 
 # actually lemmatizer
-stemmer = "udpipe"
-# stemmer = "stanza"
+stemmer = config["stemmer"]
 
 
 # ngrams, see app_ngram.py#39
@@ -45,5 +43,4 @@ ng_min = 1
 ng_default = 3
 ng_max = 3
 
-# debug = True
-debug = False
+debug = config["debug"]

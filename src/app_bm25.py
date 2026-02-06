@@ -2,6 +2,7 @@
 
 from pathlib import Path
 import random
+import logging
 
 import bm25s
 import gradio as gr
@@ -13,6 +14,7 @@ from results import render_table, render_from_export, build_fname
 from results import pfa_templ, sources2code
 from settings import lang, examples, threshold_bm25
 
+logger = logging.getLogger(__name__)
 
 def stemWords(tokens: list[str]) -> list[str]:
     text = " ".join(tokens)
@@ -24,6 +26,7 @@ def stemWords(tokens: list[str]) -> list[str]:
 
 
 def find(sources: list[str], fulltext: str) -> list[tuple[str, str, float]]:
+    logger.debug(f"Starting {__name__}")
     primary = get_texts(sources)
 
     retriever = bm25s.BM25()

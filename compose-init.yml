@@ -25,7 +25,7 @@ services:
     volumes:
       - ./corpora.${CORPUS_LANG}/:/corpora/:ro
       - ./models/:/models/
-    command: ./populate.py -v -n -e
+    command: ./populate.py -v -n -e -f
     # command: ./populate.py -e -f
     # command: ./populate.py --embedding=sentence-transformers/LaBSE
     # command: tail -f /dev/null

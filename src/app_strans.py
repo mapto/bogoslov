@@ -2,6 +2,7 @@
 
 from pathlib import Path
 import random
+import logging
 
 import gradio as gr
 
@@ -11,12 +12,15 @@ from results import render_table, render_from_export, build_fname
 from results import pfa_templ, sources2code
 from settings import lang, strans_models, examples
 
+logger = logging.getLogger(__name__)
+
 
 def find(sources: list[str], fulltext: str, model: str) -> list[tuple[str, str, float]]:
     """
     The function that performs the search.
     Takes the query string as parameter and the model identifier on HuggingFace.
     """
+    logger.debug(f"Starting {__name__}/{model}")
     response = find_embeddings(model, fulltext, threshold_strans, sources)
     result = [
         (r[0], pfa_templ.format(path=r[1], fname=r[2], addr=r[3]), r[4])
