@@ -37,29 +37,29 @@ A starting point for a new setup is the choice of language. This is relevant for
 
 ## Preparing the data {#datapreparation}
 
-Specify the language you are working with in `.env`. 
+Specify the language you are working with in `.env`.
 
 Make sure you have docker compose installed. We get started by creating the container image that will be used to deploy In the `code` directory run
-
+```bash
     docker build -t bogoslov .
-
+```
 Then in the root directory initialize the data with (potentially changing the env file)
-
+```bash
     docker compose --env-file env.chu -f compose-init.yml up --abort-on-container-exit --exit-code-from populate
-
+```
 
 If you need to deploy to a machine where you cannot run the initialization scripts, make sure to export your data on a *nix environment with (making sure to enable the lines for the correct language):
-
+```bash
     ./dump-db.sh
-
+```
 Then make sure to have the exported files in the init directory of your deployment at the first launch of your `db` container.
 
 ## Running
 
 After having initialized the data, run (selecting the env file of choice):
-
+```bash
     docker compose --env-file env.chu up
-
+```
 Open http://localhost:8780 with your browser.
 
 # Corpora
@@ -74,11 +74,11 @@ To use the data, it needs to be available in .html format for viewing (see the c
 
 # Algorithms
 
-It is important to note that due to the specifics of biblical texts, we consider verses as the units of meaning. This means that we tokenise by verses and do not consider potential matches that cross verse boundaries. We do not 
+It is important to note that due to the specifics of biblical texts, we consider verses as the units of meaning. This means that we tokenise by verses and do not consider potential matches that cross verse boundaries. We do not
 
 ## Regex - regular expresssions
 
-This approach aims to address orthographic variation through the explicit definition of orthographic equivalences. Here we use tables with tab-separated values. A first such table for Old Church Slavonic was originally proposed to us by Achim Rabus. 
+This approach aims to address orthographic variation through the explicit definition of orthographic equivalences. Here we use tables with tab-separated values. A first such table for Old Church Slavonic was originally proposed to us by Achim Rabus.
 
 Regular expressions consider as mutually exchangeable explicitly defined character or phonemes expressed through combinations of character. Due to this, the approach is suitable for searching of similarity to short texts, typically one or two words, as they tend to get overly complex for longer sequences. Because of this limitation, this approach could be seen as a complement to N-grams.
 

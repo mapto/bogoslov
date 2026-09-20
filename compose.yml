@@ -16,9 +16,17 @@ services:
     restart: always
 
   service:
+    build:
+      context: ./src
+      dockerfile: Dockerfile
     image: bogoslov
     # ports:
     #   - 8781:8000
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - .env
     environment:
       - DEPLOY_PORT=${PUBLIC_PORT}
       - DEPLOY_HOST=${PUBLIC_HOST}

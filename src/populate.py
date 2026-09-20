@@ -5,34 +5,48 @@
 Schema needs to be preloaded.
 
 Usage:
-  populate.py [-v | --verses] [-n | --ngrams] [-e | --embeddings] [-f | --force]
-  populate.py [-v | --verses] [-n | --ngrams] [--embedding=<name>] [-f | --force]
-  populate.py (-h | --help)
-  populate.py --version
+    populate.py [-x | --example] [-f | --force]
+    populate.py [-t | --biblical] [-v | --verses] [-n | --ngrams] [-e | --embeddings] [-f | --force]
+    populate.py [-t | --biblical] [-x | --example] [-v | --verses] [-n | --ngrams] [-e | --embeddings] [-f | --force]
+    populate.py [-v | --verses] [-n | --ngrams] [-e | --embeddings] [-f | --force]
+    populate.py [-v | --verses] [-n | --ngrams] [--embedding=<name>] [-f | --force]
+    populate.py [-u | --user] [-f | --force]
+    
+    populate.py (-h | --help)
+    populate.py --version
 
 Options:
-  -h --help            Show this screen.
-  --version            Show version.
-  -v --verses          Generate index for Verses.
-  -n --ngrams          Generate index for Ngrams (requires index for Verses).
-  -e --embeddings      Generate index for Embeddings (requires index for Verses).
-  --embedding=<name>   Generate index for Embeddings only for model <name> (requires index for Verses).
-  -f --force           Force regeneration even if it exists already.
+    -h --help            Show this screen.
+    --version            Show version.
+    -u --user            Generate default user.
+    -v --verses          Generate index for Verses.
+    -n --ngrams          Generate index for Ngrams (requires index for Verses).
+    -e --embeddings      Generate index for Embeddings (requires index for Verses).
+    --embedding=<name>   Generate index for Embeddings only for model <name> (requires index for Verses).
+    -t --biblical      Import biblical texts.
+    -x --example         Import example text and generate random highlights to show how the project work
+    -f --force           Force regeneration even if it exists already.
 
 """
 
 from lxml import etree  # type: ignore
 from glob import glob
+from pathlib import Path
+import random
 
 from tqdm import tqdm  # type: ignore
 from docopt import docopt  # type: ignore
 from sentence_transformers import SentenceTransformer
-from sqlalchemy import delete  # type: ignore
+from sqlalchemy import delete, func  # type: ignore
+from psycopg2.extras import NumericRange
 
-from model import Verse, Ngram, Embedding
+from model import *
 
 from settings import ns, unit, strans_models as models, ng_min, ng_max
-from db import engine, Session, Base
+from db import engine, Session, Base, session_scope
+from account import get_password_hash
+
+from tei_converter import convert_tei, calculate_chapter_index, hash_tei_json
 
 src = "/corpora/*/*.tei.xml"
 
@@ -166,3 +180,232 @@ if __name__ == "__main__":
                 persist_embedding(m, force=args["--force"])
             except ValueError as ve:
                 print(repr(ve))
+
+###
+def persist_texts(s, ConvertIndex, Text, source_glob: str = src):
+    for xml_path in glob(source_glob):
+        path_obj = Path(xml_path)
+        corpus_path = str(path_obj.parent)
+        filename = path_obj.name.removesuffix(".tei.xml")
+
+        text = convert_tei((corpus_path, filename))
+        chapters = calculate_chapter_index(text)
+
+        kwargs = {
+            "path": corpus_path.removeprefix('/corpora/'),
+            "filename": filename,
+            "text": text,
+            "chapters": chapters
+        }
+
+        if hasattr(Text, "hashText"):
+            kwargs["hashText"] = hash_tei_json(text)
+
+        text_record = Text(**kwargs)
+        s.add(text_record)
+        s.flush()
+
+        for line_idx, value in enumerate(text):
+            if value.get('type') == 'text' and value.get("text"):
+                s.add(
+                    ConvertIndex(
+                        textId=text_record.id,
+                        lineRange=value['id'],
+                        lineIndex=line_idx,
+                        wordIndexRange=NumericRange(value["text"][0]["ID"], value["text"][-1]["ID"] + 1)
+                    )
+                )
+    s.commit()
+
+
+def persist_color(s):
+    # For colors
+    for i in range(1, 6):
+        color = HighlightColors(id=i)
+        s.add(color)
+    s.commit()
+
+def persist_highlight(s, user):
+
+    def generate_non_overlapping_ranges(n: int, max_index: int) -> list[tuple[int, int]]:
+        if n <= 0 or max_index <= 1:
+            return []
+
+        ranges: list[tuple[int, int]] = []
+        current_pos = 0
+
+        for _ in range(n):
+            current_pos += random.randint(0, 100)
+            if current_pos >= max_index:
+                break
+
+            max_size = min(max(1, max_index // 12), max_index - current_pos)
+            size = random.randint(1, max_size)
+            end_pos = current_pos + size
+
+            ranges.append((current_pos, end_pos))
+            current_pos = end_pos
+
+        return ranges
+
+    #-------------------------------------
+
+    # For highlight
+    qH=s.query(
+            BiblicalText.id,
+            func.array_length(BiblicalText.text, 1).label("max_index")
+        ).all()
+    qB=s.query(
+            HistoricalText.id,
+            func.array_length(HistoricalText.text, 1).label("max_index")
+        ).all()
+
+    for h_text in qH:
+        h_convert_idx = s.query(ConvertIndexBiblical).filter(
+            ConvertIndexBiblical.textId == h_text.id
+        ).all()
+
+        for b_text in qB:
+            b_convert_idx = s.query(ConvertIndexHistorical).filter(
+                ConvertIndexHistorical.textId == b_text.id
+            ).all()
+
+            num_highlights = random.randint(0, 10)
+            if num_highlights == 0:
+                continue
+
+            left_ranges  = generate_non_overlapping_ranges(num_highlights, h_text.max_index)
+            right_ranges = generate_non_overlapping_ranges(num_highlights, b_text.max_index)
+
+            for i in range(min(len(left_ranges), len(right_ranges))):
+                hist_lower = left_ranges[i][0]
+                bibl_lower = right_ranges[i][0]
+
+                hist_start = next(
+                    (e.id for e in h_convert_idx if hist_lower in e.wordIndexRange),
+                    None
+                )
+                bibl_start = next(
+                    (e.id for e in b_convert_idx if bibl_lower in e.wordIndexRange),
+                    None
+                )
+
+                if hist_start is None or bibl_start is None:
+                    continue
+
+                # Assicuriamoci che esista il TextUser per l'utente e il testo storico
+                user_text = s.query(TextUser).filter_by(user_id=user.id, text_id=b_text.id).first()
+                if not user_text:
+                    user_text = TextUser(user_id=user.id, text_id=b_text.id)
+                    s.add(user_text)
+                    s.flush() # flush to get the id
+
+                highlight = TextHighlights(
+                    color_id = random.randint(1, random.randint(1, 5)),
+                    biblical_text_id = h_text.id,
+                    text_user_id = user_text.id,
+                    biblical_range_word = NumericRange(left_ranges[i][0], left_ranges[i][1]),
+                    historical_range_word = NumericRange(right_ranges[i][0], right_ranges[i][1]),
+                    biblical_start_line = hist_start,
+                    historical_start_line = bibl_start
+                )
+                s.add(highlight)
+
+    s.commit()
+
+def generate_default_user(s):
+    user = s.query(User).filter_by(username='admin').first()
+    if not user:
+        user = User(
+            username='admin',
+            password_hash=get_password_hash("123")
+        )
+        s.add(user)
+        s.commit()
+    return user
+
+
+if __name__ == "__main__":
+    args = docopt(__doc__, version="BogoSlov Populate 1.0")
+    # print(args)
+
+    Base.metadata.create_all(engine)
+
+    with session_scope() as s:
+
+        if args["--user"]:
+            if args["--force"]:
+                s.execute(delete(User))
+
+            print("# Generate default user with password '123'...")
+            generate_default_user(s)
+
+        if args["--biblical"]:
+            if args["--force"]:
+                print("Cleaning up preloaded biblical texts.")
+                s.execute(delete(TextHighlights))
+                s.execute(delete(ConvertIndexBiblical))
+                s.execute(delete(BiblicalText))
+                s.execute(delete(HighlightColors))
+
+            print("# Loading Biblical Texts...")
+            persist_texts(s, ConvertIndexBiblical, BiblicalText, source_glob=src)
+            persist_color(s)
+
+        if args["--example"]:
+            if args["--force"]:
+                s.execute(delete(TextHighlights))
+                s.execute(delete(ConvertIndexHistorical))
+                s.execute(delete(HistoricalText))
+
+            print("# Generate or get default user for examples...")
+            user = generate_default_user(s)
+
+            print("# Loading Example Texts...")
+            persist_texts(s, ConvertIndexHistorical, HistoricalText, source_glob=src)
+            persist_highlight(s, user)
+
+
+        if args["--verses"]:
+            if args["--force"]:
+                print("Cleaning up preloaded verses.")
+                s.execute(delete(Embedding))
+                s.execute(delete(Ngram))
+                s.execute(delete(Verse))
+            print("# Indexing Verses...")
+            for fname in glob(src):
+                persist_verse(s, fname)
+
+        if args["--ngrams"]:
+            files = list(
+                s.query(Verse.path, Verse.filename)
+                .group_by(Verse.path, Verse.filename)
+                .all()
+            )
+            # print(files)
+            if args["--force"]:
+                print("Cleaning up preloaded N-grams.")
+                s.execute(delete(Ngram))
+            for path, filename in files:
+                print(f"# Indexing N-grams: {path}/{filename}...")
+                q = s.query(Verse).filter(Verse.path == path, Verse.filename == filename)
+                for v in tqdm(q.all(), total=q.count()):
+                    for n in range(ng_min, ng_max + 1):
+                        persist_ngram(s, v, n)
+
+        if args["--embeddings"]:
+            for m in models:
+                print(f"# Indexing model: {m}...")
+                persist_embedding(m, force=args["--force"])
+
+        elif args["--embedding"]:
+            m = args["--embedding"]
+            if m not in models:
+                print(f"Available models: {models}")
+            else:
+                print(f"# Indexing model: {m}...")
+                try:
+                    persist_embedding(m, force=args["--force"])
+                except ValueError as ve:
+                    print(repr(ve))
+

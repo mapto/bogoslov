@@ -2,9 +2,11 @@
 # -*- coding: utf-8 -*-
 """"""
 
-from sqlalchemy import Column, ForeignKey
+from sqlalchemy import Column, ForeignKey, UniqueConstraint
 from sqlalchemy import Integer, String
-from sqlalchemy.orm import mapped_column
+from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.dialects.postgresql import ARRAY, JSONB,INT4RANGE
+from typing import Any
 from pgvector.sqlalchemy import Vector  # type: ignore
 
 from db import Base, Session, engine
@@ -12,6 +14,114 @@ from db import Base, Session, engine
 # vdims = 384
 vdims = 768
 
+
+### for backend -------------------------------------------------------------
+
+class BiblicalText(Base):
+    __tablename__ = "biblical_texts"
+
+    id: Mapped[int]        = mapped_column(Integer, primary_key=True, autoincrement=True)
+    path: Mapped[str]      = mapped_column(String, nullable=False)
+    filename: Mapped[str]  = mapped_column(String, nullable=False)
+    text: Mapped[list]     = mapped_column(ARRAY(JSONB), nullable=False)
+    chapters: Mapped[list] = mapped_column(ARRAY(JSONB), nullable=False)
+
+    __table_args__ = (
+        UniqueConstraint("path", "filename"),
+    )
+
+    def __str__(self):
+        return str({c.name: getattr(self, c.name) for c in self.__table__.columns})
+    
+class ConvertIndexBiblical(Base):
+    __tablename__ = "convert_index_biblical"
+
+    id: Mapped[int]             = mapped_column(Integer, primary_key=True, autoincrement=True)
+    textId: Mapped[int]         = mapped_column(Integer, ForeignKey("biblical_texts.id", ondelete="CASCADE"), nullable=False)
+    lineIndex: Mapped[int]      = mapped_column(Integer, nullable=False)
+    lineRange: Mapped[str]      = mapped_column(String, nullable=False)
+    wordIndexRange: Mapped[Any] = mapped_column(INT4RANGE, nullable=False)
+
+    def __str__(self):
+        return str({c.name: getattr(self, c.name) for c in self.__table__.columns})
+
+class ConvertIndexHistorical(Base):
+    __tablename__ = "convert_index_historical"
+
+    id: Mapped[int]             = mapped_column(Integer, primary_key=True, autoincrement=True)
+    textId: Mapped[int]         = mapped_column(Integer, ForeignKey("historical_texts.id", ondelete="CASCADE"), nullable=False)
+    lineIndex: Mapped[int]      = mapped_column(Integer, nullable=False)
+    lineRange: Mapped[str]      = mapped_column(String, nullable=False)
+    wordIndexRange: Mapped[Any] = mapped_column(INT4RANGE, nullable=False)
+
+    def __str__(self):
+        return str({c.name: getattr(self, c.name) for c in self.__table__.columns})
+
+class HistoricalText(Base):
+    __tablename__ = "historical_texts"
+
+    id: Mapped[int] =               mapped_column(Integer, primary_key=True, autoincrement=True)
+    hashText: Mapped[str] =         mapped_column(String(64), index=True, unique=True, nullable=False)
+    path: Mapped[str] =             mapped_column(String, nullable=False)
+    filename: Mapped[str] =         mapped_column(String, nullable=False)
+    text: Mapped[list] =            mapped_column(ARRAY(JSONB), nullable=False)
+    chapters: Mapped[list] =        mapped_column(ARRAY(JSONB), nullable=False)
+
+    __table_args__ = (
+        UniqueConstraint("path", "filename"),
+    )
+
+    def __str__(self):
+        return str({c.name: getattr(self, c.name) for c in self.__table__.columns})
+
+class TextUser(Base):
+    __tablename__ = "text_users"
+
+    id: Mapped[int] =       mapped_column(Integer, autoincrement=True, primary_key=True)
+    user_id: Mapped[int] =  mapped_column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    text_id: Mapped[int] =  mapped_column(Integer, ForeignKey("historical_texts.id", ondelete="CASCADE"), nullable=False)
+
+    __table_args__ = (
+        UniqueConstraint("user_id", "text_id"),
+    )
+
+    def __str__(self):
+        return str({c.name: getattr(self, c.name) for c in self.__table__.columns})
+
+class User(Base):
+    __tablename__ = "users"
+
+    id: Mapped[int] =            mapped_column(Integer, primary_key=True, autoincrement=True)
+    username: Mapped[str] =      mapped_column(String, nullable=False, unique=True, index=True)
+    password_hash: Mapped[str] = mapped_column(String, nullable=False)
+
+    def __str__(self):
+        return str({c.name: getattr(self, c.name) for c in self.__table__.columns if c.name != "password_hash"})
+
+class HighlightColors(Base):
+    __tablename__ = "highlight_colors"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+
+    def __str__(self):
+        return str({c.name: getattr(self, c.name) for c in self.__table__.columns})
+
+class TextHighlights(Base):
+    __tablename__ = "text_highlights"
+
+    id: Mapped[int]                     = mapped_column(Integer, primary_key=True, autoincrement=True)
+    color_id: Mapped[int]               = mapped_column(Integer, ForeignKey("highlight_colors.id", ondelete="CASCADE"), nullable=False)
+    biblical_text_id: Mapped[int]       = mapped_column(Integer, ForeignKey("biblical_texts.id", ondelete="CASCADE"), nullable=False)
+    text_user_id: Mapped[int]           = mapped_column(Integer, ForeignKey("text_users.id", ondelete="CASCADE"), nullable=False)
+    historical_range_word: Mapped[Any]  = mapped_column(INT4RANGE, nullable=False)
+    biblical_range_word: Mapped[Any]    = mapped_column(INT4RANGE, nullable=False)
+    historical_start_line: Mapped[int]  = mapped_column(Integer, ForeignKey("convert_index_historical.id", ondelete="CASCADE"), nullable=False)
+    biblical_start_line: Mapped[int]    = mapped_column(Integer, ForeignKey("convert_index_biblical.id", ondelete="CASCADE"), nullable=False)
+
+    def __str__(self):
+        return str({c.name: getattr(self, c.name) for c in self.__table__.columns})
+
+###
 
 class Verse(Base):
     """Corpus representation, used by all methods for better performance"""
