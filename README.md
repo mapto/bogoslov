@@ -116,4 +116,7 @@ To add a new algorithm, it needs to implement the logic of `app_*.py`. The find(
 
 # Bibliography
 
+Ruskov, Gavrilkov, Karafillidis, Mikulka & Szablewski (2026). Semi-automatic Identification and Attribution of Biblical Quotations in Old Church Slavonic Texts: Computational Methods in the Project “BogoSlov”. Scripta & e-Scripta 26 (August 2026): 105–20. https://doi.org/10.66260/SeS2026MR-MG-IK-TM-JS.
+ ([bibtex](static/references.bib))
 Ruskov, Mikulka, Podtergera, Gavrilkov & Thompson (2025). Quotes at the Fingertips: The BogoSlov Project’s Combined Approach towards Identification of Biblical Material in Old Church Slavonic Texts. In Proceedings of the 21st Conference on Information and Research Science Connecting to Digital and Library Science. CEUR-WS. https://ceur-ws.org/Vol-3937/short8.pdf ([bibtex](static/references.bib))
+
